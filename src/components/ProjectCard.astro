@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import { Image } from 'astro:assets';
 
 export interface Props {
   slug: string;
@@ -21,6 +22,17 @@ const badgeClass =
 ---
 
 <article class="rounded-sm border border-hairline bg-surface-elevated/45 p-5 transition-colors hover:border-hairline-strong sm:p-6">
+  {
+    data.cover && (
+      <Image
+        src={data.cover}
+        alt={data.coverAlt ?? ''}
+        widths={[368, 736, 1472]}
+        sizes="(min-width: 46rem) 42rem, calc(100vw - 2.5rem)"
+        class="-mx-5 -mt-5 mb-5 block h-auto w-[calc(100%+2.5rem)] max-w-none rounded-t-sm border-b border-hairline sm:-mx-6 sm:-mt-6 sm:mb-6 sm:w-[calc(100%+3rem)]"
+      />
+    )
+  }
   <div class="flex flex-wrap items-center justify-between gap-2 text-xs text-ink-muted">
     <div class="flex flex-wrap items-center gap-2">
       <span class={badgeClass}>{data.status}</span>

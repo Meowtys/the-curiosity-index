@@ -69,6 +69,22 @@ const badgeClass =
       <span class="font-mono">{data.category}</span>
     </div>
 
+    {
+      data.cover && (
+        <figure class="mt-6 overflow-hidden rounded-sm border border-hairline">
+          <Image
+            src={data.cover}
+            alt={data.coverAlt ?? `${data.title} interface preview`}
+            widths={[736, 1472]}
+            sizes="(min-width: 46rem) 42rem, calc(100vw - 2.5rem)"
+            loading="eager"
+            fetchpriority="high"
+            class="h-auto w-full"
+          />
+        </figure>
+      )
+    }
+
     <dl class="mt-6 grid grid-cols-1 gap-4 rounded-sm border border-hairline bg-surface-elevated/45 p-4 text-sm sm:grid-cols-2 sm:p-5">
       <div>
         <dt class="font-mono text-xs text-ink-muted">Role</dt>
@@ -133,18 +149,6 @@ const badgeClass =
         </dd>
       </div>
     </dl>
-
-    {
-      data.cover && (
-        <figure class="mt-6 overflow-hidden rounded-sm border border-hairline">
-          <Image
-            src={data.cover}
-            alt={data.coverAlt ?? `${data.title} interface preview`}
-            class="h-auto w-full"
-          />
-        </figure>
-      )
-    }
   </header>
 
   <article class="prose prose-editorial mt-8 sm:mt-10">
