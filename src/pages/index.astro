@@ -41,14 +41,19 @@ const featuredProjects = allProjects
   <section class="mt-12 border-b border-hairline pb-12 sm:mt-14 sm:pb-14">
     <div class="flex flex-wrap items-baseline justify-between gap-4">
       <h2 class="font-display text-2xl font-bold text-ink sm:text-3xl">
-        Selected Work
+        Projects
       </h2>
-      <a
-        href="/projects"
-        class="group inline-flex min-h-7 items-center text-sm font-medium text-accent no-underline"
-      >
-        <span class="underline decoration-accent/60 underline-offset-[0.25em] group-hover:decoration-accent">All projects ({allProjects.length})</span> <span aria-hidden="true" class="ml-1">→</span>
-      </a>
+      {
+        // Only link out when the index holds projects this page doesn't show.
+        allProjects.length > featuredProjects.length && (
+          <a
+            href="/projects"
+            class="group inline-flex min-h-7 items-center text-sm font-medium text-accent no-underline"
+          >
+            <span class="underline decoration-accent/60 underline-offset-[0.25em] group-hover:decoration-accent">All projects ({allProjects.length})</span> <span aria-hidden="true" class="ml-1">→</span>
+          </a>
+        )
+      }
     </div>
     <p class="mt-2 text-sm text-ink-muted">
       Production web platforms, offline-first mobile systems, and multi-year architectural rebuilds.
