@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Westen Dasig — The Curiosity Index">
+  <style>
+    .bg { fill: #FAF8F5; stroke: #141413; }
+    .fg { fill: #141413; }
+    .accent { fill: #9A3412; }
+    @media (prefers-color-scheme: dark) {
+      .bg { fill: #111110; stroke: #F3F1EC; }
+      .fg { fill: #F3F1EC; }
+      .accent { fill: #FB923C; }
+    }
+  </style>
+  <rect class="bg" x="3" y="3" width="58" height="58" rx="8" stroke-width="3" />
+  <path class="fg" d="M14 19h6.2l4.8 18.4L29.8 19h5.4L40 37.4 44.8 19H51l-7.8 26h-5.8L32.5 27 27.6 45h-5.8L14 19z" />
+  <circle class="accent" cx="50" cy="44" r="3.5" />
+</svg>
