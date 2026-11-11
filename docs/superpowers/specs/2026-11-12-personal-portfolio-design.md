@@ -56,14 +56,14 @@ All pages render inside a centered single-column reading container (`max-w-[46re
 #### 3.1 Home (`src/pages/index.astro` → `/`)
 1. **Hero / Identity Section:**
    - `h1`: **Westen Dasig** with subtitle **The Curiosity Index**.
-   - Role & location line: *CS Student at Foundation University Dumaguete · Full-Stack Builder & Software QA*.
+   - Role & location line: *CS Student at Foundation University Dumaguete · Full-Stack Builder*.
    - Intro bio: *"I'm Westen, a computer science student interested in exploring different areas of technology. I spend my time building software, working with hardware, and learning about things that catch my curiosity."*
    - Quick action links: `Read case studies →` (`/projects`), `About & background` (`/about`), and direct email (`mailto:westendasig2003@gmail.com`).
 2. **Selected Projects Section (`h2: Selected Work`):**
    - Renders the 3 featured projects ordered by `order` (`1` Here!, `2` JB2K Mods, `3` SUSG Voting System) using `ProjectCard.astro`.
-   - Each card displays status badge (`Open Beta`, `Live`, `In Development`), timeline (`2023 · Rebuilt 2026`, `2026`), title, subtitle, concise description, stack tags, primary link to `/projects/[slug]`, and secondary external link to `liveUrl` (when defined).
+   - Each card displays status badge (`Open Beta`, `Live`, `In Development`), timeline (`2023 · Rebuilt 2026`, `2026 · Production`, `2024 · Rebuilt 2026`), title, subtitle, concise description, stack tags, primary link to `/projects/[slug]`, and secondary external link to `liveUrl` (when defined).
 3. **Curiosity & Community Section (`h2: Curiosity & Community`):**
-   - Brief overview of software/hardware exploration and local tech community involvement in Dumaguete (**SugarPy Meetup** Python & GenAI community sessions at DICT Dumaguete; Teaching Assistant at **re:load Agentic AI Edition** assisting on Python & LangGraph AI agents).
+   - Brief overview of hardware tinkering and repair (**WesTech**, 2020–Present) alongside local tech community involvement in Dumaguete (hosted the **SugarPy Meetup Event** in Sept 2025; Teaching Assistant at **re:load Agentic AI Edition** assisting on Python & LangGraph AI agents).
    - Link to `/about` for the full background.
 4. **Contact Callout Section (`h2: Get in Touch`):**
    - Direct links to `mailto:westendasig2003@gmail.com`, LinkedIn, and GitHub.
@@ -76,10 +76,10 @@ All pages render inside a centered single-column reading container (`max-w-[46re
 - Statically generated via `getStaticPaths()` from the `projects` content collection.
 - **Structured Case Study Header:**
   - Back link (`← All projects` to `/projects`).
-  - Status badge (`Open Beta`, `Live`, `In Development`), category badge (`Software`), and timeline (`2023 · Rebuilt 2026`).
+  - Status badge (`Open Beta`, `Live`, `In Development`), category badge (`Software`), and timeline (`2023 · Rebuilt 2026`, `2024 · Rebuilt 2026`, `2026 · Production`).
   - `h1`: Project `title` and `subtitle`.
   - Metadata grid: **Role**, **Timeline**, **Status**, **Stack** tags, and **Live Site** link (or `"Private build / In development"` notice when `liveUrl` is absent).
-  - Optional cover/diagram visual rendered via `<Image />` from `astro:assets`.
+  - Optional cover/diagram visual (`cover` + `coverAlt`) rendered via `<Image />` from `astro:assets` if/when supplied (none at launch).
 - **MDX Body (`<article class="prose ...">`):**
   - Styled with `@tailwindcss/typography` adapted to the site's light/dark CSS custom properties.
 - **Case Study Footer Navigation:**
@@ -87,13 +87,13 @@ All pages render inside a centered single-column reading container (`max-w-[46re
 
 #### 3.4 About (`src/pages/about.astro` → `/about`)
 - `h1`: **About Westen Dasig**.
-- **Narrative Bio:** Expanded story covering full-stack software development, software QA, hardware tinkering, and learning driven by curiosity (`WesTech` / personal builder ethos).
-- **Community & Experience (`h2: Community & Experience`):**
-  - **SugarPy (Negros Island Python User Group)** — Community co-organizer / host for hands-on Python, FastAPI, RAG, and Generative AI meetups at the DICT Digital Transformation Center in Dumaguete City.
+- **Narrative Bio:** Expanded story covering full-stack building, software quality/testing, hardware repair & custom PC building (**WesTech**), and learning driven by curiosity.
+- **Experience & Community (`h2: Experience & Community`):**
+  - **WesTech (2020–Present)** — Local hardware repair and custom PC business repairing computers and phones and building custom PCs.
+  - **SugarPy Meetup Event (Sept 2025)** — Hosted the SugarPy Meetup event (Negros Island Python User Group) at DICT Digital Transformation Center in Dumaguete City, bringing together students and engineers for Python, FastAPI, and RAG/Generative AI workshops.
   - **re:load Agentic AI Edition (Sept 2025)** — Teaching Assistant supporting the hands-on workshop *"Building AI Agents with Python using LangGraph"* led by Jouella Fabe (Senior Software Engineer, PagerDuty).
-  - **Independent Full-Stack & QA Builder (`WesTech` / Client & Campus Systems, 2023–Present)** — Designing, rebuilding, and maintaining production web and mobile systems including *Here!*, *JB2K Mods*, and the *SUSG Voting System*.
 - **Education (`h2: Education`):**
-  - **Foundation University** (Dumaguete City, Philippines) — Bachelor of Science in Computer Science (Current).
+  - **Foundation University** (Dumaguete City, Philippines) — Bachelor of Science (BS) in Computer Science.
 - **Technical Toolbox (`h2: Stack & Tools`):**
   - **Languages & Backend:** PHP 8.2–8.4, Laravel 13, Python, Dart, TypeScript, JavaScript, SQL (MariaDB / MySQL / SQLite).
   - **Frontend & Mobile:** Flutter, React 19, Inertia.js, Astro, Tailwind CSS v4, HTML5/CSS3.
@@ -164,10 +164,10 @@ export const collections = { projects };
      - *Hardened Admin Queue & CI Quality Gates:* Private admin dashboard for reviewing, filtering, and advancing commissions and managing soundtrack playlists, secured with Laravel Fortify two-factor authentication and passkeys, validated by PHPStan (Larastan level 7), Laravel Pint, and PHPUnit feature tests, deployed on Railway with a persistent SQLite volume.
 
 3. **`src/content/projects/susg-voting-system.mdx` — SUSG Voting System (`order: 3`)**
-   - **Metadata:** `status: "In Development"`, `timeline: "2023 · Rebuilt 2026"`, `category: "Software"`, `role: "Project Lead & Maintainer"`, `tags: ["PHP 8.2", "MariaDB", "Tailwind CSS 4", "Vanilla JS", "WCAG 2.2 AA"]` (`liveUrl` omitted while in development).
+   - **Metadata:** `status: "In Development"`, `timeline: "2024 · Rebuilt 2026"`, `category: "Software"`, `role: "Project Lead & Maintainer"`, `tags: ["PHP 8.2", "MariaDB", "Tailwind CSS 4", "Vanilla JS", "WCAG 2.2 AA"]` (`liveUrl` omitted while in development).
    - **Case Study Sections:**
      - *The Problem:* Replacing Silliman University Student Government's LMS-based voting workflow with a dedicated, mobile-friendly election platform where students vote from any phone or laptop and Comelec manages the entire election from an admin dashboard.
-     - *From 2023 Team Prototype to 2026 Rebuild:* Started as a student team prototype and rebuilt/expanded in 2026 with strict security, accessibility, and operational tooling.
+     - *From 2024 Team Project to 2026 Rebuild:* Started in 2024 as a student team project and rebuilt/expanded in 2026 with strict security, accessibility, and operational tooling.
      - *Security & Server-Enforced Ballot Integrity:* Enforces one ballot per student per election (with explicit abstain support and pre-submit ballot review), derives college scoping strictly from the voter's server-side database record (ignoring client-supplied `college_id`), protects all state changes with CSRF tokens, bcrypt password hashing, rate-limited login throttling, and `.htaccess` isolation of non-public directories.
      - *Atomic Live-Results Caching & 843-Check Regression Suite:* Serves real-time election results to both voters and Comelec through `LiveResultsCache.php` using exclusive file locks and atomic file replacement outside the web root, backed by WCAG 2.2 AA compliance and 18 automated regression check scripts (843 checks).
 
@@ -187,11 +187,6 @@ the-curiosity-index/
 │   └── robots.txt                     # Allows indexing + points to sitemap-index.xml
 └── src/
     ├── content.config.ts              # Zod schema for projects collection
-    ├── assets/
-    │   └── projects/                  # SVG/PNG project architecture diagrams via astro:assets
-    │       ├── here-cover.svg
-    │       ├── jb2k-cover.svg
-    │       └── susg-cover.svg
     ├── components/
     │   ├── BaseHead.astro             # Title, meta description, canonical, OG tags, favicon
     │   ├── Header.astro               # Brand + primary navigation
@@ -231,7 +226,7 @@ the-curiosity-index/
    - Visible `:focus-visible` outline (`2px solid` accent color with `2px` offset) on every link and interactive element.
    - Strict heading hierarchy (`h1` once per page, sequential `h2` → `h3`), landmark elements (`<header>`, `<nav>`, `<main id="main-content">`, `<article>`, `<footer>`), and descriptive link text.
 4. **Per-Page Metadata (`src/components/BaseHead.astro`):**
-   - Unique `<title>` (`<Page Title> — Westen Dasig | The Curiosity Index`), `<meta name="description">`, `<link rel="canonical" href={canonicalURL}>`, Open Graph (`og:title`, `og:description`, `og:url`, `og:type`, `og:site_name`, `og:image`), and Twitter card metadata on every page.
+   - Unique `<title>` (`<Page Title> — Westen Dasig | The Curiosity Index`), `<meta name="description">`, `<link rel="canonical" href={canonicalURL}>`, Open Graph (`og:title`, `og:description`, `og:url`, `og:type`, `og:site_name`, and optional `og:image`), and Twitter card metadata on every page.
 
 ---
 
