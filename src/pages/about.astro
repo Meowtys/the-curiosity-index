@@ -1,0 +1,98 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE, EXPERIENCE, EDUCATION, TOOLBOX } from '../data/site';
+---
+
+<BaseLayout
+  title="About"
+  description="About Westen Dasig (John Westen Rey Dasig) — Computer Science student at Foundation University Dumaguete, full-stack builder, and founder of WesTech."
+>
+  <header class="border-b border-hairline pb-8">
+    <h1 class="font-display text-3xl font-bold tracking-tight text-ink sm:text-4xl">
+      About {SITE.name}
+    </h1>
+    <p class="mt-2 font-display text-lg italic text-ink-muted">
+      {SITE.role} · {SITE.location}
+    </p>
+  </header>
+
+  <section class="mt-8 space-y-4 border-b border-hairline pb-10 text-base leading-relaxed text-ink">
+    <p>
+      {SITE.bio}
+    </p>
+    <p>
+      My work sits at the intersection of practical software engineering and physical hardware. On the software side, I enjoy taking early prototypes and rebuilding them into resilient production systems—whether that means moving facial recognition inference from cloud APIs onto a mobile device with TensorFlow Lite (<a href="/projects/here" class="font-medium text-accent underline underline-offset-[0.22em]">Here!</a>), building a real-time commission storefront with Laravel 13 and React 19 (<a href="/projects/jb2k-mods" class="font-medium text-accent underline underline-offset-[0.22em]">JB2K Mods</a>), or hardening a university-wide student election platform backed by an 843-check regression suite (<a href="/projects/susg-voting-system" class="font-medium text-accent underline underline-offset-[0.22em]">SUSG Voting System</a>).
+    </p>
+    <p>
+      Outside of writing code, I have operated <strong>WesTech</strong> in Dumaguete City since 2020, diagnosing and repairing computers and smartphones while building custom desktop PCs. Working directly with hardware keeps my approach to software grounded in real device constraints, thermal budgets, and end-user reliability.
+    </p>
+  </section>
+
+  <section class="mt-10 border-b border-hairline pb-10">
+    <h2 class="font-display text-2xl font-bold text-ink">
+      Experience & Community
+    </h2>
+    <ul role="list" class="mt-6 space-y-6">
+      {
+        EXPERIENCE.map((item) => (
+          <li class="rounded-sm border border-hairline bg-surface-elevated/40 p-5">
+            <div class="flex flex-wrap items-baseline justify-between gap-2">
+              <h3 class="font-display text-lg font-bold text-ink">
+                {item.title} · <span class="text-accent">{item.organization}</span>
+              </h3>
+              <span class="font-mono text-xs tabular-nums text-ink-muted">{item.period}</span>
+            </div>
+            <p class="mt-0.5 font-mono text-xs text-ink-muted">{item.location}</p>
+            <p class="mt-3 text-sm leading-relaxed text-ink">
+              {item.summary}
+            </p>
+            <ul class="mt-3 list-disc space-y-1.5 pl-5 text-sm text-ink-muted">
+              {item.highlights.map((point) => <li>{point}</li>)}
+            </ul>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="mt-10 border-b border-hairline pb-10">
+    <h2 class="font-display text-2xl font-bold text-ink">
+      Education
+    </h2>
+    <ul role="list" class="mt-5 space-y-4">
+      {
+        EDUCATION.map((edu) => (
+          <li class="rounded-sm border border-hairline bg-surface-elevated/40 p-5">
+            <h3 class="font-display text-lg font-bold text-ink">{edu.institution}</h3>
+            <p class="mt-1 text-sm font-medium text-ink">{edu.degree}</p>
+            <p class="mt-0.5 font-mono text-xs text-ink-muted">{edu.location}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="mt-10">
+    <h2 class="font-display text-2xl font-bold text-ink">
+      Stack & Tools
+    </h2>
+    <div class="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2">
+      {
+        TOOLBOX.map((group) => (
+          <div class="rounded-sm border border-hairline p-4 sm:p-5">
+            <h3 class="font-display text-base font-bold text-ink">{group.category}</h3>
+            <ul role="list" class="mt-3 flex flex-wrap gap-1.5">
+              {
+                group.items.map((tool) => (
+                  <li class="rounded-xs border border-hairline bg-surface-elevated px-2.5 py-1 font-mono text-xs text-ink break-words">
+                    {tool}
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>

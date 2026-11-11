@@ -1,0 +1,35 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+
+const projects = (await getCollection('projects')).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+---
+
+<BaseLayout
+  title="Projects & Case Studies"
+  description="Detailed architectural case studies of software platforms and systems built by Westen Dasig, including Here!, JB2K Mods, and the SUSG Voting System."
+>
+  <header class="border-b border-hairline pb-8">
+    <h1 class="font-display text-3xl font-bold tracking-tight text-ink sm:text-4xl">
+      Projects & Case Studies
+    </h1>
+    <p class="mt-3 max-w-[62ch] text-base leading-relaxed text-ink-muted">
+      An index of systems I have designed, built, and rebuilt—documenting the problem context, architectural trade-offs, security boundaries, and verification suites behind each project.
+    </p>
+  </header>
+
+  <section class="mt-8 grid gap-6 sm:mt-10" aria-label="Project list">
+    {
+      projects.map((project) => (
+        <ProjectCard
+          slug={project.id}
+          data={project.data}
+          headingLevel="h2"
+        />
+      ))
+    }
+  </section>
+</BaseLayout>

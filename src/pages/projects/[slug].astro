@@ -1,0 +1,186 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import { Image } from 'astro:assets';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const projects = (await getCollection('projects')).sort(
+    (a, b) => a.data.order - b.data.order,
+  );
+
+  return projects.map((entry, index) => ({
+    params: { slug: entry.id },
+    props: {
+      entry,
+      prev: index > 0 ? projects[index - 1] : undefined,
+      next: index < projects.length - 1 ? projects[index + 1] : undefined,
+    },
+  }));
+}
+
+export interface Props {
+  entry: CollectionEntry<'projects'>;
+  prev?: CollectionEntry<'projects'>;
+  next?: CollectionEntry<'projects'>;
+}
+
+const { entry, prev, next } = Astro.props;
+const { Content } = await render(entry);
+const { data } = entry;
+
+const badgeClass =
+  data.status === 'Live'
+    ? 'badge-status badge-live'
+    : data.status === 'Open Beta'
+      ? 'badge-status badge-beta'
+      : 'badge-status badge-dev';
+---
+
+<BaseLayout
+  title={`${data.title} — Case Study`}
+  description={data.description}
+  type="article"
+>
+  <nav aria-label="Breadcrumb" class="mb-6">
+    <a
+      href="/projects"
+      class="inline-flex min-h-7 items-center text-sm font-medium text-ink-muted underline decoration-hairline-strong underline-offset-[0.25em] hover:text-ink hover:decoration-accent"
+    >
+      <span aria-hidden="true" class="mr-1.5">←</span> All projects
+    </a>
+  </nav>
+
+  <header class="border-b border-hairline pb-8">
+    <h1 class="font-display text-3xl font-bold tracking-tight text-ink sm:text-4xl">
+      {data.title}
+    </h1>
+    <p class="mt-2 text-base font-medium text-ink-muted sm:text-lg">
+      {data.subtitle}
+    </p>
+
+    <div class="mt-4 flex flex-wrap items-center gap-2.5 text-xs text-ink-muted">
+      <span class={badgeClass}>{data.status}</span>
+      <span aria-hidden="true">·</span>
+      <span class="font-mono tabular-nums">{data.timeline}</span>
+      <span aria-hidden="true">·</span>
+      <span class="font-mono">{data.category}</span>
+    </div>
+
+    <dl class="mt-6 grid grid-cols-1 gap-4 rounded-sm border border-hairline bg-surface-elevated/45 p-4 text-sm sm:grid-cols-2 sm:p-5">
+      <div>
+        <dt class="font-mono text-xs text-ink-muted">Role</dt>
+        <dd class="mt-0.5 font-medium text-ink">{data.role}</dd>
+      </div>
+      <div>
+        <dt class="font-mono text-xs text-ink-muted">Timeline</dt>
+        <dd class="mt-0.5 font-mono text-xs tabular-nums text-ink sm:text-sm">{data.timeline}</dd>
+      </div>
+      <div>
+        <dt class="font-mono text-xs text-ink-muted">Deployment & Access</dt>
+        <dd class="mt-0.5">
+          {
+            data.liveUrl ? (
+              <a
+                href={data.liveUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center font-medium text-accent underline decoration-accent/70 underline-offset-[0.22em] hover:decoration-accent break-all"
+              >
+                {data.liveUrl.replace(/^https?:\/\//, '')}
+                <span class="visually-hidden"> (opens in a new tab)</span>
+                <span aria-hidden="true" class="ml-1 text-xs">↗</span>
+              </a>
+            ) : (
+              <span class="text-ink-muted">Private deployment · Currently in development</span>
+            )
+          }
+        </dd>
+      </div>
+      <div>
+        <dt class="font-mono text-xs text-ink-muted">Source Repository</dt>
+        <dd class="mt-0.5 text-ink-muted">
+          {
+            data.repoUrl ? (
+              <a
+                href={data.repoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="font-medium text-accent underline underline-offset-[0.22em]"
+              >
+                Public repository <span aria-hidden="true">↗</span>
+              </a>
+            ) : (
+              <span>Private repository (architecture documented below)</span>
+            )
+          }
+        </dd>
+      </div>
+      <div class="sm:col-span-2">
+        <dt class="font-mono text-xs text-ink-muted">Technical Stack</dt>
+        <dd class="mt-1.5">
+          <ul role="list" class="flex flex-wrap gap-1.5" aria-label="Technical stack">
+            {
+              data.tags.map((tag) => (
+                <li class="rounded-xs border border-hairline bg-surface px-2 py-0.5 font-mono text-xs text-ink break-words">
+                  {tag}
+                </li>
+              ))
+            }
+          </ul>
+        </dd>
+      </div>
+    </dl>
+
+    {
+      data.cover && (
+        <figure class="mt-6 overflow-hidden rounded-sm border border-hairline">
+          <Image
+            src={data.cover}
+            alt={data.coverAlt ?? `${data.title} interface preview`}
+            class="h-auto w-full"
+          />
+        </figure>
+      )
+    }
+  </header>
+
+  <article class="prose prose-editorial mt-8 max-w-none sm:mt-10">
+    <Content />
+  </article>
+
+  <nav
+    aria-label="Case study pagination"
+    class="mt-12 grid grid-cols-1 gap-4 border-t border-hairline pt-8 sm:grid-cols-2"
+  >
+    <div>
+      {
+        prev && (
+          <a
+            href={`/projects/${prev.id}`}
+            class="group block rounded-sm border border-hairline p-4 no-underline transition-colors hover:border-hairline-strong"
+          >
+            <span class="block font-mono text-xs text-ink-muted">← Previous project</span>
+            <span class="mt-1 block font-display text-lg font-bold text-ink group-hover:text-accent">
+              {prev.data.title}
+            </span>
+          </a>
+        )
+      }
+    </div>
+    <div class="sm:text-right">
+      {
+        next && (
+          <a
+            href={`/projects/${next.id}`}
+            class="group block rounded-sm border border-hairline p-4 no-underline transition-colors hover:border-hairline-strong"
+          >
+            <span class="block font-mono text-xs text-ink-muted">Next project →</span>
+            <span class="mt-1 block font-display text-lg font-bold text-ink group-hover:text-accent">
+              {next.data.title}
+            </span>
+          </a>
+        )
+      }
+    </div>
+  </nav>
+</BaseLayout>

@@ -1,0 +1,33 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Page Not Found (404)"
+  description="The page you requested could not be found in The Curiosity Index."
+  noindex={true}
+>
+  <section class="py-12">
+    <h1 class="font-display text-3xl font-bold tracking-tight text-ink sm:text-4xl">
+      Page not found
+    </h1>
+    <p class="mt-1.5 font-mono text-xs text-ink-muted tabular-nums">HTTP 404 · Route missing</p>
+    <p class="mt-3 max-w-[54ch] text-base leading-relaxed text-ink-muted">
+      The entry or route you were looking for does not exist or has moved. You can return to the index or browse the project case studies below.
+    </p>
+    <div class="mt-6 flex flex-wrap gap-4 text-sm">
+      <a
+        href="/"
+        class="inline-flex min-h-8 items-center rounded-xs border border-hairline-strong bg-surface-elevated px-3.5 py-1.5 font-medium text-ink no-underline hover:border-accent hover:text-accent"
+      >
+        ← Return to home index
+      </a>
+      <a
+        href="/projects"
+        class="inline-flex min-h-8 items-center py-1.5 font-medium text-accent underline underline-offset-[0.25em]"
+      >
+        Browse projects →
+      </a>
+    </div>
+  </section>
+</BaseLayout>
