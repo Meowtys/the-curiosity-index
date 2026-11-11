@@ -36,3 +36,9 @@ test('all three project MDX files exist, carry accurate timelines, and leak no r
   assert.match(susg, /2024/);
   assert.doesNotMatch(susg, /liveUrl:/m, 'SUSG Voting System has no liveUrl while in development');
 });
+
+test('global.css defines explicit prefers-reduced-motion: reduce rule disabling transitions', () => {
+  const css = fs.readFileSync(path.join(root, 'src/styles/global.css'), 'utf8');
+  assert.match(css, /@media\s*\(\s*prefers-reduced-motion:\s*reduce\s*\)/);
+  assert.match(css, /transition:\s*none/);
+});
