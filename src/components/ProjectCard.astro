@@ -15,7 +15,9 @@ const badgeClass =
     ? 'badge-status badge-live'
     : data.status === 'Open Beta'
       ? 'badge-status badge-beta'
-      : 'badge-status badge-dev';
+      : data.status === 'Archived'
+        ? 'badge-status badge-archived'
+        : 'badge-status badge-dev';
 ---
 
 <article class="rounded-sm border border-hairline bg-surface-elevated/45 p-5 transition-colors hover:border-hairline-strong sm:p-6">
