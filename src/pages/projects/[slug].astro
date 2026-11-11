@@ -33,7 +33,9 @@ const badgeClass =
     ? 'badge-status badge-live'
     : data.status === 'Open Beta'
       ? 'badge-status badge-beta'
-      : 'badge-status badge-dev';
+      : data.status === 'Archived'
+        ? 'badge-status badge-archived'
+        : 'badge-status badge-dev';
 ---
 
 <BaseLayout

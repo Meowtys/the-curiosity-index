@@ -213,6 +213,12 @@ p, li, dd {
   border-color: var(--badge-dev-border);
 }
 
+.badge-archived {
+  background-color: var(--bg-elevated);
+  color: var(--fg-muted);
+  border-color: var(--border-strong);
+}
+
 /* Editorial prose overrides for @tailwindcss/typography in both light & dark modes */
 .prose-editorial {
   --tw-prose-body: var(--fg);
