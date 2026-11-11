@@ -1,0 +1,49 @@
+---
+import { SITE } from '../data/site';
+
+export interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  type?: 'website' | 'article';
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description,
+  image,
+  type = 'website',
+  noindex = false,
+} = Astro.props;
+
+const fullTitle = title.includes(SITE.name)
+  ? title
+  : `${title} · ${SITE.name} — ${SITE.subtitle}`;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? SITE.siteUrl);
+const socialImageURL = image ? new URL(image, Astro.site ?? SITE.siteUrl).toString() : undefined;
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="color-scheme" content="light dark" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="canonical" href={canonicalURL.toString()} />
+
+<title>{fullTitle}</title>
+<meta name="description" content={description} />
+<meta name="author" content={SITE.name} />
+{noindex && <meta name="robots" content="noindex" />}
+
+<meta property="og:type" content={type} />
+<meta property="og:url" content={canonicalURL.toString()} />
+<meta property="og:title" content={fullTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:site_name" content={`${SITE.name} — ${SITE.subtitle}`} />
+{socialImageURL && <meta property="og:image" content={socialImageURL} />}
+
+<meta name="twitter:card" content={socialImageURL ? 'summary_large_image' : 'summary'} />
+<meta name="twitter:title" content={fullTitle} />
+<meta name="twitter:description" content={description} />
+{socialImageURL && <meta name="twitter:image" content={socialImageURL} />}

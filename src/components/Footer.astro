@@ -1,0 +1,36 @@
+---
+import { SITE, SOCIAL_LINKS } from '../data/site';
+---
+
+<footer class="mt-16 border-t border-hairline bg-surface">
+  <div class="mx-auto flex w-full max-w-[46rem] flex-col gap-4 px-5 py-8 text-sm text-ink-muted sm:flex-row sm:items-center sm:justify-between sm:px-8">
+    <p>
+      <span class="font-medium text-ink">{SITE.name}</span>
+      <span aria-hidden="true"> · </span>
+      <span>{SITE.location}</span>
+    </p>
+
+    <ul role="list" class="flex flex-wrap items-center gap-x-5 gap-y-2">
+      {
+        SOCIAL_LINKS.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              target={item.external ? '_blank' : undefined}
+              rel={item.external ? 'noopener noreferrer' : undefined}
+              class="inline-flex min-h-7 items-center py-1 text-ink-muted underline decoration-hairline-strong underline-offset-[0.25em] transition-colors hover:text-ink hover:decoration-accent"
+            >
+              {item.label}
+              {item.external && (
+                <>
+                  <span class="visually-hidden"> (opens in a new tab)</span>
+                  <span aria-hidden="true" class="ml-0.5 text-xs">↗</span>
+                </>
+              )}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</footer>

@@ -1,0 +1,53 @@
+---
+import { SITE, NAV_LINKS } from '../data/site';
+
+const rawPath = Astro.url.pathname;
+const pathname = rawPath.length > 1 && rawPath.endsWith('/') ? rawPath.slice(0, -1) : rawPath;
+
+function isActive(href: string): boolean {
+  if (href === '/') return pathname === '/';
+  return pathname === href || pathname.startsWith(`${href}/`);
+}
+---
+
+<header class="border-b border-hairline bg-surface">
+  <div class="mx-auto flex w-full max-w-[46rem] flex-wrap items-baseline justify-between gap-x-6 gap-y-3 px-5 py-5 sm:px-8">
+    <a
+      href="/"
+      class="group inline-flex flex-wrap items-baseline gap-x-2.5 gap-y-0.5 py-1 text-ink no-underline"
+    >
+      <span class="font-display text-lg font-bold tracking-tight text-ink group-hover:text-accent">
+        {SITE.name}
+      </span>
+      <span class="text-sm text-ink-muted">
+        {SITE.subtitle}
+      </span>
+    </a>
+
+    <nav aria-label="Primary">
+      <ul class="flex flex-wrap items-center gap-x-5 gap-y-1 text-sm">
+        {
+          NAV_LINKS.map((link) => {
+            const active = isActive(link.href);
+            return (
+              <li>
+                <a
+                  href={link.href}
+                  aria-current={active ? 'page' : undefined}
+                  class:list={[
+                    'inline-flex min-h-7 items-center py-1 transition-colors',
+                    active
+                      ? 'font-semibold text-ink underline decoration-accent decoration-2 underline-offset-[0.35em]'
+                      : 'text-ink-muted hover:text-ink',
+                  ]}
+                >
+                  {link.label}
+                </a>
+              </li>
+            );
+          })
+        }
+      </ul>
+    </nav>
+  </div>
+</header>

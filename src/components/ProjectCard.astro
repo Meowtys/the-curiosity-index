@@ -1,0 +1,81 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+export interface Props {
+  slug: string;
+  data: CollectionEntry<'projects'>['data'];
+  headingLevel?: 'h2' | 'h3';
+}
+
+const { slug, data, headingLevel = 'h2' } = Astro.props;
+const HeadingTag = headingLevel;
+
+const badgeClass =
+  data.status === 'Live'
+    ? 'badge-status badge-live'
+    : data.status === 'Open Beta'
+      ? 'badge-status badge-beta'
+      : 'badge-status badge-dev';
+---
+
+<article class="rounded-sm border border-hairline bg-surface-elevated/45 p-5 transition-colors hover:border-hairline-strong sm:p-6">
+  <div class="flex flex-wrap items-center justify-between gap-2 text-xs text-ink-muted">
+    <div class="flex flex-wrap items-center gap-2">
+      <span class={badgeClass}>{data.status}</span>
+      <span aria-hidden="true">·</span>
+      <span class="font-mono tabular-nums">{data.timeline}</span>
+    </div>
+    <span class="font-mono text-xs text-ink-muted">{data.role}</span>
+  </div>
+
+  <HeadingTag class="mt-3 font-display text-xl font-bold leading-snug text-ink sm:text-2xl">
+    <a
+      href={`/projects/${slug}`}
+      class="text-ink no-underline hover:text-accent hover:underline hover:underline-offset-[0.2em]"
+    >
+      {data.title}
+    </a>
+  </HeadingTag>
+
+  <p class="mt-1 text-sm font-medium text-ink-muted">
+    {data.subtitle}
+  </p>
+
+  <p class="mt-3 text-sm leading-relaxed text-ink">
+    {data.description}
+  </p>
+
+  <ul role="list" class="mt-4 flex flex-wrap gap-1.5" aria-label={`Technologies used in ${data.title}`}>
+    {
+      data.tags.map((tag) => (
+        <li class="rounded-xs border border-hairline bg-surface px-2 py-0.5 font-mono text-xs text-ink-muted break-words">
+          {tag}
+        </li>
+      ))
+    }
+  </ul>
+
+  <div class="mt-5 flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-hairline pt-3.5 text-sm">
+    <a
+      href={`/projects/${slug}`}
+      class="inline-flex min-h-7 items-center font-medium text-accent underline decoration-accent/60 underline-offset-[0.25em] hover:decoration-accent"
+    >
+      Read case study<span class="visually-hidden"> for {data.title}</span>
+      <span aria-hidden="true" class="ml-1">→</span>
+    </a>
+
+    {
+      data.liveUrl && (
+        <a
+          href={data.liveUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex min-h-7 items-center font-medium text-ink-muted underline decoration-hairline-strong underline-offset-[0.25em] hover:text-ink hover:decoration-accent"
+        >
+          Visit live site<span class="visually-hidden"> for {data.title} (opens in a new tab)</span>
+          <span aria-hidden="true" class="ml-1 text-xs">↗</span>
+        </a>
+      )
+    }
+  </div>
+</article>
