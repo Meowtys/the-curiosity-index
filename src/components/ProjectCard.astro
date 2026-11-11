@@ -41,7 +41,7 @@ const badgeClass =
     {data.subtitle}
   </p>
 
-  <p class="mt-3 text-sm leading-relaxed text-ink">
+  <p class="mt-3 max-w-[65ch] text-sm leading-relaxed text-ink">
     {data.description}
   </p>
 
@@ -58,9 +58,9 @@ const badgeClass =
   <div class="mt-5 flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-hairline pt-3.5 text-sm">
     <a
       href={`/projects/${slug}`}
-      class="inline-flex min-h-7 items-center font-medium text-accent underline decoration-accent/60 underline-offset-[0.25em] hover:decoration-accent"
+      class="group inline-flex min-h-7 items-center font-medium text-accent no-underline"
     >
-      Read case study<span class="visually-hidden"> for {data.title}</span>
+      <span class="underline decoration-accent/60 underline-offset-[0.25em] group-hover:decoration-accent">Read case study</span><span class="visually-hidden"> for {data.title}</span>
       <span aria-hidden="true" class="ml-1">→</span>
     </a>
 
@@ -70,9 +70,9 @@ const badgeClass =
           href={data.liveUrl}
           target="_blank"
           rel="noopener noreferrer"
-          class="inline-flex min-h-7 items-center font-medium text-ink-muted underline decoration-hairline-strong underline-offset-[0.25em] hover:text-ink hover:decoration-accent"
+          class="group inline-flex min-h-7 items-center font-medium text-ink-muted no-underline transition-colors hover:text-ink"
         >
-          Visit live site<span class="visually-hidden"> for {data.title} (opens in a new tab)</span>
+          <span class="underline decoration-hairline-strong underline-offset-[0.25em] group-hover:decoration-accent">Visit live site</span><span class="visually-hidden"> for {data.title} (opens in a new tab)</span>
           <span aria-hidden="true" class="ml-1 text-xs">↗</span>
         </a>
       )

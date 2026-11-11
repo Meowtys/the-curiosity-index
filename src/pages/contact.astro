@@ -7,7 +7,7 @@ import { SITE, SOCIAL_LINKS } from '../data/site';
   title="Contact"
   description="Direct contact links for Westen Dasig — email, LinkedIn, and GitHub."
 >
-  <header class="border-b border-hairline pb-8">
+  <header class="pb-6">
     <h1 class="font-display text-3xl font-bold tracking-tight text-ink sm:text-4xl">
       Contact
     </h1>
@@ -16,7 +16,7 @@ import { SITE, SOCIAL_LINKS } from '../data/site';
     </p>
   </header>
 
-  <section class="mt-8" aria-label="Direct contact channels">
+  <section class="mt-2" aria-label="Direct contact channels">
     <dl class="divide-y divide-hairline border-y border-hairline">
       {
         SOCIAL_LINKS.map((item) => (
@@ -27,9 +27,9 @@ import { SITE, SOCIAL_LINKS } from '../data/site';
                 href={item.href}
                 target={item.external ? '_blank' : undefined}
                 rel={item.external ? 'noopener noreferrer' : undefined}
-                class="inline-flex min-h-7 items-center font-mono text-sm text-accent underline decoration-accent/70 underline-offset-[0.25em] hover:decoration-accent break-all"
+                class="group inline-flex min-h-7 items-center font-mono text-sm text-accent no-underline break-all"
               >
-                {item.handle}
+                <span class="underline decoration-accent/70 underline-offset-[0.25em] group-hover:decoration-accent">{item.handle}</span>
                 {item.external && (
                   <>
                     <span class="visually-hidden"> (opens in a new tab)</span>

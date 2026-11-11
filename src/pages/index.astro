@@ -51,9 +51,9 @@ const featuredProjects = allProjects
       </h2>
       <a
         href="/projects"
-        class="inline-flex min-h-7 items-center text-sm font-medium text-accent underline decoration-accent/60 underline-offset-[0.25em] hover:decoration-accent"
+        class="group inline-flex min-h-7 items-center text-sm font-medium text-accent no-underline"
       >
-        All projects ({featuredProjects.length}) <span aria-hidden="true" class="ml-1">→</span>
+        <span class="underline decoration-accent/60 underline-offset-[0.25em] group-hover:decoration-accent">All projects ({featuredProjects.length})</span> <span aria-hidden="true" class="ml-1">→</span>
       </a>
     </div>
     <p class="mt-2 text-sm text-ink-muted">
@@ -73,23 +73,23 @@ const featuredProjects = allProjects
     </div>
   </section>
 
-  <section class="mt-12 border-b border-hairline pb-12 sm:mt-14 sm:pb-14">
+  <section class="mt-12 border-b border-hairline pb-6 sm:mt-14 sm:pb-8">
     <div class="flex flex-wrap items-baseline justify-between gap-4">
       <h2 class="font-display text-2xl font-bold text-ink sm:text-3xl">
         Hardware & Community
       </h2>
       <a
         href="/about"
-        class="inline-flex min-h-7 items-center text-sm font-medium text-accent underline decoration-accent/60 underline-offset-[0.25em] hover:decoration-accent"
+        class="group inline-flex min-h-7 items-center text-sm font-medium text-accent no-underline"
       >
-        More on About <span aria-hidden="true" class="ml-1">→</span>
+        <span class="underline decoration-accent/60 underline-offset-[0.25em] group-hover:decoration-accent">More on About</span> <span aria-hidden="true" class="ml-1">→</span>
       </a>
     </div>
     <p class="mt-2 text-sm text-ink-muted">
       Beyond software repositories—hands-on diagnostics, custom PC builds, and local developer workshops in Dumaguete City.
     </p>
 
-    <ul role="list" class="mt-6 divide-y divide-hairline border-y border-hairline">
+    <ul role="list" class="mt-6 divide-y divide-hairline border-t border-hairline">
       {
         EXPERIENCE.map((item) => (
           <li class="py-4 sm:py-5">
@@ -100,7 +100,7 @@ const featuredProjects = allProjects
               </h3>
               <span class="font-mono text-xs tabular-nums text-ink-muted">{item.period}</span>
             </div>
-            <p class="mt-1.5 text-sm leading-relaxed text-ink-muted">
+            <p class="mt-1.5 max-w-[65ch] text-sm leading-relaxed text-ink-muted">
               {item.summary}
             </p>
           </li>
@@ -125,9 +125,9 @@ const featuredProjects = allProjects
               href={item.href}
               target={item.external ? '_blank' : undefined}
               rel={item.external ? 'noopener noreferrer' : undefined}
-              class="inline-flex min-h-7 items-center font-medium text-ink underline decoration-accent decoration-1 underline-offset-[0.25em] hover:text-accent"
+              class="group inline-flex min-h-7 items-center font-medium text-ink no-underline hover:text-accent"
             >
-              {item.label}: <span class="ml-1 font-mono text-xs text-ink-muted">{item.handle}</span>
+              <span class="underline decoration-accent decoration-1 underline-offset-[0.25em]">{item.label}: <span class="ml-1 font-mono text-xs text-ink-muted group-hover:text-accent">{item.handle}</span></span>
               {item.external && (
                 <>
                   <span class="visually-hidden"> (opens in a new tab)</span>

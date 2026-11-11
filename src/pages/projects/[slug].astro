@@ -44,9 +44,10 @@ const badgeClass =
   <nav aria-label="Breadcrumb" class="mb-6">
     <a
       href="/projects"
-      class="inline-flex min-h-7 items-center text-sm font-medium text-ink-muted underline decoration-hairline-strong underline-offset-[0.25em] hover:text-ink hover:decoration-accent"
+      class="group inline-flex min-h-7 items-center text-sm font-medium text-ink-muted no-underline transition-colors hover:text-ink"
     >
-      <span aria-hidden="true" class="mr-1.5">←</span> All projects
+      <span aria-hidden="true" class="mr-1.5">←</span>
+      <span class="underline decoration-hairline-strong underline-offset-[0.25em] group-hover:decoration-accent">All projects</span>
     </a>
   </nav>
 
@@ -84,9 +85,9 @@ const badgeClass =
                 href={data.liveUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                class="inline-flex items-center font-medium text-accent underline decoration-accent/70 underline-offset-[0.22em] hover:decoration-accent break-all"
+                class="group inline-flex items-center font-medium text-accent no-underline break-all"
               >
-                {data.liveUrl.replace(/^https?:\/\//, '')}
+                <span class="underline decoration-accent/70 underline-offset-[0.22em] group-hover:decoration-accent">{data.liveUrl.replace(/^https?:\/\//, '')}</span>
                 <span class="visually-hidden"> (opens in a new tab)</span>
                 <span aria-hidden="true" class="ml-1 text-xs">↗</span>
               </a>
@@ -144,7 +145,7 @@ const badgeClass =
     }
   </header>
 
-  <article class="prose prose-editorial mt-8 max-w-none sm:mt-10">
+  <article class="prose prose-editorial mt-8 sm:mt-10">
     <Content />
   </article>
 
