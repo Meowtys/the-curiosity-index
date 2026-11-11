@@ -59,16 +59,6 @@ const badgeClass =
     {data.description}
   </p>
 
-  <ul role="list" class="mt-4 flex flex-wrap gap-1.5" aria-label={`Technologies used in ${data.title}`}>
-    {
-      data.tags.map((tag) => (
-        <li class="rounded-xs border border-hairline bg-surface px-2 py-0.5 font-mono text-xs text-ink-muted break-words">
-          {tag}
-        </li>
-      ))
-    }
-  </ul>
-
   <div class="mt-5 flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-hairline pt-3.5 text-sm">
     <a
       href={`/projects/${slug}`}
