@@ -1,0 +1,45 @@
+---
+title: "JB2K Mods"
+subtitle: "Commission & order-tracking platform for custom NBA 2K cyberfaces"
+description: "A full-stack e-commerce commission workflow and order tracker built with Laravel 13, PHP 8.4, Inertia 3, React 19, and Tailwind CSS 4—replacing fragmented DM threads with structured briefs, live card previews, and a 2FA-secured admin queue."
+date: 2026-04-01
+timeline: "2026 · Production"
+status: "Live"
+category: "Software"
+role: "Full-Stack Developer"
+tags:
+  - "Laravel 13"
+  - "PHP 8.4"
+  - "Inertia 3"
+  - "React 19"
+  - "TypeScript"
+  - "Tailwind CSS 4"
+  - "SQLite"
+featured: true
+order: 2
+liveUrl: "https://jb2k.shop"
+---
+
+## Problem & Context
+
+Custom NBA 2K modding (player cyberfaces, hairstyles, and tattoos across 2K25–2K27) is traditionally coordinated through scattered social media DMs. Creators lose hours chasing missing reference photos, clarifying target game versions, manually quoting add-ons, and answering repetitive *"what is my order status?"* messages.
+
+I built **JB2K Mods** (`jb2k.shop`) to replace ad-hoc chat threads with a dedicated, dark-court broadcast storefront where clients configure commissions with upfront pricing and track progress asynchronously.
+
+## Architecture & Key Engineering Decisions
+
+### Structured Commission Intake & Live Player Card Preview
+
+- **Interactive Builder (`/commission`):** Clients select their target title (`2K25`, `2K26`, `2K27`), base cyberface package, and modular add-ons (custom hair, beard, tattoos, accessories, rush priority) while watching a **live player-card preview** update in real time.
+- **Reference Photo Validation:** Enforces multi-angle reference uploads and structured notes at submission time so every brief enters the queue ready to sculpt.
+- **Persistent Cross-Page Audio Dock:** Built with **Inertia.js v3** and **React 19** (`TypeScript`), the storefront maintains a persistent bottom-right YouTube soundtrack dock that continues playing smoothly across client-side page transitions between the showcase, commission form, and order tracker.
+
+### Order Tracking & Hardened Admin Queue
+
+- **Self-Serve Order Codes (`/track`):** Every submission generates a unique `JB2K-XXXXXXXX` tracking token and triggers transactional email notifications via **Resend**, allowing clients to inspect queue stage and delivery notes without creating an account.
+- **2FA & Passkey Admin Workspace:** The creator dashboard is protected by **Laravel Fortify** with two-factor authentication (TOTP) and WebAuthn passkeys, providing one-click status transitions, reference asset downloads, and revenue filtering.
+- **Lean Production Deployment:** Runs on **Laravel 13** and **PHP 8.4** backed by **SQLite** on a persistent **Railway** volume, keeping infrastructure simple and response times fast.
+
+## Quality & Verification Discipline
+
+The codebase is verified continuously with **PHPStan / Larastan at Level 7**, **Laravel Pint** formatting, **ESLint + TypeScript** strict checks, and a **PHPUnit** feature suite covering commission price calculation, tracking code lookup, and authenticated admin state transitions.

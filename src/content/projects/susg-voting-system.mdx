@@ -1,0 +1,46 @@
+---
+title: "SUSG Voting System"
+subtitle: "Online student government election & Comelec administration platform"
+description: "A dedicated campus election platform for Silliman University Student Government built with PHP 8.2, MariaDB, Tailwind CSS 4, and vanilla JavaScript—replacing LMS-based workarounds with college-scoped ballots and an audited Comelec command center."
+date: 2026-02-01
+timeline: "2024 · Rebuilt 2026"
+status: "In Development"
+category: "Software"
+role: "Project Lead & Maintainer"
+tags:
+  - "PHP 8.2"
+  - "MariaDB"
+  - "Tailwind CSS 4"
+  - "Vanilla JS"
+  - "WCAG 2.2 AA"
+featured: true
+order: 3
+---
+
+## Problem & Context
+
+Running university-wide student government elections through a general-purpose Learning Management System (LMS) forces election commissioners into fragile workarounds: manual course enrollments per college, awkward quiz-style ballot layouts on mobile phones, and slow spreadsheet exports when verifying turnout.
+
+Started in **2024** as a team prototype for **Silliman University Student Government (SUSG)** elections and rebuilt and expanded in **2026**, the **SUSG Voting System** is a purpose-built web platform where students cast verified ballots from their phone or laptop and the Commission on Elections (**Comelec**) operates the entire election lifecycle from a unified administrative dashboard.
+
+## Architecture & Rebuild Highlights
+
+### Server-Enforced College Ballot Scoping
+
+University elections combine campus-wide executive races (President and Vice President) with college-specific representative seats where each academic unit elects a distinct quota of representatives.
+
+- **Zero Client-Side Trust:** Ballot eligibility and seat limits are enforced strictly on the server in **PHP 8.2** and **MariaDB** based on the authenticated voter's college affiliation.
+- **Single-Submission Integrity:** Database constraints and transactional ballot recording ensure a student can cast exactly one ballot per election while preserving ballot secrecy from administrative tampering.
+
+### Comelec Administration & Atomic Live Results Caching
+
+During peak election hours, hundreds of students and watchers refresh live turnout and tally pages simultaneously.
+
+- **Atomic File-Locked Cache (`LiveResultsCache.php`):** Instead of running expensive aggregate `COUNT`/`GROUP BY` queries against MariaDB on every page view, live election tallies and college turnout breakdowns are served through an atomic file-locked cache (`flock` + temp-file rename) with explicit invalidation on ballot submission and administrative state changes.
+- **End-to-End Election Operations:** Comelec administrators manage election schedules, candidate slates, party lists, voter rosters, and real-time turnout monitoring from a dedicated control panel.
+
+## Security, Accessibility & Regression Suite
+
+- **Defense-in-Depth Auth:** Combines `bcrypt` credential hashing, hardened session regeneration, per-route CSRF token verification, and login rate-limiting.
+- **WCAG 2.2 AA Accessibility:** Built with semantic HTML, keyboard-operable ballot controls, high-contrast status indicators, and responsive mobile-first layouts styled with **Tailwind CSS 4** and **vanilla JavaScript**.
+- **Automated Verification:** Backed by an **18-script / 843-check regression suite** (`tests/run-all.php`) exercising ballot scoping, CSRF protection, cache invalidation, and administrative access boundaries.

@@ -1,0 +1,48 @@
+---
+title: "Here!"
+subtitle: "Face-first, offline-first student attendance system for Android"
+description: "An on-device facial recognition attendance platform rebuilt with Flutter, Google ML Kit, MobileFaceNet TFLite, and Firebase to eliminate per-scan cloud API costs and operate reliably across offline campus venues."
+date: 2026-03-01
+timeline: "2023 · Rebuilt 2026"
+status: "Open Beta"
+category: "Software"
+role: "Creator & Lead Developer"
+tags:
+  - "Flutter"
+  - "Dart"
+  - "Google ML Kit"
+  - "TensorFlow Lite"
+  - "Firebase"
+  - "Astro"
+featured: true
+order: 1
+liveUrl: "https://youre-here.vercel.app"
+---
+
+## Problem & Origin
+
+University student organizations and campus-wide assemblies regularly check in hundreds of students across gymnasiums, open courts, and lecture halls where cellular data is congested or unavailable. Manual sign-in sheets create long queues and transcription errors, while cloud-dependent biometric scanners stall whenever connectivity drops.
+
+**Here!** began in 2023 as a college project built alongside Sheikha Encabo and Earlan Josh Sabillano. That original prototype proved that camera-based check-ins could replace paper rosters, but its architecture relied on sending captured frames to **AWS Rekognition** through **Firebase Cloud Functions**. Every check-in required a live internet round-trip and incurred per-invocation cloud vision costs—two constraints that made large-scale campus deployment impractical.
+
+## The 2026 Ground-Up Rebuild
+
+In 2026, I re-architected **Here!** from scratch so the entire recognition pipeline runs **100% on-device** inside a native Android application, paired with a static **Astro** web portal (`youre-here.vercel.app`) for public overview, privacy documentation, and APK distribution.
+
+### On-Device Vision & Embedding Pipeline
+
+- **Face Detection & Alignment:** Uses **Google ML Kit Face Detection** directly on the device camera stream to locate faces, verify framing, and crop aligned regions at interactive frame rates.
+- **MobileFaceNet TFLite Embeddings:** Replaces cloud vision APIs with an embedded **MobileFaceNet TensorFlow Lite** model that extracts normalized facial feature embeddings locally on the phone—reducing per-scan cloud inference cost to zero.
+- **Consent-First Face Data Lifecycle:** Students explicitly consent before enrolling facial embeddings, and raw enrollment imagery is never exposed to unauthorized roles.
+
+### Offline-First Multi-Checker Sync
+
+Campus events typically station multiple attendance checkers at different doors simultaneously, often without Wi-Fi.
+
+- **Deterministic Composite Keys (`$uid~$timestamp`):** Attendance logs are written locally first via **Cloud Firestore** offline persistence using deterministic `$uid~$timestamp` composite identifiers, preventing key collisions when multiple checkers sync queued batches back to the cloud after an event.
+- **Role-Based Access Control (RBAC):** Enforces distinct permissions for **Students**, **Attendance Checkers**, and **Administrators** across both the Flutter client and Firestore security rules.
+- **Turnout Velocity & Export:** Organizers monitor real-time check-in velocity, late/absent breakdowns, and export verified CSV attendance sheets immediately after sync.
+
+## Outcome
+
+**Here!** is currently live in **Open Beta** for Android (`v1.0.0-beta.1`), transforming what started as a cloud-tethered classroom prototype into a resilient, zero-API-cost field tool for student organizations.
