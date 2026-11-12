@@ -68,6 +68,7 @@ test('site.ts exports EXPLORING and CORE_STACK and TechBadge component exists wi
   const site = fs.readFileSync(path.join(root, 'src/data/site.ts'), 'utf8');
   assert.match(site, /export const EXPLORING/);
   assert.match(site, /export const CORE_STACK/);
+  assert.doesNotMatch(site, /I'm Westen,/, 'SITE.bio should not repeat name right below hero h1');
   const badgePath = path.join(root, 'src/components/TechBadge.astro');
   assert.ok(fs.existsSync(badgePath), 'src/components/TechBadge.astro must exist');
   const badge = fs.readFileSync(badgePath, 'utf8');

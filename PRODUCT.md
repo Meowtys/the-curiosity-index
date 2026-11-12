@@ -7,7 +7,7 @@ The personal portfolio and engineering index of **Westen Dasig** (*John Westen R
 - **Primary Identity:** Westen Dasig
 - **Creative Subtitle / Direction:** *The Curiosity Index*
 - **Role Line:** CS Student at Foundation University Dumaguete · Full-Stack Builder
-- **Core Bio:** *"I'm Westen, a computer science student interested in exploring different areas of technology. I spend my time building software, working with hardware, and learning about things that catch my curiosity."*
+- **Core Bio:** *"I'm a computer science student interested in exploring different areas of technology. I spend my time building software, working with hardware, and learning about things that catch my curiosity."*
 
 ## Audience & Purpose
 1. **Primary (Curiosity-driven builder showcase / digital index):** Fellow builders, engineers, and collaborators exploring what Westen builds across software, on-device ML, full-stack web platforms, and computer/mobile hardware repair.
