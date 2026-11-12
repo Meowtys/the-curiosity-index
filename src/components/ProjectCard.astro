@@ -1,6 +1,7 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import { Image } from 'astro:assets';
+import { getStatusBadgeClass } from '../data/site';
 import TechBadge from './TechBadge.astro';
 
 export interface Props {
@@ -11,15 +12,7 @@ export interface Props {
 
 const { slug, data, headingLevel = 'h2' } = Astro.props;
 const HeadingTag = headingLevel;
-
-const badgeClass =
-  data.status === 'Live'
-    ? 'badge-status badge-live'
-    : data.status === 'Open Beta'
-      ? 'badge-status badge-beta'
-      : data.status === 'Archived'
-        ? 'badge-status badge-archived'
-        : 'badge-status badge-dev';
+const badgeClass = getStatusBadgeClass(data.status);
 ---
 
 <article class="group relative flex flex-col gap-3.5 rounded-sm border border-hairline bg-surface-elevated/45 p-4 transition-colors hover:border-hairline-strong hover:bg-surface-elevated/80 sm:flex-row sm:items-center sm:gap-5">
