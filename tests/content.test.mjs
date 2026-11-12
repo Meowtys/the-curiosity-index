@@ -193,6 +193,13 @@ test('Header theme toggle, FOUC guard, CSS overrides, and live canvas/cat sync e
   assert.match(read('DESIGN.md'), /theme-toggle|data-theme/, 'DESIGN.md must document the header theme toggle');
 });
 
+test('about.astro uses native collapsible details cards with the first Experience and Education items open', () => {
+  const about = fs.readFileSync(path.join(root, 'src/pages/about.astro'), 'utf8');
+  assert.match(about, /<details[\s\S]*open=\{index === 0\}/, 'about.astro must expand the first item by default');
+  assert.match(about, /<summary\b/, 'about.astro must use accessible <summary> rows inside <details>');
+  assert.match(about, /accordion-chevron/, 'about.astro summaries must render an accordion chevron');
+});
+
 test('BaseHead and global.css load clean sans-serif (Geist) and JetBrains Mono web fonts without Instrument Serif', () => {
   const head = fs.readFileSync(path.join(root, 'src/components/BaseHead.astro'), 'utf8');
   const css = fs.readFileSync(path.join(root, 'src/styles/global.css'), 'utf8');
