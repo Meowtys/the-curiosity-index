@@ -63,6 +63,10 @@ test('every built page has zero client JS, required SEO/OG tags, single h1, skip
     for (const match of html.matchAll(/href="(\/(?!\/)[^"#?]*)/g)) {
       const target = match[1];
       if (target === '/' || target.startsWith('/favicon')) continue;
+      // Cloudflare Pages 308-redirects /page to /page/, so page links must carry the slash.
+      if (!/\.[a-z0-9]+$/i.test(target)) {
+        assert.ok(target.endsWith('/'), `${rel} links to ${target} without a trailing slash`);
+      }
       const clean = target.replace(/^\/|\/$/g, '');
       const hasFile = fs.existsSync(path.join(distDir, clean)) || fs.existsSync(path.join(distDir, clean, 'index.html'));
       assert.ok(hasFile, `${rel} has broken internal link: ${target}`);
