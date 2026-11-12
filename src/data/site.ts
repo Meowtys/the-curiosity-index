@@ -107,18 +107,6 @@ export const EXPERIENCE: readonly ExperienceItem[] = [
     ],
   },
   {
-    title: 'Founder & Technician',
-    organization: 'WesTech',
-    period: '2020 – Present',
-    location: 'Tanjay City, Philippines',
-    summary:
-      'Local computer and phone repair shop and custom PC building business.',
-    highlights: [
-      'Troubleshoot and repair laptops, desktop PCs, and mobile phones for local clients.',
-      'Select parts, assemble, cable-manage, and test custom desktop PC builds matched to each client’s budget and workload.',
-    ],
-  },
-  {
     title: 'Event Host',
     organization: 'SugarPy Meetup Event (Negros Island Python User Group)',
     period: 'September 2025',
@@ -138,6 +126,18 @@ export const EXPERIENCE: readonly ExperienceItem[] = [
       'Supported the hands-on workshop "Building AI Agents with Python using LangGraph" led by Jouella Fabe (Senior Software Engineer, PagerDuty).',
     highlights: [
       'Assisted attendees with Python environment configuration, dependency troubleshooting, and LangGraph state-graph execution.',
+    ],
+  },
+  {
+    title: 'Founder & Technician',
+    organization: 'WesTech',
+    period: '2020 – Present',
+    location: 'Tanjay City, Philippines',
+    summary:
+      'Local computer and phone repair shop and custom PC building business.',
+    highlights: [
+      'Troubleshoot and repair laptops, desktop PCs, and mobile phones for local clients.',
+      'Select parts, assemble, cable-manage, and test custom desktop PC builds matched to each client’s budget and workload.',
     ],
   },
 ];
