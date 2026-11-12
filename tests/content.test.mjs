@@ -141,6 +141,12 @@ test('AmbientBackdrop and PixelCat components exist and honor motion, desktop, a
   assert.match(cat, /id="meowtys-cat"/, 'PixelCat must render #meowtys-cat canvas');
   assert.match(cat, /id="cat-toggle"/, 'PixelCat must expose #cat-toggle corner button');
   assert.match(cat, /tap-target/, 'PixelCat toggle button must include .tap-target');
+  assert.match(cat, /w-fit/, 'PixelCat toggle button must shrink-wrap to content width (w-fit)');
+  assert.match(
+    read('src/styles/global.css'),
+    /\.tap-target:not\([^)]*\.fixed/,
+    '.tap-target must exclude .fixed elements so unlayered CSS never overrides position: fixed',
+  );
   assert.match(cat, /aria-pressed/, 'PixelCat toggle button must expose aria-pressed state');
   assert.match(cat, /min-width:\s*1024px/, 'PixelCat must be desktop-only (>=1024px)');
   assert.match(cat, /prefers-reduced-motion: reduce/, 'PixelCat must respect prefers-reduced-motion');

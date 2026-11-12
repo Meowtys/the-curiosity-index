@@ -142,8 +142,8 @@ p, li, dd {
 }
 
 /* Expands a compact link's hit area to at least 44x44px without changing layout.
-   Don't use on stretched-link titles: it makes the link the positioning context. */
-.tap-target {
+   Preserve .fixed/.absolute positioning, and skip stretched-link titles so they stay inside the card. */
+.tap-target:not(.fixed, .absolute) {
   position: relative;
 }
 
