@@ -28,6 +28,14 @@ test('content.config.ts and site.ts exist with required exports', () => {
   assert.match(site, /2021 – 2025/);
   assert.match(site, /2025 – 2027/);
   assert.match(site, /Bachelor of Science \(BS\) in Computer Science/);
+
+  const expBlock = site.slice(site.indexOf('export const EXPERIENCE'), site.indexOf('export const EDUCATION'));
+  assert.ok(
+    expBlock.indexOf('eGetinnz') < expBlock.indexOf('SugarPy') &&
+      expBlock.indexOf('SugarPy') < expBlock.indexOf('re:load') &&
+      expBlock.indexOf('re:load') < expBlock.indexOf('WesTech'),
+    'EXPERIENCE must be ordered newest start date first (eGetinnz -> SugarPy -> re:load -> WesTech)',
+  );
 });
 
 test('all three project MDX files exist, carry accurate timelines, and leak no repoUrl', () => {
