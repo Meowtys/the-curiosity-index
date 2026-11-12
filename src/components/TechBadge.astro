@@ -28,6 +28,7 @@ type IconKey =
   | 'railway'
   | 'vercel'
   | 'hardware'
+  | 'html'
   | 'code';
 
 function resolveIcon(label: string): IconKey {
@@ -51,6 +52,7 @@ function resolveIcon(label: string): IconKey {
   if (label.includes('railway')) return 'railway';
   if (label.includes('vercel')) return 'vercel';
   if (label.includes('hardware') || label.includes('pc ')) return 'hardware';
+  if (label.includes('html')) return 'html';
   return 'code';
 }
 
@@ -234,6 +236,14 @@ const pillClasses =
         <rect x="6" y="6" width="12" height="12" rx="2" />
         <rect x="9" y="9" width="6" height="6" rx="1" />
         <path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4" />
+      </svg>
+    )
+  }
+  {
+    icon === 'html' && (
+      <svg class="h-3.5 w-3.5 shrink-0 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M4 3l1.6 17L12 22l6.4-2L20 3H4z" />
+        <path d="M15.5 7.5h-7l.35 4h6.3l-.4 4.3L12 16.8l-2.75-1-.15-1.6" />
       </svg>
     )
   }
