@@ -22,7 +22,10 @@ const fullTitle = title.includes(SITE.name)
   : `${title} · ${SITE.name} — ${SITE.subtitle}`;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? SITE.siteUrl);
-const socialImageURL = image ? new URL(image, Astro.site ?? SITE.siteUrl).toString() : undefined;
+const resolvedImage = image ?? (noindex ? undefined : '/og-default.png');
+const socialImageURL = resolvedImage
+  ? new URL(resolvedImage, Astro.site ?? SITE.siteUrl).toString()
+  : undefined;
 ---
 
 <meta charset="utf-8" />

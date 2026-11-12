@@ -36,6 +36,19 @@ export interface ExploringItem {
   description: string;
 }
 
+export type ProjectStatus = 'Live' | 'Open Beta' | 'In Development' | 'Archived';
+
+const STATUS_BADGE_CLASSES: Record<ProjectStatus, string> = {
+  Live: 'badge-status badge-live',
+  'Open Beta': 'badge-status badge-beta',
+  'In Development': 'badge-status badge-dev',
+  Archived: 'badge-status badge-archived',
+};
+
+export function getStatusBadgeClass(status: ProjectStatus): string {
+  return STATUS_BADGE_CLASSES[status];
+}
+
 export const SITE = {
   name: 'Westen Dasig',
   fullName: 'John Westen Rey Dasig',
