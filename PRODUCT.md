@@ -37,3 +37,8 @@ The personal portfolio and engineering index of **Westen Dasig** (*John Westen R
 - No contact forms, backend database, or analytics trackers.
 - Keep JavaScript minimal and self-hosted (only lightweight ambient canvas and desktop cursor-cat enhancements, never analytics or heavy UI runtimes).
 - No fabricated metrics, unverified dates, or placeholder links to private repositories.
+
+## Future Roadmap
+- **Career & Content Expansions (Deferred TODO):**
+  - Printable Resume / CV view (`/resume`) synced cleanly with verified `EXPERIENCE`, education, and skills data, complete with clean `@media print` styling.
+  - Field Notes / Micro-Blog (`/notes`) for concise engineering logs, bug post-mortems, and architecture writeups.
