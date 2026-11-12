@@ -43,3 +43,10 @@ test('global.css defines explicit prefers-reduced-motion: reduce rule disabling 
   assert.match(css, /@media\s*\(\s*prefers-reduced-motion:\s*reduce\s*\)/);
   assert.match(css, /transition:\s*none/);
 });
+
+test('ProjectCard uses compact horizontal row layout with a constrained side thumbnail on sm+ screens', () => {
+  const card = fs.readFileSync(path.join(root, 'src/components/ProjectCard.astro'), 'utf8');
+  assert.match(card, /\bsm:flex-row\b/, 'ProjectCard must use sm:flex-row for compact horizontal rows');
+  assert.match(card, /\bsm:w-48\b/, 'ProjectCard cover thumbnail must be constrained to sm:w-48');
+  assert.doesNotMatch(card, /w-\[calc\(100%\+/, 'ProjectCard must not use full-bleed cover banners');
+});
