@@ -82,6 +82,7 @@ const NO_URL_LABELS: Record<typeof data.status, string> = {
             class="lightbox-trigger group block w-full text-left cursor-zoom-in focus-visible:outline-accent"
             aria-label={`Enlarge cover image: ${data.coverAlt ?? data.title}`}
             data-full-src={data.cover.src}
+            data-alt={data.coverAlt ?? `${data.title} interface preview`}
             data-caption={`${data.title} — ${data.subtitle}`}
           >
             <Image
@@ -116,7 +117,7 @@ const NO_URL_LABELS: Record<typeof data.status, string> = {
                 href={data.liveUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                class="group inline-flex items-center font-medium text-accent no-underline break-all"
+                class="tap-target group inline-flex min-h-7 items-center font-medium text-accent no-underline break-all"
               >
                 <span class="underline decoration-accent/70 underline-offset-[0.22em] group-hover:decoration-accent">{data.liveUrl.replace(/^https?:\/\//, '')}</span>
                 <span class="visually-hidden"> (opens in a new tab)</span>
@@ -182,9 +183,10 @@ const NO_URL_LABELS: Record<typeof data.status, string> = {
               <figure class={wide ? 'col-span-6' : 'col-span-3 sm:col-span-2'}>
                 <button
                   type="button"
-                  class="lightbox-trigger group block w-full text-left cursor-zoom-in rounded-sm overflow-hidden focus-visible:outline-accent"
+                  class="lightbox-trigger group block w-full text-left cursor-zoom-in rounded-sm border border-hairline overflow-hidden transition-colors hover:border-hairline-strong focus-visible:outline-accent"
                   aria-label={`Enlarge image: ${shot.alt}`}
                   data-full-src={shot.src.src}
+                  data-alt={shot.alt}
                   data-caption={shot.caption}
                 >
                   <Image
@@ -192,7 +194,7 @@ const NO_URL_LABELS: Record<typeof data.status, string> = {
                     alt={shot.alt}
                     widths={wide ? [736, 1472] : [240, 480, 720]}
                     sizes={wide ? '(min-width: 46rem) 42rem, calc(100vw - 2.5rem)' : '(min-width: 40rem) 14rem, 45vw'}
-                    class="h-auto w-full rounded-sm border border-hairline transition-transform duration-200 group-hover:scale-[1.01]"
+                    class="h-auto w-full transition-transform duration-200 group-hover:scale-[1.01]"
                   />
                 </button>
                 <figcaption class="mt-2 max-w-[65ch] text-sm text-ink-muted">{shot.caption}</figcaption>
@@ -251,7 +253,7 @@ const NO_URL_LABELS: Record<typeof data.status, string> = {
         <button
           type="button"
           id="lightbox-close"
-          class="tap-target inline-flex items-center rounded-xs border border-zinc-700 bg-zinc-900/90 px-2.5 py-1 text-zinc-200 hover:border-zinc-500 hover:text-white cursor-pointer"
+          class="tap-target shrink-0 inline-flex items-center rounded-xs border border-zinc-700 bg-zinc-900/90 px-2.5 py-1 text-zinc-200 hover:border-zinc-500 hover:text-white cursor-pointer"
           aria-label="Close enlarged preview"
         >
           Close [Esc]
@@ -274,12 +276,15 @@ const NO_URL_LABELS: Record<typeof data.status, string> = {
     const triggers = document.querySelectorAll<HTMLButtonElement>('.lightbox-trigger');
 
     if (dialog && closeBtn && img && caption && triggers.length > 0) {
+      const PLACEHOLDER_SRC =
+        img.getAttribute('src') ||
+        "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E";
       let activeTrigger: HTMLButtonElement | null = null;
 
       function openLightbox(trigger: HTMLButtonElement) {
         activeTrigger = trigger;
         const fullSrc = trigger.getAttribute('data-full-src');
-        const alt = trigger.getAttribute('aria-label') || '';
+        const alt = trigger.getAttribute('data-alt') || trigger.getAttribute('aria-label') || '';
         const cap = trigger.getAttribute('data-caption') || '';
 
         if (fullSrc) {
@@ -293,11 +298,6 @@ const NO_URL_LABELS: Record<typeof data.status, string> = {
       function closeLightbox() {
         if (dialog!.open) {
           dialog!.close();
-          img!.src = '';
-          if (activeTrigger) {
-            activeTrigger.focus();
-            activeTrigger = null;
-          }
         }
       }
 
@@ -308,6 +308,8 @@ const NO_URL_LABELS: Record<typeof data.status, string> = {
       closeBtn.addEventListener('click', closeLightbox);
 
       dialog.addEventListener('click', (e) => {
+        // Ignore synthetic keyboard clicks (Enter/Space report detail === 0 at 0,0)
+        if (e.detail === 0) return;
         const rect = dialog.getBoundingClientRect();
         const isInDialog = (
           rect.top <= e.clientY &&
@@ -321,7 +323,12 @@ const NO_URL_LABELS: Record<typeof data.status, string> = {
       });
 
       dialog.addEventListener('close', () => {
-        img!.src = '';
+        img!.src = PLACEHOLDER_SRC;
+        img!.alt = '';
+        if (activeTrigger) {
+          activeTrigger.focus();
+          activeTrigger = null;
+        }
       });
     }
   </script>
