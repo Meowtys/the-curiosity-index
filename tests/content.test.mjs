@@ -208,6 +208,39 @@ test('about.astro uses native collapsible details cards with the first Experienc
   assert.match(about, /accordion-chevron/, 'about.astro summaries must render an accordion chevron');
 });
 
+test('GitHubActivity component, github.json data, and heatmap CSS tokens exist and render on homepage', () => {
+  const ghJsonPath = path.join(root, 'src/data/github.json');
+  const ghCompPath = path.join(root, 'src/components/GitHubActivity.astro');
+  assert.ok(fs.existsSync(ghJsonPath), 'src/data/github.json must exist');
+  assert.ok(fs.existsSync(ghCompPath), 'src/components/GitHubActivity.astro must exist');
+
+  const ghData = JSON.parse(fs.readFileSync(ghJsonPath, 'utf8'));
+  assert.equal(ghData.total, 1354, 'github.json must hold 1,354 total contributions');
+  assert.equal(ghData.weeks.length, 53, 'github.json must hold 53 weeks of contributions');
+
+  const comp = fs.readFileSync(ghCompPath, 'utf8');
+  assert.match(comp, /GitHub Activity/, 'GitHubActivity must render GitHub Activity heading');
+  assert.match(comp, /@Meowtys/, 'GitHubActivity must link to @Meowtys');
+  assert.match(comp, /tap-target/, 'GitHubActivity profile link must use .tap-target');
+  assert.match(comp, /border-hairline/, 'GitHubActivity Variation A must wrap the calendar in a border-hairline card');
+  assert.match(comp, /id="gh-hover-status"/, 'GitHubActivity must expose #gh-hover-status live readout');
+
+  const css = fs.readFileSync(path.join(root, 'src/styles/global.css'), 'utf8');
+  for (let level = 0; level <= 4; level++) {
+    assert.match(css, new RegExp(`--gh-${level}:`), `global.css must define --gh-${level} token`);
+  }
+  assert.match(css, /\.gh-cell\[data-level=['"]4['"]\]/, 'global.css must map .gh-cell[data-level] fills');
+
+  const indexPage = fs.readFileSync(path.join(root, 'src/pages/index.astro'), 'utf8');
+  const projectsIdx = indexPage.indexOf('Projects');
+  const ghIdx = indexPage.indexOf('<GitHubActivity');
+  const stackIdx = indexPage.indexOf('Core Stack');
+  assert.ok(
+    projectsIdx !== -1 && ghIdx > projectsIdx && ghIdx < stackIdx,
+    'index.astro must render <GitHubActivity /> between Projects and Core Stack',
+  );
+});
+
 test('BaseHead and global.css load clean sans-serif (Geist) and JetBrains Mono web fonts without Instrument Serif', () => {
   const head = fs.readFileSync(path.join(root, 'src/components/BaseHead.astro'), 'utf8');
   const css = fs.readFileSync(path.join(root, 'src/styles/global.css'), 'utf8');
