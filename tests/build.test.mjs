@@ -58,6 +58,14 @@ test('every built page has zero client JS, required SEO/OG tags, single h1, skip
     assert.match(html, /<link\s+rel="canonical"\s+href="https:\/\/westendasig\.pages\.dev\//i, `${rel} missing canonical URL`);
     assert.match(html, /<meta\s+property="og:title"\s+content="[^"]+"/i, `${rel} missing og:title`);
     assert.match(html, /<meta\s+property="og:description"\s+content="[^"]+"/i, `${rel} missing og:description`);
+    if (rel !== '404.html') {
+      const ogImageMatch = html.match(/<meta\s+property="og:image"\s+content="https:\/\/westendasig\.pages\.dev(\/[^"]+)"/i);
+      assert.ok(ogImageMatch?.[1], `${rel} missing og:image tag`);
+      assert.match(html, /<meta\s+name="twitter:card"\s+content="summary_large_image"/i, `${rel} missing summary_large_image twitter:card`);
+      assert.match(html, /<meta\s+name="twitter:image"\s+content="https:\/\/westendasig\.pages\.dev\/[^"]+"/i, `${rel} missing twitter:image tag`);
+      const ogAssetRel = ogImageMatch[1].replace(/^\//, '');
+      assert.ok(fs.existsSync(path.join(distDir, ogAssetRel)), `${rel} og:image points to missing file in dist: ${ogImageMatch[1]}`);
+    }
     assert.doesNotMatch(html, /href="undefined"|src="undefined"/i, `${rel} contains undefined link/asset`);
 
     for (const match of html.matchAll(/href="(\/(?!\/)[^"#?]*)/g)) {

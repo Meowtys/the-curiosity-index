@@ -77,11 +77,20 @@ test('BaseHead and global.css load clean sans-serif (Geist) and JetBrains Mono w
   assert.doesNotMatch(css, /Instrument Serif/);
 });
 
-test('site.ts exports EXPLORING and CORE_STACK and TechBadge component exists with SVG logos', () => {
+test('site.ts exports EXPLORING, CORE_STACK, and getStatusBadgeClass, and TechBadge component exists with SVG logos', () => {
   const site = fs.readFileSync(path.join(root, 'src/data/site.ts'), 'utf8');
   assert.match(site, /export const EXPLORING/);
   assert.match(site, /export const CORE_STACK/);
+  assert.match(site, /export function getStatusBadgeClass/);
   assert.doesNotMatch(site, /I'm Westen,/, 'SITE.bio should not repeat name right below hero h1');
+
+  const card = fs.readFileSync(path.join(root, 'src/components/ProjectCard.astro'), 'utf8');
+  const caseStudy = fs.readFileSync(path.join(root, 'src/pages/projects/[slug].astro'), 'utf8');
+  assert.match(card, /getStatusBadgeClass/, 'ProjectCard must use shared getStatusBadgeClass helper');
+  assert.doesNotMatch(card, /badge-status badge-live/, 'ProjectCard must not inline duplicate badge ternary');
+  assert.match(caseStudy, /getStatusBadgeClass/, 'Case study page must use shared getStatusBadgeClass helper');
+  assert.doesNotMatch(caseStudy, /badge-status badge-live/, 'Case study page must not inline duplicate badge ternary');
+
   const badgePath = path.join(root, 'src/components/TechBadge.astro');
   assert.ok(fs.existsSync(badgePath), 'src/components/TechBadge.astro must exist');
   const badge = fs.readFileSync(badgePath, 'utf8');
