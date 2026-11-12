@@ -1,0 +1,143 @@
+---
+---
+
+<canvas
+  id="ambient-ascii"
+  aria-hidden="true"
+  class="pointer-events-none fixed inset-0 z-0 h-full w-full"
+></canvas>
+
+<script>
+  const canvas = document.getElementById('ambient-ascii') as HTMLCanvasElement | null;
+  if (canvas) {
+    const ctx = canvas.getContext('2d');
+    const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const themeQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+    const GLYPHS = ['.', ':', '+', '0', '1', '=', 'x'];
+    const CELL_W = 26;
+    const CELL_H = 30;
+    const SPINE_HALF = 376;
+
+    let cols = 0;
+    let rows = 0;
+    let width = 0;
+    let height = 0;
+    let rafId = 0;
+    let lastDraw = 0;
+    let pointer = { x: -999, y: -999 };
+    let pulse = { x: -999, y: -999, age: 99 };
+
+    function resize() {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas!.width = Math.max(1, Math.floor(width * dpr));
+      canvas!.height = Math.max(1, Math.floor(height * dpr));
+      ctx?.setTransform(dpr, 0, 0, dpr, 0, 0);
+      cols = Math.ceil(width / CELL_W);
+      rows = Math.ceil(height / CELL_H);
+    }
+
+    function render(now: number) {
+      if (!ctx) return;
+      ctx.clearRect(0, 0, width, height);
+
+      const isDark = themeQuery.matches;
+      const fgRgb = isDark ? '243,241,236' : '20,20,19';
+      const accentRgb = isDark ? '251,146,60' : '154,52,18';
+      const t = motionQuery.matches ? 0 : now * 0.00045;
+      const midX = width / 2;
+
+      ctx.font = '12px "JetBrains Mono", ui-monospace, monospace';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          const x = c * CELL_W + CELL_W * 0.5;
+          const y = r * CELL_H + CELL_H * 0.5;
+          const distSpine = Math.max(0, Math.abs(x - midX) - SPINE_HALF);
+          // Keep the center reading column almost clear while softly blooming into desktop side gutters.
+          const spineMask = width < 820 ? 0.12 : Math.min(1, 0.1 + distSpine / 120);
+
+          const wave =
+            Math.sin(c * 0.36 + t) * Math.cos(r * 0.42 - t * 0.75) +
+            Math.sin((c + r) * 0.19 + t * 0.55) * 0.45;
+          if (wave < 0.2) continue;
+
+          const dCursor = Math.hypot(x - pointer.x, y - pointer.y);
+          const cursorBoost = !motionQuery.matches && dCursor < 115 ? 1 - dCursor / 115 : 0;
+
+          let rippleBoost = 0;
+          if (!motionQuery.matches && pulse.age < 1.1) {
+            const radius = pulse.age * 240;
+            const ringDist = Math.abs(Math.hypot(x - pulse.x, y - pulse.y) - radius);
+            if (ringDist < 38) {
+              rippleBoost = (1 - ringDist / 38) * (1 - pulse.age / 1.1);
+            }
+          }
+
+          const energy = Math.min(1, cursorBoost * 0.9 + rippleBoost);
+          const glyphIdx = Math.min(GLYPHS.length - 1, Math.floor((wave + 0.8) * 2.1 + energy * 2.5));
+          const alpha = Math.min(0.28, (0.045 + energy * 0.18) * spineMask + rippleBoost * 0.1);
+
+          ctx.fillStyle = energy > 0.28 ? `rgba(${accentRgb}, ${alpha})` : `rgba(${fgRgb}, ${alpha})`;
+          ctx.fillText(GLYPHS[glyphIdx], x, y);
+        }
+      }
+    }
+
+    function loop(now: number) {
+      if (document.hidden || motionQuery.matches) {
+        rafId = 0;
+        return;
+      }
+      if (now - lastDraw >= 34) {
+        pulse.age += (now - (lastDraw || now)) / 1000;
+        lastDraw = now;
+        render(now);
+      }
+      rafId = requestAnimationFrame(loop);
+    }
+
+    function start() {
+      resize();
+      if (motionQuery.matches) {
+        cancelAnimationFrame(rafId);
+        rafId = 0;
+        render(0);
+      } else if (!rafId && !document.hidden) {
+        lastDraw = performance.now();
+        rafId = requestAnimationFrame(loop);
+      }
+    }
+
+    window.addEventListener('resize', () => {
+      resize();
+      if (motionQuery.matches) render(0);
+    }, { passive: true });
+
+    window.addEventListener('pointermove', (e) => {
+      pointer.x = e.clientX;
+      pointer.y = e.clientY;
+    }, { passive: true });
+
+    window.addEventListener('pointerdown', (e) => {
+      pulse = { x: e.clientX, y: e.clientY, age: 0 };
+    }, { passive: true });
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        cancelAnimationFrame(rafId);
+        rafId = 0;
+      } else {
+        start();
+      }
+    });
+
+    motionQuery.addEventListener('change', start);
+    themeQuery.addEventListener('change', () => render(performance.now()));
+    start();
+  }
+</script>

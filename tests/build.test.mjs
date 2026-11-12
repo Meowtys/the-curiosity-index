@@ -23,12 +23,31 @@ test('dist contains all expected static HTML pages and sitemap-index.xml', () =>
   assert.ok(fs.existsSync(path.join(distDir, 'sitemap-index.xml')), 'Missing sitemap-index.xml');
 });
 
-test('every built page has zero client JS, required SEO/OG tags, single h1, skip link, and valid internal links', () => {
+test('every built page ships only tiny self-hosted Astro module JS, required SEO/OG tags, single h1, skip link, and valid internal links', () => {
   const titles = new Set();
   for (const rel of expectedPages) {
     const html = fs.readFileSync(path.join(distDir, rel), 'utf8');
 
-    assert.doesNotMatch(html, /<script\b/i, `${rel} must ship zero client <script> tags`);
+    const scripts = [...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)];
+    assert.ok(scripts.length > 0 && scripts.length <= 2, `${rel} expected 1-2 ambient/cat module scripts, got ${scripts.length}`);
+    let pageJsBytes = 0;
+    for (const [, attrs, inlineBody] of scripts) {
+      assert.match(attrs, /type="module"/i, `${rel} scripts must be type="module"`);
+      const srcMatch = attrs.match(/src="([^"]+)"/i);
+      if (srcMatch) {
+        assert.match(srcMatch[1], /^\/_astro\/[^"]+\.js$/, `${rel} must not load third-party scripts: ${srcMatch[1]}`);
+        const jsPath = path.join(distDir, srcMatch[1].replace(/^\//, ''));
+        assert.ok(fs.existsSync(jsPath), `Missing bundled script in dist: ${srcMatch[1]}`);
+        pageJsBytes += fs.statSync(jsPath).size;
+      } else {
+        assert.match(inlineBody, /ambient-ascii|meowtys-cat/, `${rel} inline module must only be ambient-ascii or meowtys-cat`);
+        pageJsBytes += Buffer.byteLength(inlineBody, 'utf8');
+      }
+    }
+    assert.ok(pageJsBytes <= 8 * 1024, `${rel} total client JS must stay <= 8 KB, got ${pageJsBytes} bytes`);
+    assert.match(html, /id="ambient-ascii"/, `${rel} missing #ambient-ascii backdrop canvas`);
+    assert.match(html, /id="meowtys-cat"/, `${rel} missing #meowtys-cat companion canvas`);
+    assert.match(html, /id="cat-toggle"/, `${rel} missing #cat-toggle button`);
     assert.match(html, /<a[^>]+href="#main-content"/i, `${rel} missing skip link`);
     assert.match(html, /<main[^>]+id="main-content"/i, `${rel} missing #main-content`);
 

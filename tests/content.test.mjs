@@ -127,6 +127,32 @@ test('audit fixes: tap targets, status-derived fallback, accurate copy, and docu
   assert.match(read('src/components/TechBadge.astro'), /'html'/, 'TechBadge must have a dedicated HTML/CSS icon');
 });
 
+test('AmbientBackdrop and PixelCat components exist and honor motion, desktop, and pointer guardrails', () => {
+  const read = (rel) => fs.readFileSync(path.join(root, rel), 'utf8');
+
+  const backdrop = read('src/components/AmbientBackdrop.astro');
+  assert.match(backdrop, /id="ambient-ascii"/, 'AmbientBackdrop must render #ambient-ascii canvas');
+  assert.match(backdrop, /aria-hidden="true"/, 'AmbientBackdrop canvas must be aria-hidden');
+  assert.match(backdrop, /pointer-events-none/, 'AmbientBackdrop canvas must be pointer-events-none');
+  assert.match(backdrop, /prefers-reduced-motion: reduce/, 'AmbientBackdrop must respect prefers-reduced-motion');
+  assert.match(backdrop, /visibilitychange/, 'AmbientBackdrop must pause when tab is hidden');
+
+  const cat = read('src/components/PixelCat.astro');
+  assert.match(cat, /id="meowtys-cat"/, 'PixelCat must render #meowtys-cat canvas');
+  assert.match(cat, /id="cat-toggle"/, 'PixelCat must expose #cat-toggle corner button');
+  assert.match(cat, /tap-target/, 'PixelCat toggle button must include .tap-target');
+  assert.match(cat, /aria-pressed/, 'PixelCat toggle button must expose aria-pressed state');
+  assert.match(cat, /min-width:\s*1024px/, 'PixelCat must be desktop-only (>=1024px)');
+  assert.match(cat, /prefers-reduced-motion: reduce/, 'PixelCat must respect prefers-reduced-motion');
+  assert.match(cat, /localStorage/, 'PixelCat must persist mute/hide toggle in localStorage');
+
+  const layout = read('src/layouts/BaseLayout.astro');
+  assert.match(layout, /AmbientBackdrop/, 'BaseLayout must include AmbientBackdrop');
+  assert.match(layout, /PixelCat/, 'BaseLayout must include PixelCat');
+  assert.doesNotMatch(read('PRODUCT.md'), /Zero client-side JavaScript by default\./, 'PRODUCT.md must reflect lightweight ambient/cat enhancement instead of strict zero JS');
+  assert.match(read('DESIGN.md'), /ambient-ascii|Ambient Backdrop/i, 'DESIGN.md must document ambient backdrop & pixel cat surface');
+});
+
 test('BaseHead and global.css load clean sans-serif (Geist) and JetBrains Mono web fonts without Instrument Serif', () => {
   const head = fs.readFileSync(path.join(root, 'src/components/BaseHead.astro'), 'utf8');
   const css = fs.readFileSync(path.join(root, 'src/styles/global.css'), 'utf8');
