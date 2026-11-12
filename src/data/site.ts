@@ -42,7 +42,7 @@ export const SITE = {
   subtitle: 'The Curiosity Index',
   role: 'CS Student at Foundation University Dumaguete · Full-Stack Builder',
   location: 'Tanjay City, Philippines',
-  bio: "I'm Westen, a computer science student interested in exploring different areas of technology. I spend my time building software, working with hardware, and learning about things that catch my curiosity.",
+  bio: "I'm a computer science student interested in exploring different areas of technology. I spend my time building software, working with hardware, and learning about things that catch my curiosity.",
   email: 'westendasig2003@gmail.com',
   siteUrl: 'https://westendasig.pages.dev',
   description:

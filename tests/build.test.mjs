@@ -96,4 +96,9 @@ test('built home and case study pages include Currently Exploring, Core Stack, a
 
   const hereHtml = fs.readFileSync(path.join(distDir, 'projects/here/index.html'), 'utf8');
   assert.match(hereHtml, /<svg\b/i, 'case study page must include inline SVG stack logos');
+
+  const homeHeader = homeHtml.match(/<header[\s\S]*?<\/header>/i)?.[0] ?? '';
+  assert.match(homeHeader, />WD</, 'home header must include WD monogram badge');
+  assert.match(homeHeader, /The Curiosity Index/, 'home header must include The Curiosity Index');
+  assert.doesNotMatch(homeHeader, /Westen Dasig/, 'home header must not repeat Westen Dasig above hero h1');
 });
