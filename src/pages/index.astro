@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ProjectCard from '../components/ProjectCard.astro';
+import GitHubActivity from '../components/GitHubActivity.astro';
 import TechBadge from '../components/TechBadge.astro';
 import { SITE, EXPERIENCE, SOCIAL_LINKS, CORE_STACK, EXPLORING } from '../data/site';
 
@@ -98,6 +99,8 @@ const featuredProjects = allProjects
       }
     </div>
   </section>
+
+  <GitHubActivity />
 
   <section class="mt-12 border-b border-hairline pb-10 sm:mt-14 sm:pb-12">
     <div class="flex flex-wrap items-baseline justify-between gap-4">
