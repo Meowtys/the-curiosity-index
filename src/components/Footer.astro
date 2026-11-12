@@ -18,7 +18,7 @@ import { SITE, SOCIAL_LINKS } from '../data/site';
               href={item.href}
               target={item.external ? '_blank' : undefined}
               rel={item.external ? 'noopener noreferrer' : undefined}
-              class="group inline-flex min-h-7 items-center py-1 text-ink-muted no-underline transition-colors hover:text-ink"
+              class="tap-target group inline-flex min-h-7 items-center py-1 text-ink-muted no-underline transition-colors hover:text-ink"
             >
               <span class="underline decoration-hairline-strong underline-offset-[0.25em] group-hover:decoration-accent">{item.label}</span>
               {item.external && (

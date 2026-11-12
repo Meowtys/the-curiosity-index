@@ -31,18 +31,27 @@ const { Content } = await render(entry);
 const { data } = entry;
 
 const badgeClass = getStatusBadgeClass(data.status);
+
+// Shown when a project has no public URL; worded from its status so archived or private-live work isn't mislabeled.
+const NO_URL_LABELS: Record<typeof data.status, string> = {
+  Live: 'Private deployment',
+  'Open Beta': 'Private beta · Access on request',
+  'In Development': 'Private deployment · In development',
+  Archived: 'No longer deployed',
+};
 ---
 
 <BaseLayout
   title={`${data.title} — Case Study`}
   description={data.description}
   image={data.cover?.src}
+  imageAlt={data.coverAlt}
   type="article"
 >
   <nav aria-label="Breadcrumb" class="mb-6">
     <a
       href="/projects/"
-      class="group inline-flex min-h-7 items-center text-sm font-medium text-ink-muted no-underline transition-colors hover:text-ink"
+      class="tap-target group inline-flex min-h-7 items-center text-sm font-medium text-ink-muted no-underline transition-colors hover:text-ink"
     >
       <span aria-hidden="true" class="mr-1.5">←</span>
       <span class="underline decoration-hairline-strong underline-offset-[0.25em] group-hover:decoration-accent">All projects</span>
@@ -106,7 +115,7 @@ const badgeClass = getStatusBadgeClass(data.status);
                 <span aria-hidden="true" class="ml-1 text-xs">↗</span>
               </a>
             ) : (
-              <span class="text-ink-muted">Private deployment · Currently in development</span>
+              <span class="text-ink-muted">{NO_URL_LABELS[data.status]}</span>
             )
           }
         </dd>

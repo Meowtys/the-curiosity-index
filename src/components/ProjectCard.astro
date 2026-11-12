@@ -8,9 +8,11 @@ export interface Props {
   slug: string;
   data: CollectionEntry<'projects'>['data'];
   headingLevel?: 'h2' | 'h3';
+  /** Load the cover eagerly; set on the first card near the fold. */
+  priority?: boolean;
 }
 
-const { slug, data, headingLevel = 'h2' } = Astro.props;
+const { slug, data, headingLevel = 'h2', priority = false } = Astro.props;
 const HeadingTag = headingLevel;
 const badgeClass = getStatusBadgeClass(data.status);
 ---
@@ -24,6 +26,8 @@ const badgeClass = getStatusBadgeClass(data.status);
           alt={data.coverAlt ?? ''}
           widths={[240, 384, 736]}
           sizes="(min-width: 40rem) 12rem, calc(100vw - 4.5rem)"
+          loading={priority ? 'eager' : 'lazy'}
+          fetchpriority={priority ? 'high' : undefined}
           class="block h-full w-full object-cover transition-all duration-200 saturate-[0.9] group-hover:scale-[1.02] group-hover:saturate-100"
         />
       </div>
@@ -78,7 +82,7 @@ const badgeClass = getStatusBadgeClass(data.status);
             href={data.liveUrl}
             target="_blank"
             rel="noopener noreferrer"
-            class="relative z-10 inline-flex min-h-6 items-center font-medium text-ink-muted no-underline transition-colors hover:text-ink"
+            class="tap-target z-10 inline-flex min-h-6 items-center font-medium text-ink-muted no-underline transition-colors hover:text-ink"
           >
             <span class="underline decoration-hairline-strong underline-offset-[0.25em] hover:decoration-accent">Visit live site</span><span class="visually-hidden"> for {data.title} (opens in a new tab)</span>
             <span aria-hidden="true" class="ml-1 text-xs">↗</span>

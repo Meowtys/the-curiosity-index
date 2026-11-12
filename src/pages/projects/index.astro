@@ -10,7 +10,7 @@ const projects = (await getCollection('projects')).sort(
 
 <BaseLayout
   title="Projects & Case Studies"
-  description="Detailed architectural case studies of software platforms and systems built by Westen Dasig, including Here!, JB2K Mods, and the SUSG Voting System."
+  description="Case studies of software built by Westen Dasig: the Here! attendance app, the JB2K Mods commission platform, and the SUSG Voting System."
 >
   <header class="border-b border-hairline pb-8">
     <h1 class="font-display text-3xl font-bold tracking-tight text-ink sm:text-4xl">
@@ -23,11 +23,12 @@ const projects = (await getCollection('projects')).sort(
 
   <section class="mt-7 grid gap-4 sm:mt-8" aria-label="Project list">
     {
-      projects.map((project) => (
+      projects.map((project, index) => (
         <ProjectCard
           slug={project.id}
           data={project.data}
           headingLevel="h2"
+          priority={index === 0}
         />
       ))
     }

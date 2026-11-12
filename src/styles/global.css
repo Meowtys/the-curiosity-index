@@ -141,6 +141,22 @@ p, li, dd {
   }
 }
 
+/* Expands a compact link's hit area to at least 44x44px without changing layout.
+   Don't use on stretched-link titles: it makes the link the positioning context. */
+.tap-target {
+  position: relative;
+}
+
+.tap-target::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: max(100%, 44px);
+  height: max(100%, 44px);
+  transform: translate(-50%, -50%);
+}
+
 /* Visually hidden utility that reveals on focus when used as skip-link */
 .visually-hidden:where(:not(:focus-within, :active)) {
   position: absolute !important;
@@ -186,12 +202,12 @@ p, li, dd {
 .badge-status {
   display: inline-flex;
   align-items: center;
-  padding: 0.125rem 0.5rem;
+  padding: 0.25rem 0.5rem;
   border-radius: 0.25rem;
   font-family: var(--font-mono);
   font-size: 0.75rem;
   font-weight: 500;
-  line-height: 1.4;
+  line-height: 1.3;
   border: 1px solid transparent;
 }
 

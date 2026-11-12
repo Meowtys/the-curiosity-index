@@ -1,7 +1,7 @@
 ---
 title: "Here!"
 subtitle: "Face-first, offline-first student attendance system for Android"
-description: "An on-device facial recognition attendance platform rebuilt with Flutter, Google ML Kit, MobileFaceNet TFLite, and Firebase to eliminate per-scan cloud API costs and operate reliably across offline campus venues."
+description: "On-device facial recognition attendance for Android, rebuilt with Flutter, ML Kit, and TFLite to cut per-scan cloud costs and work offline at campus events."
 date: 2026-03-01
 timeline: "2023 · Rebuilt 2026"
 status: "Open Beta"
@@ -59,7 +59,8 @@ Campus events typically station multiple attendance checkers at different doors 
 
 - **Deterministic Composite Keys (`$uid~$timestamp`):** Attendance logs are written locally first via **Cloud Firestore** offline persistence using deterministic `$uid~$timestamp` composite identifiers, preventing key collisions when multiple checkers sync queued batches back to the cloud after an event.
 - **Role-Based Access Control (RBAC):** Enforces distinct permissions for **Students**, **Attendance Checkers**, and **Administrators** across both the Flutter client and Firestore security rules.
-- **Turnout Velocity & Export:** Organizers monitor real-time check-in velocity, late/absent breakdowns, and export verified CSV attendance sheets immediately after sync.
+- **Org Groups & Multi-Day Sessions:** Each student organization gets its own group that checkers join with a code or QR, rosters import straight from Excel or Sheets, and multi-day events split into separate morning and afternoon sessions.
+- **Turnout Velocity & Export:** Organizers monitor real-time check-in velocity, late/absent breakdowns, and export verified attendance as CSV or print-ready PDF immediately after sync.
 
 ## Outcome
 

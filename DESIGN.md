@@ -16,24 +16,35 @@
 ### Light Mode (`prefers-color-scheme: light` default)
 - `--bg`: `#FAF8F5` (Warm archival paper)
 - `--bg-elevated`: `#F2EFE9` (Warm stone card/panel surface)
-- `--fg`: `#141413` (Deep carbon ink — 17.6:1 on `--bg`)
-- `--fg-muted`: `#52504C` (Warm graphite — 7.5:1 on `--bg`, 6.9:1 on `--bg-elevated`)
+- `--fg`: `#141413` (Deep carbon ink — 17.39:1 on `--bg`)
+- `--fg-muted`: `#52504C` (Warm graphite — 7.59:1 on `--bg`, 7.01:1 on `--bg-elevated`)
 - `--border`: `#D6D1C7` (1px hairline divider)
-- `--border-strong`: `#78736A` (Interactive control boundary — 4.3:1 on `--bg`)
-- `--accent`: `#9A3412` (Editorial rust-vermilion — 7.4:1 on `--bg`)
+- `--border-strong`: `#78736A` (Interactive control boundary — 4.44:1 on `--bg`)
+- `--accent`: `#9A3412` (Editorial rust-vermilion — 6.89:1 on `--bg`, 6.37:1 on `--bg-elevated`)
 - `--accent-soft`: `#FFEDD5` (Selection & subtle highlight tint)
+- Status badges (`padding: 0.25rem 0.5rem`):
+  - Live: `--badge-live-bg` `#DCFCE7` / `--badge-live-fg` `#14532D` (8.3:1) / `--badge-live-border` `#86EFAC`
+  - Open Beta: `--badge-beta-bg` `#DBEAFE` / `--badge-beta-fg` `#1E3A8A` (8.49:1) / `--badge-beta-border` `#93C5FD`
+  - In Development: `--badge-dev-bg` `#FEF3C7` / `--badge-dev-fg` `#78350F` (8.15:1) / `--badge-dev-border` `#FCD34D`
+  - Archived (`.badge-archived`): `--bg-elevated` / `--fg-muted` / `--border-strong`
 
 ### Dark Mode (`@media (prefers-color-scheme: dark)`)
 - `--bg`: `#111110` (Matte carbon canvas)
 - `--bg-elevated`: `#1A1917` (Elevated graphite surface)
-- `--fg`: `#F3F1EC` (Crisp warm parchment — 16.5:1 on `--bg`)
-- `--fg-muted`: `#B5B0A6` (Muted stone — 8.6:1 on `--bg`, 8.0:1 on `--bg-elevated`)
+- `--fg`: `#F3F1EC` (Crisp warm parchment — 16.74:1 on `--bg`)
+- `--fg-muted`: `#B5B0A6` (Muted stone — 8.75:1 on `--bg`, 8.14:1 on `--bg-elevated`)
 - `--border`: `#2C2A27` (1px dark hairline divider)
-- `--border-strong`: `#78736A` (Interactive control boundary — 3.9:1 on `--bg`)
-- `--accent`: `#FB923C` (Warm signal amber — 8.3:1 on `--bg`)
+- `--border-strong`: `#78736A` (Interactive control boundary — 4.01:1 on `--bg`)
+- `--accent`: `#FB923C` (Warm signal amber — 8.35:1 on `--bg`, 7.76:1 on `--bg-elevated`)
 - `--accent-soft`: `#3B2106` (Selection & subtle highlight tint)
+- Status badges:
+  - Live: `--badge-live-bg` `#142E1F` / `--badge-live-fg` `#86EFAC` (10.38:1) / `--badge-live-border` `#166534`
+  - Open Beta: `--badge-beta-bg` `#172554` / `--badge-beta-fg` `#93C5FD` (8.15:1) / `--badge-beta-border` `#1E40AF`
+  - In Development: `--badge-dev-bg` `#3B2106` / `--badge-dev-fg` `#FCD34D` (10.36:1) / `--badge-dev-border` `#92400E`
+  - Archived (`.badge-archived`): `--bg-elevated` / `--fg-muted` / `--border-strong`
 
-## Browser Surfaces & Motion
+## Browser Surfaces, Touch Targets & Motion
 - `color-scheme: light dark` set on `:root` and `<meta name="color-scheme" content="light dark">` in `<head>`.
 - Custom `::selection`, `accent-color`, `caret-color`, `scrollbar-color`, and link `text-underline-offset: 0.22em`.
+- Compact navigation, footer, contact, and card links use the `.tap-target` `::before` pseudo-element helper to expand hit areas to `44×44px` without distorting compact visual density (never applied to stretched-link `ProjectCard` headings so the `<article>` remains the card positioning container).
 - Motion is opt-in (`@media (prefers-reduced-motion: no-preference)` for `scroll-behavior: smooth`); hover/focus states use crisp color and border shifts without spatial bounce.
