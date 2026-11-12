@@ -193,14 +193,14 @@ p, li, dd {
   font-variant-numeric: tabular-nums;
 }
 
-:where(a:any-link, button, [tabindex]:not([tabindex="-1"])):focus-visible {
+:where(a:any-link, button, summary, [tabindex]:not([tabindex="-1"])):focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
   border-radius: 2px;
 }
 
 @media (forced-colors: active) {
-  :where(a:any-link, button, [tabindex]:not([tabindex="-1"])):focus-visible {
+  :where(a:any-link, button, summary, [tabindex]:not([tabindex="-1"])):focus-visible {
     outline: 2px solid Highlight;
   }
 }
@@ -297,6 +297,24 @@ p, li, dd {
   background-color: var(--bg-elevated);
   color: var(--fg-muted);
   border-color: var(--border-strong);
+}
+
+/* Native collapsible card disclosure */
+.accordion-summary {
+  list-style: none;
+  cursor: pointer;
+}
+
+.accordion-summary::-webkit-details-marker {
+  display: none;
+}
+
+.accordion-chevron {
+  transition: transform 0.2s ease, color 0.15s ease;
+}
+
+details[open] .accordion-chevron {
+  transform: rotate(180deg);
 }
 
 /* Editorial prose overrides for @tailwindcss/typography in both light & dark modes */
