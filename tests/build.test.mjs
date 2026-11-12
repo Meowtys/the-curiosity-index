@@ -160,7 +160,7 @@ test('built home and case study pages include Currently Exploring, Core Stack, a
   assert.doesNotMatch(homeHtml, /Hardware &amp; Community|Hardware & Community/, 'home page must not show Hardware & Community heading');
   assert.match(homeHtml, /eGetinnz/, 'home page must include eGetinnz internship');
   assert.match(homeHtml, /GitHub Activity/, 'home page must include GitHub Activity section');
-  assert.match(homeHtml, /1,354<\/span>\s+contributions on GitHub in the last year\./, 'home page must include a space between 1,354 and contributions');
+  assert.match(homeHtml, />[\d,]+<\/span>\s+contributions on GitHub in the last year\./, 'home page must include a space between count and contributions');
   assert.match(homeHtml, /@Meowtys/, 'home page GitHub Activity section must link to @Meowtys');
   assert.match(homeHtml, /class="gh-cell"/, 'home page must render SVG .gh-cell day squares at build time');
   assert.match(homeHtml, /id="gh-hover-status"/, 'home page must include #gh-hover-status readout');
