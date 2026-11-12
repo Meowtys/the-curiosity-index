@@ -46,7 +46,7 @@ function isActive(href: string): boolean {
                   href={link.href}
                   aria-current={active ? 'page' : undefined}
                   class:list={[
-                    'inline-flex min-h-7 items-center py-1 transition-colors',
+                    'tap-target inline-flex min-h-7 items-center py-1 transition-colors',
                     active
                       ? 'font-semibold text-ink underline decoration-accent decoration-2 underline-offset-[0.35em]'
                       : 'text-ink-muted hover:text-ink',

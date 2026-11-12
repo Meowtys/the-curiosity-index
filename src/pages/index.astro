@@ -47,7 +47,7 @@ const featuredProjects = allProjects
                 href={item.href}
                 target={item.external ? '_blank' : undefined}
                 rel={item.external ? 'noopener noreferrer' : undefined}
-                class="inline-flex min-h-7 items-center text-ink-muted underline decoration-hairline-strong underline-offset-[0.25em] transition-colors hover:text-accent hover:decoration-accent"
+                class="tap-target inline-flex min-h-7 items-center text-ink-muted underline decoration-hairline-strong underline-offset-[0.25em] transition-colors hover:text-accent hover:decoration-accent"
               >
                 {item.label}
                 {item.external && (
@@ -74,7 +74,7 @@ const featuredProjects = allProjects
         allProjects.length > featuredProjects.length && (
           <a
             href="/projects/"
-            class="group inline-flex min-h-7 items-center text-sm font-medium text-accent no-underline"
+            class="tap-target group inline-flex min-h-7 items-center text-sm font-medium text-accent no-underline"
           >
             <span class="underline decoration-accent/60 underline-offset-[0.25em] group-hover:decoration-accent">All projects ({allProjects.length})</span> <span aria-hidden="true" class="ml-1">→</span>
           </a>
@@ -105,7 +105,7 @@ const featuredProjects = allProjects
       </h2>
       <a
         href="/about/"
-        class="group inline-flex min-h-7 items-center text-sm font-medium text-accent no-underline"
+        class="tap-target group inline-flex min-h-7 items-center text-sm font-medium text-accent no-underline"
       >
         <span class="underline decoration-accent/60 underline-offset-[0.25em] group-hover:decoration-accent">Full toolbox</span> <span aria-hidden="true" class="ml-1">→</span>
       </a>
@@ -158,7 +158,7 @@ const featuredProjects = allProjects
       </h2>
       <a
         href="/about/"
-        class="group inline-flex min-h-7 items-center text-sm font-medium text-accent no-underline"
+        class="tap-target group inline-flex min-h-7 items-center text-sm font-medium text-accent no-underline"
       >
         <span class="underline decoration-accent/60 underline-offset-[0.25em] group-hover:decoration-accent">More on About</span> <span aria-hidden="true" class="ml-1">→</span>
       </a>
@@ -203,7 +203,7 @@ const featuredProjects = allProjects
               href={item.href}
               target={item.external ? '_blank' : undefined}
               rel={item.external ? 'noopener noreferrer' : undefined}
-              class="group inline-flex min-h-7 items-center font-medium text-ink no-underline hover:text-accent"
+              class="tap-target group inline-flex min-h-7 items-center font-medium text-ink no-underline hover:text-accent"
             >
               <span class="underline decoration-accent decoration-1 underline-offset-[0.25em]">{item.label}: <span class="ml-1 font-mono text-xs text-ink-muted group-hover:text-accent">{item.handle}</span></span>
               {item.external && (

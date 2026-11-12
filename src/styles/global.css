@@ -141,6 +141,22 @@ p, li, dd {
   }
 }
 
+/* Expands a compact link's hit area to at least 44x44px without changing layout.
+   Don't use on stretched-link titles: it makes the link the positioning context. */
+.tap-target {
+  position: relative;
+}
+
+.tap-target::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: max(100%, 44px);
+  height: max(100%, 44px);
+  transform: translate(-50%, -50%);
+}
+
 /* Visually hidden utility that reveals on focus when used as skip-link */
 .visually-hidden:where(:not(:focus-within, :active)) {
   position: absolute !important;
