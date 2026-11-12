@@ -53,15 +53,15 @@ test('ProjectCard uses compact horizontal row layout with a constrained side thu
   assert.match(card, /TechBadge/, 'ProjectCard must render TechBadge stack pills with logos');
 });
 
-test('BaseHead and global.css load Instrument Serif, Plus Jakarta Sans, and JetBrains Mono web fonts', () => {
+test('BaseHead and global.css load clean sans-serif (Geist) and JetBrains Mono web fonts without Instrument Serif', () => {
   const head = fs.readFileSync(path.join(root, 'src/components/BaseHead.astro'), 'utf8');
   const css = fs.readFileSync(path.join(root, 'src/styles/global.css'), 'utf8');
   assert.match(head, /fonts\.googleapis\.com/);
-  assert.match(head, /Instrument\+Serif/);
-  assert.match(head, /Plus\+Jakarta\+Sans/);
+  assert.match(head, /family=Geist/);
   assert.match(head, /JetBrains\+Mono/);
-  assert.match(css, /'Instrument Serif'/);
-  assert.match(css, /'Plus Jakarta Sans'/);
+  assert.doesNotMatch(head, /Instrument\+Serif/);
+  assert.match(css, /'Geist'/);
+  assert.doesNotMatch(css, /Instrument Serif/);
 });
 
 test('site.ts exports EXPLORING and CORE_STACK and TechBadge component exists with SVG logos', () => {

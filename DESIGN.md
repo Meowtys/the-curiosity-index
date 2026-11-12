@@ -6,8 +6,8 @@
 - **Layout Spine:** Single centered reading column (`max-w-[46rem]` / `736px`) with `px-5 sm:px-8` horizontal padding.
 
 ## Typography
-- **Display / Headings (`--font-display`):** `'Instrument Serif', 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, serif` — editorial authority with balanced line wrapping (`text-wrap: balance`) and tight tracking (`-0.02em`).
-- **Body / UI (`--font-sans`):** `'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif` — comfortable `65ch–72ch` measure, `1.65` line height.
+- **Display / Headings (`--font-display`):** `'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif` — clean neo-grotesque clarity with balanced line wrapping (`text-wrap: balance`) and tight tracking (`-0.02em`).
+- **Body / UI (`--font-sans`):** `'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif` — comfortable `65ch–72ch` measure, `1.65` line height.
 - **Technical / Dates / Code (`--font-mono`):** `'JetBrains Mono', ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, monospace` — used strictly for timelines (`2023 · Rebuilt 2026`), stack tags, and code snippets with `font-variant-numeric: tabular-nums`.
 - **Craft Rule:** Never place a small uppercase kicker/eyebrow above an `<h1>`/`<h2>` heading; let the heading lead and place subtitles or metadata below it.
 
