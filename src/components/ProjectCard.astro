@@ -21,65 +21,74 @@ const badgeClass =
         : 'badge-status badge-dev';
 ---
 
-<article class="rounded-sm border border-hairline bg-surface-elevated/45 p-5 transition-colors hover:border-hairline-strong sm:p-6">
+<article class="flex flex-col gap-3.5 rounded-sm border border-hairline bg-surface-elevated/45 p-4 transition-colors hover:border-hairline-strong sm:flex-row sm:items-center sm:gap-5">
   {
     data.cover && (
-      <Image
-        src={data.cover}
-        alt={data.coverAlt ?? ''}
-        widths={[368, 736, 1472]}
-        sizes="(min-width: 46rem) 42rem, calc(100vw - 2.5rem)"
-        class="-mx-5 -mt-5 mb-5 block h-auto w-[calc(100%+2.5rem)] max-w-none rounded-t-sm border-b border-hairline sm:-mx-6 sm:-mt-6 sm:mb-6 sm:w-[calc(100%+3rem)]"
-      />
+      <a
+        href={`/projects/${slug}/`}
+        tabindex="-1"
+        aria-hidden="true"
+        class="block shrink-0 overflow-hidden rounded-xs border border-hairline sm:w-48"
+      >
+        <Image
+          src={data.cover}
+          alt={data.coverAlt ?? ''}
+          widths={[240, 384, 736]}
+          sizes="(min-width: 40rem) 12rem, calc(100vw - 4.5rem)"
+          class="block h-auto w-full"
+        />
+      </a>
     )
   }
-  <div class="flex flex-wrap items-center justify-between gap-2 text-xs text-ink-muted">
-    <div class="flex flex-wrap items-center gap-2">
-      <span class={badgeClass}>{data.status}</span>
-      <span aria-hidden="true">·</span>
-      <span class="font-mono tabular-nums">{data.timeline}</span>
-    </div>
-    <span class="font-mono text-xs text-ink-muted">{data.role}</span>
-  </div>
 
-  <HeadingTag class="mt-3 font-display text-xl font-bold leading-snug text-ink sm:text-2xl">
-    <a
-      href={`/projects/${slug}/`}
-      class="text-ink no-underline hover:text-accent hover:underline hover:underline-offset-[0.2em]"
-    >
-      {data.title}
-    </a>
-  </HeadingTag>
-
-  <p class="mt-1 text-sm font-medium text-ink-muted">
-    {data.subtitle}
-  </p>
-
-  <p class="mt-3 max-w-[65ch] text-sm leading-relaxed text-ink">
-    {data.description}
-  </p>
-
-  <div class="mt-5 flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-hairline pt-3.5 text-sm">
-    <a
-      href={`/projects/${slug}/`}
-      class="group inline-flex min-h-7 items-center font-medium text-accent no-underline"
-    >
-      <span class="underline decoration-accent/60 underline-offset-[0.25em] group-hover:decoration-accent">Read case study</span><span class="visually-hidden"> for {data.title}</span>
-      <span aria-hidden="true" class="ml-1">→</span>
-    </a>
-
-    {
-      data.liveUrl && (
+  <div class="min-w-0 flex-1">
+    <div class="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+      <HeadingTag class="font-display text-lg font-bold leading-snug text-ink sm:text-xl">
         <a
-          href={data.liveUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="group inline-flex min-h-7 items-center font-medium text-ink-muted no-underline transition-colors hover:text-ink"
+          href={`/projects/${slug}/`}
+          class="text-ink no-underline hover:text-accent hover:underline hover:underline-offset-[0.2em]"
         >
-          <span class="underline decoration-hairline-strong underline-offset-[0.25em] group-hover:decoration-accent">Visit live site</span><span class="visually-hidden"> for {data.title} (opens in a new tab)</span>
-          <span aria-hidden="true" class="ml-1 text-xs">↗</span>
+          {data.title}
         </a>
-      )
-    }
+      </HeadingTag>
+
+      <div class="flex flex-wrap items-center gap-2 text-xs text-ink-muted">
+        <span class={badgeClass}>{data.status}</span>
+        <span aria-hidden="true">·</span>
+        <span class="font-mono tabular-nums">{data.timeline}</span>
+      </div>
+    </div>
+
+    <p class="mt-0.5 text-sm font-medium text-ink-muted">
+      {data.subtitle}
+    </p>
+
+    <p class="mt-1.5 max-w-[65ch] line-clamp-2 text-xs leading-relaxed text-ink sm:text-sm">
+      {data.description}
+    </p>
+
+    <div class="mt-2.5 flex flex-wrap items-center gap-x-5 gap-y-1.5 text-xs sm:text-sm">
+      <a
+        href={`/projects/${slug}/`}
+        class="group inline-flex min-h-6 items-center font-medium text-accent no-underline"
+      >
+        <span class="underline decoration-accent/60 underline-offset-[0.25em] group-hover:decoration-accent">Read case study</span><span class="visually-hidden"> for {data.title}</span>
+        <span aria-hidden="true" class="ml-1">→</span>
+      </a>
+
+      {
+        data.liveUrl && (
+          <a
+            href={data.liveUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group inline-flex min-h-6 items-center font-medium text-ink-muted no-underline transition-colors hover:text-ink"
+          >
+            <span class="underline decoration-hairline-strong underline-offset-[0.25em] group-hover:decoration-accent">Visit live site</span><span class="visually-hidden"> for {data.title} (opens in a new tab)</span>
+            <span aria-hidden="true" class="ml-1 text-xs">↗</span>
+          </a>
+        )
+      }
+    </div>
   </div>
 </article>
