@@ -45,7 +45,7 @@ const badgeClass =
 >
   <nav aria-label="Breadcrumb" class="mb-6">
     <a
-      href="/projects"
+      href="/projects/"
       class="group inline-flex min-h-7 items-center text-sm font-medium text-ink-muted no-underline transition-colors hover:text-ink"
     >
       <span aria-hidden="true" class="mr-1.5">←</span>
@@ -191,7 +191,7 @@ const badgeClass =
       {
         prev && (
           <a
-            href={`/projects/${prev.id}`}
+            href={`/projects/${prev.id}/`}
             class="group block rounded-sm border border-hairline p-4 no-underline transition-colors hover:border-hairline-strong"
           >
             <span class="block font-mono text-xs text-ink-muted">← Previous project</span>
@@ -206,7 +206,7 @@ const badgeClass =
       {
         next && (
           <a
-            href={`/projects/${next.id}`}
+            href={`/projects/${next.id}/`}
             class="group block rounded-sm border border-hairline p-4 no-underline transition-colors hover:border-hairline-strong"
           >
             <span class="block font-mono text-xs text-ink-muted">Next project →</span>

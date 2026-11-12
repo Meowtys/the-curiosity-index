@@ -44,9 +44,9 @@ export const SITE = {
 } as const;
 
 export const NAV_LINKS: readonly NavLink[] = [
-  { label: 'Projects', href: '/projects' },
-  { label: 'About', href: '/about' },
-  { label: 'Contact', href: '/contact' },
+  { label: 'Projects', href: '/projects/' },
+  { label: 'About', href: '/about/' },
+  { label: 'Contact', href: '/contact/' },
 ];
 
 export const SOCIAL_LINKS: readonly SocialLink[] = [
