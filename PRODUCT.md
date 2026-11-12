@@ -27,9 +27,11 @@ The personal portfolio and engineering index of **Westen Dasig** (*John Westen R
   - **Foundation University** (`2025 – 2027`, Dumaguete City, Philippines) — `Bachelor of Science (BS) in Computer Science`.
   - **Silliman University** (`2021 – 2025`, Dumaguete City, Philippines) — `Bachelor of Science (BS) in Computer Science` (completed CS coursework from 2021 to 2025 before transferring to Foundation University to finish degree; Student Government and College of Computer Studies student council leadership).
 - **Direct Contact Channels:**
-  - Email: `mailto:westendasig2003@gmail.com`
+  - Email: `mailto:westendasig2003@gmail.com` (with 1-click clipboard copy button on `/contact/`)
   - LinkedIn: `https://www.linkedin.com/in/westen-dasig/`
-  - GitHub: `https://github.com/Meowtys` (`1,354` contributions in the last year rendered statically on the homepage in a framed 53-week SVG heatmap card)
+  - GitHub: `https://github.com/Meowtys` (53-week SVG contribution heatmap on the homepage, automatically refreshed weekly via GitHub Actions and `npm run sync:github`)
+- **Interactive Lightbox:**
+  - Native `<dialog>` modal for high-resolution case study screenshots and covers with zero client library bloat.
 
 ## Non-Goals & Guardrails
 - No contact forms, backend database, or analytics trackers.

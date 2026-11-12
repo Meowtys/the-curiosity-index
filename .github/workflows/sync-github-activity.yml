@@ -1,0 +1,48 @@
+name: Sync GitHub Activity
+
+on:
+  schedule:
+    - cron: '0 0 * * 0'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Sync GitHub contribution calendar
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npm run sync:github
+
+      - name: Run verification checks
+        run: |
+          npm run check
+          npm run build
+          npm test
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if ! git diff --quiet src/data/github.json; then
+            git add src/data/github.json
+            git commit -m "chore(data): auto-sync weekly GitHub activity calendar [skip ci]"
+            git push
+          else
+            echo "No changes in contribution calendar."
+          fi

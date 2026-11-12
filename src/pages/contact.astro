@@ -22,7 +22,7 @@ import { SITE, SOCIAL_LINKS } from '../data/site';
         SOCIAL_LINKS.map((item) => (
           <div class="flex flex-col justify-between gap-2 py-5 sm:flex-row sm:items-baseline">
             <dt class="font-display text-lg font-bold text-ink">{item.label}</dt>
-            <dd>
+            <dd class="flex flex-wrap items-center gap-x-3 gap-y-1">
               <a
                 href={item.href}
                 target={item.external ? '_blank' : undefined}
@@ -37,6 +37,18 @@ import { SITE, SOCIAL_LINKS } from '../data/site';
                   </>
                 )}
               </a>
+              {item.label === 'Email' && (
+                <button
+                  type="button"
+                  id="copy-email-btn"
+                  data-email={item.handle}
+                  class="tap-target inline-flex min-h-7 items-center rounded-xs border border-hairline bg-surface-elevated/60 px-2 py-0.5 font-mono text-xs text-ink-muted transition-colors hover:border-hairline-strong hover:text-ink cursor-pointer select-none"
+                  aria-label="Copy email address to clipboard"
+                  title="Copy email to clipboard"
+                >
+                  <span id="copy-email-text">copy</span>
+                </button>
+              )}
             </dd>
           </div>
         ))
@@ -47,4 +59,28 @@ import { SITE, SOCIAL_LINKS } from '../data/site';
       </div>
     </dl>
   </section>
+
+  <script>
+    const copyBtn = document.getElementById('copy-email-btn');
+    const copyText = document.getElementById('copy-email-text');
+    if (copyBtn && copyText) {
+      let timer: number | undefined;
+      copyBtn.addEventListener('click', async () => {
+        const email = copyBtn.getAttribute('data-email');
+        if (!email) return;
+        try {
+          await navigator.clipboard.writeText(email);
+          copyText.textContent = 'copied!';
+          copyBtn.classList.add('border-accent', 'text-accent');
+          window.clearTimeout(timer);
+          timer = window.setTimeout(() => {
+            copyText.textContent = 'copy';
+            copyBtn.classList.remove('border-accent', 'text-accent');
+          }, 2000);
+        } catch {
+          // Clipboard write failed or denied
+        }
+      });
+    }
+  </script>
 </BaseLayout>

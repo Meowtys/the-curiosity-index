@@ -215,8 +215,8 @@ test('GitHubActivity component, github.json data, and heatmap CSS tokens exist a
   assert.ok(fs.existsSync(ghCompPath), 'src/components/GitHubActivity.astro must exist');
 
   const ghData = JSON.parse(fs.readFileSync(ghJsonPath, 'utf8'));
-  assert.equal(ghData.total, 1354, 'github.json must hold 1,354 total contributions');
-  assert.equal(ghData.weeks.length, 53, 'github.json must hold 53 weeks of contributions');
+  assert.ok(typeof ghData.total === 'number' && ghData.total >= 1000, 'github.json must hold valid total contributions');
+  assert.ok(ghData.weeks.length >= 52 && ghData.weeks.length <= 54, 'github.json must hold 52-54 weeks of contributions');
 
   const comp = fs.readFileSync(ghCompPath, 'utf8');
   assert.match(comp, /GitHub Activity/, 'GitHubActivity must render GitHub Activity heading');
@@ -239,6 +239,40 @@ test('GitHubActivity component, github.json data, and heatmap CSS tokens exist a
     projectsIdx !== -1 && ghIdx > projectsIdx && ghIdx < stackIdx,
     'index.astro must render <GitHubActivity /> between Projects and Core Stack',
   );
+});
+
+test('contact.astro has 1-click email copy button and case study pages provide zero-dependency image lightbox', () => {
+  const contact = fs.readFileSync(path.join(root, 'src/pages/contact.astro'), 'utf8');
+  assert.match(contact, /id="copy-email-btn"/, 'contact.astro must have #copy-email-btn');
+  assert.match(contact, /id="copy-email-text"/, 'contact.astro must have #copy-email-text');
+  assert.match(contact, /data-email=/, 'contact.astro copy button must carry data-email');
+  assert.match(contact, /navigator\.clipboard\.writeText/, 'contact.astro must copy email using clipboard API');
+
+  const caseStudy = fs.readFileSync(path.join(root, 'src/pages/projects/[slug].astro'), 'utf8');
+  assert.match(caseStudy, /id="image-lightbox"/, 'projects/[slug].astro must render #image-lightbox dialog');
+  assert.match(caseStudy, /id="lightbox-close"/, 'projects/[slug].astro must render #lightbox-close button');
+  assert.match(caseStudy, /id="lightbox-img"/, 'projects/[slug].astro must render #lightbox-img preview');
+  assert.match(caseStudy, /lightbox-trigger/, 'projects/[slug].astro must wrap zoomable figures in .lightbox-trigger buttons');
+  assert.match(caseStudy, /showModal\(\)/, 'projects/[slug].astro must use native showModal() API');
+});
+
+test('sync-github-activity script and GitHub Actions workflows exist and validate', () => {
+  const scriptPath = path.join(root, 'scripts/sync-github-activity.mjs');
+  const workflowPath = path.join(root, '.github/workflows/sync-github-activity.yml');
+  const ciPath = path.join(root, '.github/workflows/ci.yml');
+  const pkgPath = path.join(root, 'package.json');
+
+  assert.ok(fs.existsSync(scriptPath), 'scripts/sync-github-activity.mjs must exist');
+  assert.ok(fs.existsSync(workflowPath), '.github/workflows/sync-github-activity.yml must exist');
+  assert.ok(fs.existsSync(ciPath), '.github/workflows/ci.yml must exist');
+
+  const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
+  assert.equal(pkg.scripts?.['sync:github'], 'node scripts/sync-github-activity.mjs', 'package.json must declare sync:github script');
+
+  const workflow = fs.readFileSync(workflowPath, 'utf8');
+  assert.match(workflow, /cron:\s*['"]0 0 \* \* 0['"]/, 'sync-github-activity.yml must run weekly on cron');
+  assert.match(workflow, /workflow_dispatch/, 'sync-github-activity.yml must support manual trigger');
+  assert.match(workflow, /npm run sync:github/, 'sync-github-activity.yml must invoke npm run sync:github');
 });
 
 test('BaseHead and global.css load clean sans-serif (Geist) and JetBrains Mono web fonts without Instrument Serif', () => {
