@@ -16,6 +16,7 @@ test('content.config.ts and site.ts exist with required exports', () => {
   assert.match(site, /https:\/\/www\.linkedin\.com\/in\/westen-dasig\//);
   assert.match(site, /https:\/\/github\.com\/Meowtys/);
   assert.match(site, /WesTech/);
+  assert.match(site, /Tanjay City, Philippines/);
   assert.match(site, /2020/);
   assert.match(site, /SugarPy/);
   assert.match(site, /Foundation University/);

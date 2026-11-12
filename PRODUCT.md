@@ -1,7 +1,7 @@
 # Product Context — The Curiosity Index (Westen Dasig)
 
 ## What It Is
-The personal portfolio and engineering index of **Westen Dasig** (*John Westen Rey Dasig*), a Computer Science student at Foundation University Dumaguete and Full-Stack Builder based in Dumaguete City, Central Visayas, Philippines.
+The personal portfolio and engineering index of **Westen Dasig** (*John Westen Rey Dasig*), a Computer Science student at Foundation University Dumaguete and Full-Stack Builder based in Tanjay City, Philippines.
 
 ## Brand Identity & Pairing
 - **Primary Identity:** Westen Dasig
@@ -19,7 +19,7 @@ The personal portfolio and engineering index of **Westen Dasig** (*John Westen R
   2. **JB2K Mods** (`https://jb2k.shop`) — Live (`2026 · Production`), Full-Stack Developer. Commission & order-tracking platform for custom NBA 2K player cyberfaces (`Laravel 13`, `PHP 8.4`, `Inertia 3`, `React 19`, `TypeScript`, `Tailwind CSS 4`, `SQLite`, `Resend`).
   3. **SUSG Voting System** (in development, no public URL) — In Development (`2024 · Rebuilt 2026`), Project Lead & Maintainer. Online student government election & Comelec administration platform for Silliman University (`PHP 8.2`, `MariaDB`, `Tailwind CSS 4`, `Vanilla JS`).
 - **Experience & Community:**
-  - **WesTech** (`2020 – Present`): Local computer and phone repair shop and custom PC building business.
+  - **WesTech** (`2020 – Present`, Tanjay City, Philippines): Local computer and phone repair shop and custom PC building business.
   - **SugarPy Meetup Event** (`September 2025`): Hosted the Negros Island Python User Group meetup at DICT Digital Transformation Center in Dumaguete City.
   - **re:load Agentic AI Edition** (`September 2025`): Teaching Assistant supporting the hands-on LangGraph AI agents workshop led by Jouella Fabe (Senior Software Engineer, PagerDuty).
 - **Education:**
