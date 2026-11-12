@@ -160,6 +160,30 @@ test('AmbientBackdrop and PixelCat components exist and honor motion, desktop, a
   assert.match(read('DESIGN.md'), /ambient-ascii|Ambient Backdrop/i, 'DESIGN.md must document ambient backdrop & pixel cat surface');
 });
 
+test('Header theme toggle, FOUC guard, CSS overrides, and live canvas/cat sync exist', () => {
+  const read = (rel) => fs.readFileSync(path.join(root, rel), 'utf8');
+
+  const header = read('src/components/Header.astro');
+  assert.match(header, /id="theme-toggle"/, 'Header must render #theme-toggle button');
+  assert.match(header, /role="switch"/, 'Header theme toggle must expose role="switch"');
+  assert.match(header, /tap-target/, 'Header theme toggle must include .tap-target');
+  assert.match(header, /theme-icon-sun/, 'Header theme toggle must include sun icon');
+  assert.match(header, /theme-icon-moon/, 'Header theme toggle must include moon icon');
+  assert.match(header, /curiosity_theme/, 'Header theme toggle must persist curiosity_theme in localStorage');
+
+  const head = read('src/components/BaseHead.astro');
+  assert.match(head, /curiosity_theme/, 'BaseHead must apply saved curiosity_theme before paint to avoid FOUC');
+  assert.match(head, /dataset\.theme/, 'BaseHead boot script must set document.documentElement.dataset.theme');
+
+  const css = read('src/styles/global.css');
+  assert.match(css, /:root\[data-theme='dark'\]|:root\[data-theme="dark"\]/, 'global.css must define explicit dark theme tokens');
+  assert.match(css, /not\(\[data-theme=["']light["']\]\)/, 'global.css dark media query must respect explicit light override');
+
+  assert.match(read('src/components/AmbientBackdrop.astro'), /dataset\.theme/, 'AmbientBackdrop must read explicit data-theme override');
+  assert.match(read('src/components/PixelCat.astro'), /MutationObserver/, 'PixelCat must redraw when data-theme changes');
+  assert.match(read('DESIGN.md'), /theme-toggle|data-theme/, 'DESIGN.md must document the header theme toggle');
+});
+
 test('BaseHead and global.css load clean sans-serif (Geist) and JetBrains Mono web fonts without Instrument Serif', () => {
   const head = fs.readFileSync(path.join(root, 'src/components/BaseHead.astro'), 'utf8');
   const css = fs.readFileSync(path.join(root, 'src/styles/global.css'), 'utf8');

@@ -39,11 +39,17 @@
       rows = Math.ceil(height / CELL_H);
     }
 
+    function isDarkTheme(): boolean {
+      const explicit = document.documentElement.dataset.theme;
+      if (explicit === 'dark' || explicit === 'light') return explicit === 'dark';
+      return themeQuery.matches;
+    }
+
     function render(now: number) {
       if (!ctx) return;
       ctx.clearRect(0, 0, width, height);
 
-      const isDark = themeQuery.matches;
+      const isDark = isDarkTheme();
       const fgRgb = isDark ? '243,241,236' : '20,20,19';
       const accentRgb = isDark ? '251,146,60' : '154,52,18';
       const t = motionQuery.matches ? 0 : now * 0.00045;
@@ -138,6 +144,10 @@
 
     motionQuery.addEventListener('change', start);
     themeQuery.addEventListener('change', () => render(performance.now()));
+    new MutationObserver(() => render(performance.now())).observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-theme'],
+    });
     start();
   }
 </script>

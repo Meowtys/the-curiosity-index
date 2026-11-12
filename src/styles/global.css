@@ -38,7 +38,8 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
     --bg: #111110;
     --bg-elevated: #1A1917;
     --fg: #F3F1EC;
@@ -65,6 +66,64 @@
   }
 }
 
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #111110;
+  --bg-elevated: #1A1917;
+  --fg: #F3F1EC;
+  --fg-muted: #B5B0A6;
+  --border: #2C2A27;
+  --border-strong: #78736A;
+  --accent: #FB923C;
+  --accent-soft: #3B2106;
+
+  --badge-live-bg: #142E1F;
+  --badge-live-fg: #86EFAC;
+  --badge-live-border: #166534;
+
+  --badge-beta-bg: #172554;
+  --badge-beta-fg: #93C5FD;
+  --badge-beta-border: #1E40AF;
+
+  --badge-dev-bg: #3B2106;
+  --badge-dev-fg: #FCD34D;
+  --badge-dev-border: #92400E;
+
+  --scrollbar-thumb: #78736A;
+  --scrollbar-track: #1A1917;
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+}
+
+/* Header theme toggle icon visibility (shows Sun when active theme is dark, Moon when light) */
+.theme-icon-sun {
+  display: none;
+}
+
+.theme-icon-moon {
+  display: block;
+}
+
+:root[data-theme='dark'] .theme-icon-sun {
+  display: block;
+}
+
+:root[data-theme='dark'] .theme-icon-moon {
+  display: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .theme-icon-sun {
+    display: block;
+  }
+
+  :root:not([data-theme='light']) .theme-icon-moon {
+    display: none;
+  }
+}
+
 @theme {
   --font-display: var(--font-display);
   --font-sans: var(--font-sans);
@@ -83,6 +142,11 @@
 @media (prefers-reduced-motion: no-preference) {
   html {
     scroll-behavior: smooth;
+  }
+
+  html,
+  body {
+    transition: background-color 0.25s ease, color 0.25s ease;
   }
 }
 

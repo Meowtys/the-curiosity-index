@@ -212,6 +212,12 @@
 
     desktopQuery.addEventListener('change', syncVisibility);
     motionQuery.addEventListener('change', syncVisibility);
+    new MutationObserver(() => {
+      if (isActive()) drawCat();
+    }).observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-theme'],
+    });
     syncVisibility();
   }
 </script>
