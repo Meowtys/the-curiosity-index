@@ -1,0 +1,238 @@
+---
+---
+
+<button
+  id="cat-toggle"
+  type="button"
+  aria-pressed="true"
+  aria-label="Toggle corner pixel cat"
+  class="tap-target fixed top-3.5 left-4 z-40 hidden items-center rounded-xs border border-hairline bg-surface-elevated/80 px-2 py-1 font-mono text-xs text-ink-muted opacity-45 transition-opacity hover:border-hairline-strong hover:text-ink hover:opacity-100 focus-visible:opacity-100 lg:inline-flex"
+>
+  cat: on
+</button>
+
+<canvas
+  id="meowtys-cat"
+  width="32"
+  height="32"
+  aria-hidden="true"
+  class="pointer-events-none fixed z-40 hidden h-8 w-8 lg:block"
+  style="image-rendering: pixelated; left: 18px; top: 58px;"
+></canvas>
+
+<script>
+  const catCanvas = document.getElementById('meowtys-cat') as HTMLCanvasElement | null;
+  const toggleBtn = document.getElementById('cat-toggle') as HTMLButtonElement | null;
+
+  if (catCanvas && toggleBtn) {
+    const ctx = catCanvas.getContext('2d');
+    const desktopQuery = window.matchMedia('(min-width: 1024px)');
+    const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const STORAGE_KEY = 'curiosity_cat_disabled';
+
+    let disabled = false;
+    try {
+      disabled = window.localStorage.getItem(STORAGE_KEY) === 'true';
+    } catch {
+      disabled = false;
+    }
+
+    let x = 18;
+    let y = 58;
+    let targetX = 18;
+    let targetY = 58;
+    let frame = 0;
+    let idleTicks = 0;
+    let alertTicks = 0;
+    let facing = 1;
+    let state: 'sit' | 'alert' | 'run' | 'sleep' = 'sit';
+    let lastTick = 0;
+    let rafId = 0;
+
+    function isActive(): boolean {
+      return desktopQuery.matches && !motionQuery.matches && !disabled;
+    }
+
+    function syncVisibility() {
+      const active = isActive();
+      catCanvas!.classList.toggle('lg:block', active);
+      catCanvas!.classList.toggle('hidden', !active);
+      toggleBtn!.setAttribute('aria-pressed', String(!disabled));
+      toggleBtn!.textContent = disabled || motionQuery.matches ? 'cat: off' : 'cat: on';
+
+      if (active) {
+        startLoop();
+      } else {
+        cancelAnimationFrame(rafId);
+        rafId = 0;
+      }
+    }
+
+    function steerAwayFromContent(nx: number, ny: number): { x: number; y: number } {
+      const blocks = document.querySelectorAll('main section, main article, [data-no-cat]');
+      for (const el of blocks) {
+        const r = el.getBoundingClientRect();
+        const pad = 18;
+        if (nx > r.left - pad && nx < r.right + 6 && ny > r.top - pad && ny < r.bottom + 6) {
+          const dLeft = Math.abs(nx - (r.left - pad));
+          const dRight = Math.abs(r.right + 6 - nx);
+          const dTop = Math.abs(ny - (r.top - pad));
+          const dBottom = Math.abs(r.bottom + 6 - ny);
+          const edge = Math.min(dLeft, dRight, dTop, dBottom);
+          if (edge === dLeft) return { x: r.left - pad, y: ny };
+          if (edge === dRight) return { x: r.right + 6, y: ny };
+          if (edge === dTop) return { x: nx, y: r.top - pad };
+          return { x: nx, y: r.bottom + 6 };
+        }
+      }
+      return { x: nx, y: ny };
+    }
+
+    function drawCat() {
+      if (!ctx) return;
+      ctx.clearRect(0, 0, 32, 32);
+
+      const styles = getComputedStyle(document.documentElement);
+      const fur = styles.getPropertyValue('--fg').trim() || '#F3F1EC';
+      const eye = styles.getPropertyValue('--bg').trim() || '#111110';
+      const accent = styles.getPropertyValue('--accent').trim() || '#FB923C';
+      const scale = 2;
+
+      const px = (gx: number, gy: number, w = 1, h = 1, color = fur) => {
+        ctx.fillStyle = color;
+        const dx = facing < 0 ? (16 - gx - w) * scale : gx * scale;
+        ctx.fillRect(dx, gy * scale, w * scale, h * scale);
+      };
+
+      if (state === 'sleep') {
+        px(4, 10, 8, 4, fur);
+        px(5, 9, 4, 2, fur);
+        px(5, 8, 1, 1, fur);
+        px(8, 8, 1, 1, fur);
+        px(4, 11, 8, 1, accent);
+        const bob = frame % 2;
+        ctx.fillStyle = accent;
+        ctx.font = 'bold 9px monospace';
+        ctx.fillText(bob === 0 ? 'z' : 'Z', 21, 12 - bob * 2);
+        return;
+      }
+
+      // Perked ears with inner accent
+      px(5, 3, 2, 2, fur);
+      px(10, 3, 2, 2, fur);
+      px(6, 4, 1, 1, accent);
+      px(10, 4, 1, 1, accent);
+
+      // Head & blinking eyes
+      px(5, 5, 7, 4, fur);
+      const blinking = state === 'sit' && frame % 26 === 0;
+      if (!blinking) {
+        px(6, 6, 1, state === 'alert' ? 2 : 1, eye);
+        px(10, 6, 1, state === 'alert' ? 2 : 1, eye);
+      }
+      px(8, 7, 1, 1, accent);
+
+      // Accent collar
+      px(5, 9, 6, 1, accent);
+
+      // Body & stride paws
+      px(3, 10, 8, 4, fur);
+      const stride = state === 'run' ? (frame % 2 === 0 ? 1 : -1) : 0;
+      px(4 + stride, 14, 2, 1, fur);
+      px(9 - stride, 14, 2, 1, fur);
+
+      // Tail flick
+      const tailShift = state === 'run' || frame % 12 < 3 ? frame % 2 : 0;
+      px(2, 9 - tailShift, 1, 3, fur);
+      px(1, 8 - tailShift, 1, 2, accent);
+
+      if (state === 'alert') {
+        ctx.fillStyle = accent;
+        ctx.font = 'bold 9px monospace';
+        ctx.fillText('!', 15, 7);
+      }
+    }
+
+    function step(now: number) {
+      if (!isActive() || document.hidden) {
+        rafId = 0;
+        return;
+      }
+
+      if (now - lastTick >= 100) {
+        lastTick = now;
+        frame++;
+
+        const dx = targetX - x;
+        const dy = targetY - y;
+        const dist = Math.hypot(dx, dy);
+
+        if (dist > 32) {
+          if (state === 'sleep') {
+            alertTicks = 3;
+          }
+          idleTicks = 0;
+          if (alertTicks > 0) {
+            state = 'alert';
+            alertTicks--;
+          } else {
+            state = 'run';
+            if (Math.abs(dx) > 2) facing = dx > 0 ? 1 : -1;
+            const move = Math.min(9, dist);
+            const rawX = x + (dx / dist) * move;
+            const rawY = y + (dy / dist) * move;
+            const steered = steerAwayFromContent(rawX, rawY);
+            x = Math.max(8, Math.min(window.innerWidth - 40, steered.x));
+            y = Math.max(8, Math.min(window.innerHeight - 40, steered.y));
+          }
+        } else {
+          idleTicks++;
+          state = idleTicks > 28 ? 'sleep' : 'sit';
+        }
+
+        catCanvas!.style.left = `${Math.round(x)}px`;
+        catCanvas!.style.top = `${Math.round(y)}px`;
+        drawCat();
+      }
+
+      rafId = requestAnimationFrame(step);
+    }
+
+    function startLoop() {
+      if (!rafId && isActive() && !document.hidden) {
+        lastTick = performance.now();
+        drawCat();
+        rafId = requestAnimationFrame(step);
+      }
+    }
+
+    window.addEventListener('pointermove', (e) => {
+      if (!isActive()) return;
+      targetX = e.clientX - 16;
+      targetY = e.clientY - 16;
+    }, { passive: true });
+
+    toggleBtn.addEventListener('click', () => {
+      disabled = !disabled;
+      try {
+        window.localStorage.setItem(STORAGE_KEY, String(disabled));
+      } catch {
+        // Ignore storage restriction errors in private browsing.
+      }
+      syncVisibility();
+    });
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        cancelAnimationFrame(rafId);
+        rafId = 0;
+      } else {
+        startLoop();
+      }
+    });
+
+    desktopQuery.addEventListener('change', syncVisibility);
+    motionQuery.addEventListener('change', syncVisibility);
+    syncVisibility();
+  }
+</script>
