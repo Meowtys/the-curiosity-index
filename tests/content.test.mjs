@@ -158,6 +158,9 @@ test('AmbientBackdrop and PixelCat components exist and honor motion, desktop, a
   assert.match(cat, />meow~</, 'PixelCat meow label must show meow~ text');
   assert.match(cat, /await\s+audioCtx\.resume\(\)/, 'PixelCat must await audioCtx.resume() before scheduling nodes');
   assert.match(cat, /MEOW_COOLDOWN_MS/, 'PixelCat must rate-limit repeated meow clicks with a cooldown');
+  assert.match(cat, /sessionStorage/, 'PixelCat must persist position across page navigations in sessionStorage');
+  assert.match(cat, /curiosity_cat_state/, 'PixelCat must save and restore curiosity_cat_state');
+  assert.match(cat, /pagehide/, 'PixelCat must flush position to sessionStorage before page unload');
 
   const layout = read('src/layouts/BaseLayout.astro');
   assert.match(layout, /AmbientBackdrop/, 'BaseLayout must include AmbientBackdrop');
