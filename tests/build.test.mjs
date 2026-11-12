@@ -163,7 +163,8 @@ test('built home and case study pages include Currently Exploring, Core Stack, a
   assert.match(homeHtml, />[\d,]+<\/span>\s+contributions on GitHub in the last year\./, 'home page must include a space between count and contributions');
   assert.match(homeHtml, /@Meowtys/, 'home page GitHub Activity section must link to @Meowtys');
   assert.match(homeHtml, /class="gh-cell"/, 'home page must render SVG .gh-cell day squares at build time');
-  assert.match(homeHtml, /id="gh-hover-status"/, 'home page must include #gh-hover-status readout');
+  assert.match(homeHtml, /id="gh-scroll-region"/, 'home page must include #gh-scroll-region');
+  assert.match(homeHtml, /id="gh-hover-status"[^>]*aria-live="polite"/, 'home page must include #gh-hover-status with aria-live="polite"');
 
   const aboutHtml = fs.readFileSync(path.join(distDir, 'about/index.html'), 'utf8');
   assert.match(aboutHtml, /Silliman University/, 'about page must include Silliman University in Education');
@@ -180,9 +181,13 @@ test('built contact page includes 1-click email copy button and case study pages
   const contactHtml = fs.readFileSync(path.join(distDir, 'contact/index.html'), 'utf8');
   assert.match(contactHtml, /id="copy-email-btn"/, 'contact/index.html must include #copy-email-btn');
   assert.match(contactHtml, /id="copy-email-text"/, 'contact/index.html must include #copy-email-text');
+  assert.match(contactHtml, /id="copy-email-live"[^>]*aria-live="polite"/, 'contact/index.html must include #copy-email-live aria-live region');
 
   const projectHtml = fs.readFileSync(path.join(distDir, 'projects/here/index.html'), 'utf8');
   assert.match(projectHtml, /id="image-lightbox"/, 'projects/here/index.html must include #image-lightbox dialog');
-  assert.match(projectHtml, /id="lightbox-close"/, 'projects/here/index.html must include #lightbox-close');
+  assert.match(projectHtml, /id="lightbox-close"[^>]*shrink-0/, 'projects/here/index.html #lightbox-close must include shrink-0');
   assert.match(projectHtml, /class="[^"]*lightbox-trigger/, 'projects/here/index.html must include .lightbox-trigger');
+  assert.match(projectHtml, /data-alt="/, 'projects/here/index.html triggers must include clean data-alt');
+  assert.match(projectHtml, /youre-here\.vercel\.app/, 'projects/here/index.html must include live URL');
+  assert.match(projectHtml, /<a href="https:\/\/youre-here\.vercel\.app"[^>]*class="[^"]*tap-target/, 'projects/here/index.html liveUrl link must include .tap-target');
 });

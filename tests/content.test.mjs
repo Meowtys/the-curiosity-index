@@ -245,15 +245,34 @@ test('contact.astro has 1-click email copy button and case study pages provide z
   const contact = fs.readFileSync(path.join(root, 'src/pages/contact.astro'), 'utf8');
   assert.match(contact, /id="copy-email-btn"/, 'contact.astro must have #copy-email-btn');
   assert.match(contact, /id="copy-email-text"/, 'contact.astro must have #copy-email-text');
+  assert.match(contact, /id="copy-email-live"[^>]*aria-live="polite"/, 'contact.astro must announce copy feedback via aria-live="polite"');
   assert.match(contact, /data-email=/, 'contact.astro copy button must carry data-email');
   assert.match(contact, /navigator\.clipboard\.writeText/, 'contact.astro must copy email using clipboard API');
+  assert.match(contact, /execCommand\(['"]copy['"]\)/, 'contact.astro must include execCommand copy fallback');
 
   const caseStudy = fs.readFileSync(path.join(root, 'src/pages/projects/[slug].astro'), 'utf8');
   assert.match(caseStudy, /id="image-lightbox"/, 'projects/[slug].astro must render #image-lightbox dialog');
-  assert.match(caseStudy, /id="lightbox-close"/, 'projects/[slug].astro must render #lightbox-close button');
+  assert.match(caseStudy, /id="lightbox-close"[\s\S]*?\bshrink-0\b/, 'projects/[slug].astro #lightbox-close must declare shrink-0');
   assert.match(caseStudy, /id="lightbox-img"/, 'projects/[slug].astro must render #lightbox-img preview');
   assert.match(caseStudy, /lightbox-trigger/, 'projects/[slug].astro must wrap zoomable figures in .lightbox-trigger buttons');
+  assert.match(caseStudy, /data-alt=/, 'projects/[slug].astro .lightbox-trigger must carry clean data-alt text');
+  assert.match(caseStudy, /e\.detail === 0/, 'projects/[slug].astro dialog click handler must guard synthetic keyboard clicks');
+  assert.match(caseStudy, /PLACEHOLDER_SRC/, 'projects/[slug].astro must restore placeholder SVG data URI on lightbox close');
+  assert.match(caseStudy, /data\.liveUrl[\s\S]*?tap-target/, 'projects/[slug].astro Deployment & Access liveUrl link must use .tap-target');
   assert.match(caseStudy, /showModal\(\)/, 'projects/[slug].astro must use native showModal() API');
+});
+
+test('UI audit hardening: mobile GitHub heatmap defaults to recent months, supports tap inspection, and PRODUCT.md tracks Future Roadmap', () => {
+  const ghComp = fs.readFileSync(path.join(root, 'src/components/GitHubActivity.astro'), 'utf8');
+  assert.match(ghComp, /id="gh-scroll-region"/, 'GitHubActivity must expose #gh-scroll-region');
+  assert.match(ghComp, /scrollWidth/, 'GitHubActivity must scroll mobile overflow region to latest months on load');
+  assert.match(ghComp, /id="gh-hover-status"[^>]*aria-live="polite"/, 'GitHubActivity #gh-hover-status must declare aria-live="polite"');
+  assert.match(ghComp, /addEventListener\(['"]click['"]/, 'GitHubActivity must support tapping day cells on touch devices');
+
+  const product = fs.readFileSync(path.join(root, 'PRODUCT.md'), 'utf8');
+  assert.match(product, /## Future Roadmap/, 'PRODUCT.md must record Future Roadmap TODOs');
+  assert.match(product, /\/resume/, 'PRODUCT.md Future Roadmap must note printable Resume / CV view');
+  assert.match(product, /\/notes/, 'PRODUCT.md Future Roadmap must note Field Notes / Micro-Blog');
 });
 
 test('sync-github-activity script and GitHub Actions workflows exist and validate', () => {
