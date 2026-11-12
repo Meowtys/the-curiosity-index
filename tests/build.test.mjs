@@ -41,8 +41,8 @@ test('every built page ships only tiny self-hosted Astro module JS, required SEO
       } else {
         assert.match(
           inlineBody,
-          /ambient-ascii|meowtys-cat|theme-toggle|curiosity_theme|gh-hover-status/,
-          `${rel} inline script must only be ambient, cat, theme, or GitHub heatmap hover controller`,
+          /ambient-ascii|meowtys-cat|theme-toggle|curiosity_theme|gh-hover-status|copy-email|image-lightbox/,
+          `${rel} inline script must only be ambient, cat, theme, GitHub heatmap, copy email, or lightbox controller`,
         );
         pageJsBytes += Buffer.byteLength(inlineBody, 'utf8');
       }
@@ -174,4 +174,15 @@ test('built home and case study pages include Currently Exploring, Core Stack, a
   assert.equal(detailsMatches.length, 6, 'about page must render 6 collapsible details cards (4 Experience + 2 Education)');
   const openCount = detailsMatches.filter(([, attrs]) => /\bopen\b/i.test(attrs)).length;
   assert.equal(openCount, 2, 'about page must leave exactly 2 details cards open by default (first Experience + first Education)');
+});
+
+test('built contact page includes 1-click email copy button and case study pages include image lightbox', () => {
+  const contactHtml = fs.readFileSync(path.join(distDir, 'contact/index.html'), 'utf8');
+  assert.match(contactHtml, /id="copy-email-btn"/, 'contact/index.html must include #copy-email-btn');
+  assert.match(contactHtml, /id="copy-email-text"/, 'contact/index.html must include #copy-email-text');
+
+  const projectHtml = fs.readFileSync(path.join(distDir, 'projects/here/index.html'), 'utf8');
+  assert.match(projectHtml, /id="image-lightbox"/, 'projects/here/index.html must include #image-lightbox dialog');
+  assert.match(projectHtml, /id="lightbox-close"/, 'projects/here/index.html must include #lightbox-close');
+  assert.match(projectHtml, /class="[^"]*lightbox-trigger/, 'projects/here/index.html must include .lightbox-trigger');
 });
