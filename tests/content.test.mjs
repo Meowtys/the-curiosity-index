@@ -48,7 +48,7 @@ test('ProjectCard uses compact horizontal row layout with a constrained side thu
   const card = fs.readFileSync(path.join(root, 'src/components/ProjectCard.astro'), 'utf8');
   assert.match(card, /\bsm:flex-row\b/, 'ProjectCard must use sm:flex-row for compact horizontal rows');
   assert.match(card, /\bsm:w-48\b/, 'ProjectCard cover thumbnail must be constrained to sm:w-48');
-  assert.match(card, /\baspect-\[16\/10\]\b/, 'ProjectCard cover thumbnail must enforce a uniform 16:10 aspect ratio');
+  assert.match(card, /aspect-\[16\/10\]/, 'ProjectCard cover thumbnail must enforce a uniform 16:10 aspect ratio');
   assert.match(card, /\bobject-cover\b/, 'ProjectCard cover thumbnail must use object-cover');
   assert.doesNotMatch(card, /w-\[calc\(100%\+/, 'ProjectCard must not use full-bleed cover banners');
   assert.match(card, /\bafter:inset-0\b/, 'ProjectCard title link must stretch across the card');
