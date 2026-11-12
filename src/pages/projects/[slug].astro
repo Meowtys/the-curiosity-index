@@ -31,6 +31,14 @@ const { Content } = await render(entry);
 const { data } = entry;
 
 const badgeClass = getStatusBadgeClass(data.status);
+
+// Shown when a project has no public URL; worded from its status so archived or private-live work isn't mislabeled.
+const NO_URL_LABELS: Record<typeof data.status, string> = {
+  Live: 'Private deployment',
+  'Open Beta': 'Private beta · Access on request',
+  'In Development': 'Private deployment · In development',
+  Archived: 'No longer deployed',
+};
 ---
 
 <BaseLayout
@@ -106,7 +114,7 @@ const badgeClass = getStatusBadgeClass(data.status);
                 <span aria-hidden="true" class="ml-1 text-xs">↗</span>
               </a>
             ) : (
-              <span class="text-ink-muted">Private deployment · Currently in development</span>
+              <span class="text-ink-muted">{NO_URL_LABELS[data.status]}</span>
             )
           }
         </dd>
