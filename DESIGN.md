@@ -27,6 +27,8 @@
   - Open Beta: `--badge-beta-bg` `#DBEAFE` / `--badge-beta-fg` `#1E3A8A` (8.49:1) / `--badge-beta-border` `#93C5FD`
   - In Development: `--badge-dev-bg` `#FEF3C7` / `--badge-dev-fg` `#78350F` (8.15:1) / `--badge-dev-border` `#FCD34D`
   - Archived (`.badge-archived`): `--bg-elevated` / `--fg-muted` / `--border-strong`
+- GitHub Contribution Heatmap (`--gh-0`..`--gh-4`):
+  - `--gh-0`: `#EAE5DC` / `--gh-1`: `#F3D1BD` / `--gh-2`: `#D99B78` / `--gh-3`: `#BA643B` / `--gh-4`: `#9A3412`
 
 ### Dark Mode (`@media (prefers-color-scheme: dark)`)
 - `--bg`: `#111110` (Matte carbon canvas)
@@ -42,6 +44,8 @@
   - Open Beta: `--badge-beta-bg` `#172554` / `--badge-beta-fg` `#93C5FD` (8.15:1) / `--badge-beta-border` `#1E40AF`
   - In Development: `--badge-dev-bg` `#3B2106` / `--badge-dev-fg` `#FCD34D` (10.36:1) / `--badge-dev-border` `#92400E`
   - Archived (`.badge-archived`): `--bg-elevated` / `--fg-muted` / `--border-strong`
+- GitHub Contribution Heatmap (`--gh-0`..`--gh-4`):
+  - `--gh-0`: `#1F1D1A` / `--gh-1`: `#4A2B16` / `--gh-2`: `#7C441E` / `--gh-3`: `#BA652B` / `--gh-4`: `#FB923C`
 
 ## Browser Surfaces, Touch Targets & Motion
 - `color-scheme: light dark` set on `:root` and `<meta name="color-scheme" content="light dark">` in `<head>`.
