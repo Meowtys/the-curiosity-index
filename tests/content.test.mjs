@@ -151,6 +151,7 @@ test('AmbientBackdrop and PixelCat components exist and honor motion, desktop, a
   assert.match(cat, /min-width:\s*1024px/, 'PixelCat must be desktop-only (>=1024px)');
   assert.match(cat, /prefers-reduced-motion: reduce/, 'PixelCat must respect prefers-reduced-motion');
   assert.match(cat, /localStorage/, 'PixelCat must persist mute/hide toggle in localStorage');
+  assert.doesNotMatch(cat, /steerAwayFromContent/, 'PixelCat must pass freely over page content without getting stuck');
 
   const layout = read('src/layouts/BaseLayout.astro');
   assert.match(layout, /AmbientBackdrop/, 'BaseLayout must include AmbientBackdrop');
