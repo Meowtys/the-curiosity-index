@@ -35,12 +35,12 @@ export const SITE = {
   fullName: 'John Westen Rey Dasig',
   subtitle: 'The Curiosity Index',
   role: 'CS Student at Foundation University Dumaguete · Full-Stack Builder',
-  location: 'Dumaguete City, Philippines',
+  location: 'Tanjay City, Philippines',
   bio: "I'm Westen, a computer science student interested in exploring different areas of technology. I spend my time building software, working with hardware, and learning about things that catch my curiosity.",
   email: 'westendasig2003@gmail.com',
   siteUrl: 'https://westendasig.pages.dev',
   description:
-    'Westen Dasig — The Curiosity Index. Computer science student at Foundation University Dumaguete, full-stack builder, and hardware technician exploring software systems, on-device ML, and physical hardware.',
+    'Westen Dasig — The Curiosity Index. Computer science student at Foundation University Dumaguete and full-stack developer building web and mobile software, custom PCs, and handling computer and phone repairs.',
 } as const;
 
 export const NAV_LINKS: readonly NavLink[] = [
@@ -72,15 +72,15 @@ export const SOCIAL_LINKS: readonly SocialLink[] = [
 
 export const EXPERIENCE: readonly ExperienceItem[] = [
   {
-    title: 'Founder & Hardware Technician',
+    title: 'Founder & Technician',
     organization: 'WesTech',
     period: '2020 – Present',
-    location: 'Dumaguete City, Philippines',
+    location: 'Tanjay City, Philippines',
     summary:
-      'Independent local service business repairing desktop computers, laptops, and mobile phones while designing and assembling custom PC builds.',
+      'Local computer and phone repair shop and custom PC building business.',
     highlights: [
-      'Diagnose and repair board-level, storage, display, and thermal issues across consumer laptops, desktops, and smartphones.',
-      'Specify, assemble, cable-manage, and stress-test custom desktop PC builds tailored to client workloads and budgets.',
+      'Troubleshoot and repair laptops, desktop PCs, and mobile phones for local clients.',
+      'Select parts, assemble, cable-manage, and test custom desktop PC builds matched to each client’s budget and workload.',
     ],
   },
   {
