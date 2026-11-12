@@ -29,7 +29,7 @@ test('every built page ships only tiny self-hosted Astro module JS, required SEO
     const html = fs.readFileSync(path.join(distDir, rel), 'utf8');
 
     const scripts = [...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)];
-    assert.ok(scripts.length > 0 && scripts.length <= 4, `${rel} expected 1-4 lightweight scripts, got ${scripts.length}`);
+    assert.ok(scripts.length > 0 && scripts.length <= 5, `${rel} expected 1-5 lightweight scripts, got ${scripts.length}`);
     let pageJsBytes = 0;
     for (const [, attrs, inlineBody] of scripts) {
       const srcMatch = attrs.match(/src="([^"]+)"/i);
@@ -41,8 +41,8 @@ test('every built page ships only tiny self-hosted Astro module JS, required SEO
       } else {
         assert.match(
           inlineBody,
-          /ambient-ascii|meowtys-cat|theme-toggle|curiosity_theme/,
-          `${rel} inline script must only be ambient, cat, or theme controller`,
+          /ambient-ascii|meowtys-cat|theme-toggle|curiosity_theme|gh-hover-status/,
+          `${rel} inline script must only be ambient, cat, theme, or GitHub heatmap hover controller`,
         );
         pageJsBytes += Buffer.byteLength(inlineBody, 'utf8');
       }
@@ -159,6 +159,11 @@ test('built home and case study pages include Currently Exploring, Core Stack, a
   assert.match(homeHtml, /Experience &amp; Community|Experience & Community/, 'home page must show Experience & Community heading');
   assert.doesNotMatch(homeHtml, /Hardware &amp; Community|Hardware & Community/, 'home page must not show Hardware & Community heading');
   assert.match(homeHtml, /eGetinnz/, 'home page must include eGetinnz internship');
+  assert.match(homeHtml, /GitHub Activity/, 'home page must include GitHub Activity section');
+  assert.match(homeHtml, /1,354/, 'home page must show 1,354 GitHub contributions');
+  assert.match(homeHtml, /@Meowtys/, 'home page GitHub Activity section must link to @Meowtys');
+  assert.match(homeHtml, /class="gh-cell"/, 'home page must render SVG .gh-cell day squares at build time');
+  assert.match(homeHtml, /id="gh-hover-status"/, 'home page must include #gh-hover-status readout');
 
   const aboutHtml = fs.readFileSync(path.join(distDir, 'about/index.html'), 'utf8');
   assert.match(aboutHtml, /Silliman University/, 'about page must include Silliman University in Education');

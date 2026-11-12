@@ -29,7 +29,7 @@ The personal portfolio and engineering index of **Westen Dasig** (*John Westen R
 - **Direct Contact Channels:**
   - Email: `mailto:westendasig2003@gmail.com`
   - LinkedIn: `https://www.linkedin.com/in/westen-dasig/`
-  - GitHub: `https://github.com/Meowtys`
+  - GitHub: `https://github.com/Meowtys` (`1,354` contributions in the last year rendered statically on the homepage in a framed 53-week SVG heatmap card)
 
 ## Non-Goals & Guardrails
 - No contact forms, backend database, or analytics trackers.

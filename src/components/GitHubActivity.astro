@@ -1,0 +1,155 @@
+---
+import calendar from '../data/github.json';
+
+type DayTuple = [string, number, number];
+const weeks = calendar.weeks as DayTuple[][];
+const totalFormatted = calendar.total.toLocaleString('en-US');
+
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const WEEKDAYS: Array<[number, string]> = [
+  [1, 'Mon'],
+  [3, 'Wed'],
+  [5, 'Fri'],
+];
+
+interface MonthLabel {
+  x: number;
+  label: string;
+}
+
+const monthLabels: MonthLabel[] = [];
+let lastMonth = -1;
+weeks.forEach((week, col) => {
+  const firstDate = week[0]?.[0];
+  if (!firstDate) return;
+  const m = Number(firstDate.slice(5, 7)) - 1;
+  if (m !== lastMonth && col > 0) {
+    monthLabels.push({
+      x: Number((28 + col * 11.9).toFixed(1)),
+      label: MONTHS[m] ?? '',
+    });
+  }
+  lastMonth = m;
+});
+---
+
+<section class="mt-12 border-b border-hairline pb-10 sm:mt-14 sm:pb-12">
+  <div class="flex flex-wrap items-baseline justify-between gap-4">
+    <h2 class="font-display text-2xl font-bold text-ink sm:text-3xl">
+      GitHub Activity
+    </h2>
+    <a
+      href="https://github.com/Meowtys"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="tap-target inline-flex min-h-7 items-center font-mono text-xs text-ink-muted underline decoration-hairline-strong underline-offset-[0.25em] transition-colors hover:text-accent hover:decoration-accent"
+    >
+      @Meowtys<span class="visually-hidden"> (opens in a new tab)</span>
+      <span aria-hidden="true" class="ml-0.5 text-xs">↗</span>
+    </a>
+  </div>
+
+  <p class="mt-2 text-sm text-ink-muted">
+    <span class="font-mono font-medium tabular-nums text-ink">{totalFormatted}</span>
+    contributions on GitHub in the last year.
+  </p>
+
+  <div class="mt-5 rounded-sm border border-hairline bg-surface-elevated/45 p-4 sm:p-5">
+    <div
+      class="overflow-x-auto pb-1"
+      tabindex="0"
+      role="region"
+      aria-label="GitHub contribution calendar"
+    >
+      <svg
+        id="gh-calendar-svg"
+        viewBox="0 0 660 112"
+        class="block h-auto w-full min-w-[540px] overflow-visible"
+        role="img"
+        aria-label={`${totalFormatted} GitHub contributions in the last year`}
+      >
+        {
+          WEEKDAYS.map(([row, label]) => (
+            <text
+              x="0"
+              y={22 + row * 12 + 7}
+              fill="var(--fg-muted)"
+              font-size="10"
+              font-family="var(--font-mono)"
+            >
+              {label}
+            </text>
+          ))
+        }
+
+        {
+          monthLabels.map((m) => (
+            <text
+              x={m.x}
+              y="12"
+              fill="var(--fg-muted)"
+              font-size="10"
+              font-family="var(--font-mono)"
+            >
+              {m.label}
+            </text>
+          ))
+        }
+
+        {
+          weeks.map((week, col) => {
+            const x = Number((28 + col * 11.9).toFixed(1));
+            return week.map(([date, count, level], row) => {
+              const label = `${count} ${count === 1 ? 'contribution' : 'contributions'} on ${date}`;
+              return (
+                <rect
+                  x={x}
+                  y={20 + row * 12}
+                  width="9.5"
+                  height="9.5"
+                  rx="2"
+                  class="gh-cell"
+                  data-level={level}
+                  data-label={label}
+                >
+                  <title>{label}</title>
+                </rect>
+              );
+            });
+          })
+        }
+      </svg>
+    </div>
+
+    <div class="mt-3 flex flex-wrap items-center justify-between gap-3 font-mono text-xs text-ink-muted">
+      <span id="gh-hover-status" class="tabular-nums">Hover a day square to inspect count</span>
+      <div class="flex items-center gap-1.5" aria-hidden="true">
+        <span>Less</span>
+        <svg width="62" height="10" viewBox="0 0 62 10" class="block">
+          <rect x="0" y="0" width="10" height="10" rx="2" fill="var(--gh-0)" />
+          <rect x="13" y="0" width="10" height="10" rx="2" fill="var(--gh-1)" />
+          <rect x="26" y="0" width="10" height="10" rx="2" fill="var(--gh-2)" />
+          <rect x="39" y="0" width="10" height="10" rx="2" fill="var(--gh-3)" />
+          <rect x="52" y="0" width="10" height="10" rx="2" fill="var(--gh-4)" />
+        </svg>
+        <span>More</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const svg = document.getElementById('gh-calendar-svg');
+  const status = document.getElementById('gh-hover-status');
+  if (svg && status) {
+    const defaultText = status.textContent || 'Hover a day square to inspect count';
+    svg.addEventListener('mouseover', (e) => {
+      const target = (e.target as Element | null)?.closest('.gh-cell');
+      const label = target?.getAttribute('data-label');
+      if (label) status.textContent = label;
+    });
+    svg.addEventListener('mouseleave', () => {
+      status.textContent = defaultText;
+    });
+  }
+</script>
