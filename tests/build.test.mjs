@@ -109,4 +109,13 @@ test('built home and case study pages include Currently Exploring, Core Stack, a
   assert.match(homeHeader, />WD</, 'home header must include WD monogram badge');
   assert.match(homeHeader, /The Curiosity Index/, 'home header must include The Curiosity Index');
   assert.doesNotMatch(homeHeader, /Westen Dasig/, 'home header must not repeat Westen Dasig above hero h1');
+
+  assert.match(homeHtml, /Experience &amp; Community|Experience & Community/, 'home page must show Experience & Community heading');
+  assert.doesNotMatch(homeHtml, /Hardware &amp; Community|Hardware & Community/, 'home page must not show Hardware & Community heading');
+  assert.match(homeHtml, /eGetinnz/, 'home page must include eGetinnz internship');
+
+  const aboutHtml = fs.readFileSync(path.join(distDir, 'about/index.html'), 'utf8');
+  assert.match(aboutHtml, /Silliman University/, 'about page must include Silliman University in Education');
+  assert.match(aboutHtml, /eGetinnz/, 'about page must include eGetinnz internship in Experience');
+  assert.match(aboutHtml, /Software Quality Assurance Intern/, 'about page must include Software Quality Assurance Intern role');
 });
