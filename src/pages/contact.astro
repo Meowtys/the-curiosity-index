@@ -48,6 +48,7 @@ import { SITE, SOCIAL_LINKS } from '../data/site';
                 >
                   <span id="copy-email-text">copy</span>
                 </button>
+                <span id="copy-email-live" class="visually-hidden" aria-live="polite"></span>
               )}
             </dd>
           </div>
@@ -63,22 +64,38 @@ import { SITE, SOCIAL_LINKS } from '../data/site';
   <script>
     const copyBtn = document.getElementById('copy-email-btn');
     const copyText = document.getElementById('copy-email-text');
+    const copyLive = document.getElementById('copy-email-live');
     if (copyBtn && copyText) {
       let timer: number | undefined;
+      function announceCopied() {
+        copyText!.textContent = 'copied!';
+        copyBtn!.classList.add('border-accent', 'text-accent');
+        if (copyLive) copyLive.textContent = 'Email address copied to clipboard';
+        window.clearTimeout(timer);
+        timer = window.setTimeout(() => {
+          copyText!.textContent = 'copy';
+          copyBtn!.classList.remove('border-accent', 'text-accent');
+          if (copyLive) copyLive.textContent = '';
+        }, 2000);
+      }
+
       copyBtn.addEventListener('click', async () => {
         const email = copyBtn.getAttribute('data-email');
         if (!email) return;
         try {
           await navigator.clipboard.writeText(email);
-          copyText.textContent = 'copied!';
-          copyBtn.classList.add('border-accent', 'text-accent');
-          window.clearTimeout(timer);
-          timer = window.setTimeout(() => {
-            copyText.textContent = 'copy';
-            copyBtn.classList.remove('border-accent', 'text-accent');
-          }, 2000);
+          announceCopied();
         } catch {
-          // Clipboard write failed or denied
+          const area = document.createElement('textarea');
+          area.value = email;
+          area.setAttribute('readonly', '');
+          area.style.position = 'fixed';
+          area.style.opacity = '0';
+          document.body.appendChild(area);
+          area.select();
+          const copied = document.execCommand('copy');
+          document.body.removeChild(area);
+          if (copied) announceCopied();
         }
       });
     }
