@@ -51,4 +51,4 @@
 
 ## Ambient Backdrop & Interactive Layering
 - **Ambient ASCII Margin Canvas (`#ambient-ascii`):** Fixed `pointer-events-none` full-viewport `<canvas>` (`z-0`) rendering faint monospace glyphs (`JetBrains Mono`) weighted heavily toward wide desktop side margins (`SPINE_HALF = 376px`) with subtle cursor/click accent highlights using live light/dark tokens; renders a calm static frame under `prefers-reduced-motion: reduce` and pauses on hidden tabs.
-- **Desktop Pixel Cat (`#meowtys-cat`):** Desktop-only (`>= 1024px`) `32×32` procedural `Meowtys` pixel sprite (`--fg`, `--bg`, `--accent`) that steers around `section` / `article` / `[data-no-cat]` blocks, naps (`z`/`Z`) after idling, respects `prefers-reduced-motion`, and exposes a top-left corner `#cat-toggle` persisted in `localStorage`.
+- **Desktop Pixel Cat (`#meowtys-cat`):** Desktop-only (`>= 1024px`) `32×32` procedural `Meowtys` pixel sprite (`--fg`, `--bg`, `--accent`) that roams freely across the viewport toward the cursor (`pointer-events-none`), naps (`z`/`Z`) after idling, respects `prefers-reduced-motion`, and exposes a top-left corner `#cat-toggle` persisted in `localStorage`.

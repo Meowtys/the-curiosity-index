@@ -68,26 +68,6 @@
       }
     }
 
-    function steerAwayFromContent(nx: number, ny: number): { x: number; y: number } {
-      const blocks = document.querySelectorAll('main section, main article, [data-no-cat]');
-      for (const el of blocks) {
-        const r = el.getBoundingClientRect();
-        const pad = 18;
-        if (nx > r.left - pad && nx < r.right + 6 && ny > r.top - pad && ny < r.bottom + 6) {
-          const dLeft = Math.abs(nx - (r.left - pad));
-          const dRight = Math.abs(r.right + 6 - nx);
-          const dTop = Math.abs(ny - (r.top - pad));
-          const dBottom = Math.abs(r.bottom + 6 - ny);
-          const edge = Math.min(dLeft, dRight, dTop, dBottom);
-          if (edge === dLeft) return { x: r.left - pad, y: ny };
-          if (edge === dRight) return { x: r.right + 6, y: ny };
-          if (edge === dTop) return { x: nx, y: r.top - pad };
-          return { x: nx, y: r.bottom + 6 };
-        }
-      }
-      return { x: nx, y: ny };
-    }
-
     function drawCat() {
       if (!ctx) return;
       ctx.clearRect(0, 0, 32, 32);
@@ -181,9 +161,8 @@
             const move = Math.min(9, dist);
             const rawX = x + (dx / dist) * move;
             const rawY = y + (dy / dist) * move;
-            const steered = steerAwayFromContent(rawX, rawY);
-            x = Math.max(8, Math.min(window.innerWidth - 40, steered.x));
-            y = Math.max(8, Math.min(window.innerHeight - 40, steered.y));
+            x = Math.max(8, Math.min(window.innerWidth - 40, rawX));
+            y = Math.max(8, Math.min(window.innerHeight - 40, rawY));
           }
         } else {
           idleTicks++;
