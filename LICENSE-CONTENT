@@ -1,0 +1,17 @@
+Content & Brand Assets Notice — All Rights Reserved
+
+Copyright (c) 2026 Westen Dasig (John Westen Rey Dasig). All rights reserved.
+
+While the underlying website source code (components, layouts, styling,
+build configuration, and test utilities) is licensed under the MIT License
+(see ./LICENSE), all personal content and media assets in this repository
+are excluded from the MIT grant and remain All Rights Reserved:
+
+  - src/content/     — Case study narratives and project copy
+  - src/data/        — Personal biography, education, and experience records
+  - src/assets/      — Studio cover graphics and application screenshots
+  - public/          — Social preview images and personal brand marks
+
+You may not reproduce, republish, redistribute, or deploy these personal
+texts, screenshots, or identity assets as your own without explicit written
+permission from the author.
