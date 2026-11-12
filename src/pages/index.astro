@@ -87,11 +87,12 @@ const featuredProjects = allProjects
 
     <div class="mt-5 grid gap-4">
       {
-        featuredProjects.map((project) => (
+        featuredProjects.map((project, index) => (
           <ProjectCard
             slug={project.id}
             data={project.data}
             headingLevel="h3"
+            priority={index === 0}
           />
         ))
       }

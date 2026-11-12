@@ -23,11 +23,12 @@ const projects = (await getCollection('projects')).sort(
 
   <section class="mt-7 grid gap-4 sm:mt-8" aria-label="Project list">
     {
-      projects.map((project) => (
+      projects.map((project, index) => (
         <ProjectCard
           slug={project.id}
           data={project.data}
           headingLevel="h2"
+          priority={index === 0}
         />
       ))
     }
