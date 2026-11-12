@@ -73,6 +73,60 @@ test('all three project cover PNGs share uniform 1472x920 (16:10) dimensions', (
   }
 });
 
+test('meta descriptions in site.ts and project frontmatter stay within 160 characters', () => {
+  const site = fs.readFileSync(path.join(root, 'src/data/site.ts'), 'utf8');
+  const siteDescription = site.match(/description:\s*\r?\n?\s*'([^']+)'/)?.[1];
+  assert.ok(siteDescription, 'SITE.description must exist');
+  assert.ok(siteDescription.length <= 160, `SITE.description is ${siteDescription.length} chars`);
+
+  for (const file of ['here.mdx', 'jb2k-mods.mdx', 'susg-voting-system.mdx']) {
+    const body = fs.readFileSync(path.join(root, 'src/content/projects', file), 'utf8');
+    const description = body.match(/^description:\s*"([^"]+)"/m)?.[1];
+    assert.ok(description, `${file} must have a description`);
+    assert.ok(description.length <= 160, `${file} description is ${description.length} chars`);
+  }
+});
+
+test('audit fixes: tap targets, status-derived fallback, accurate copy, and documented tokens', () => {
+  const read = (rel) => fs.readFileSync(path.join(root, rel), 'utf8');
+
+  const css = read('src/styles/global.css');
+  assert.match(css, /\.tap-target::before/, 'global.css must define a .tap-target hit-area expander');
+  assert.match(css, /44px/, '.tap-target must expand hit areas to 44px');
+  for (const rel of [
+    'src/components/Header.astro',
+    'src/components/Footer.astro',
+    'src/components/ProjectCard.astro',
+    'src/pages/contact.astro',
+    'src/pages/index.astro',
+  ]) {
+    assert.match(read(rel), /tap-target/, `${rel} links must use .tap-target`);
+  }
+
+  const header = read('src/components/Header.astro');
+  assert.match(header, /<ul[^>]*role="list"/, 'Header nav list must declare role="list"');
+
+  const card = read('src/components/ProjectCard.astro');
+  assert.match(card, /priority\?: boolean/, 'ProjectCard must accept a priority prop');
+
+  const caseStudy = read('src/pages/projects/[slug].astro');
+  assert.doesNotMatch(
+    caseStudy,
+    /Private deployment · Currently in development/,
+    'Deployment fallback must derive from status instead of a hardcoded label',
+  );
+
+  assert.doesNotMatch(read('PRODUCT.md'), /`PHP 8\.2`/, 'PRODUCT.md must list SUSG as PHP 8.4');
+  assert.match(read('src/content/projects/here.mdx').split('---')[2], /PDF/, 'Here! prose must mention PDF export');
+  assert.doesNotMatch(read('src/pages/404.astro'), /case studies below/, '404 copy must not reference content below');
+
+  const design = read('DESIGN.md');
+  assert.match(design, /--badge-live-bg/, 'DESIGN.md must document status badge tokens');
+  assert.match(design, /tap-target/, 'DESIGN.md must document the tap-target pattern');
+
+  assert.match(read('src/components/TechBadge.astro'), /'html'/, 'TechBadge must have a dedicated HTML/CSS icon');
+});
+
 test('BaseHead and global.css load clean sans-serif (Geist) and JetBrains Mono web fonts without Instrument Serif', () => {
   const head = fs.readFileSync(path.join(root, 'src/components/BaseHead.astro'), 'utf8');
   const css = fs.readFileSync(path.join(root, 'src/styles/global.css'), 'utf8');

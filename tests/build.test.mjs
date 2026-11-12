@@ -83,6 +83,28 @@ test('every built page has zero client JS, required SEO/OG tags, single h1, skip
   assert.equal(titles.size, expectedPages.length, 'Every page must have a unique <title>');
 });
 
+test('public pages ship short meta descriptions, social image alt text, and an eager first cover', () => {
+  const decode = (s) => s.replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+  for (const rel of expectedPages.filter((p) => p !== '404.html')) {
+    const html = fs.readFileSync(path.join(distDir, rel), 'utf8');
+    const description = decode(html.match(/<meta\s+name="description"\s+content="([^"]+)"/i)?.[1] ?? '');
+    assert.ok(description.length <= 160, `${rel} meta description is ${description.length} chars`);
+    assert.match(html, /<meta\s+property="og:image:alt"\s+content="[^"]+"/i, `${rel} missing og:image:alt`);
+    assert.match(html, /<meta\s+name="twitter:image:alt"\s+content="[^"]+"/i, `${rel} missing twitter:image:alt`);
+  }
+
+  const homeHtml = fs.readFileSync(path.join(distDir, 'index.html'), 'utf8');
+  const homeHeader = homeHtml.match(/<header[\s\S]*?<\/header>/i)?.[0] ?? '';
+  assert.match(homeHeader, /aria-current="page"/, 'home brand link must carry aria-current="page" on /');
+
+  for (const rel of ['index.html', 'projects/index.html']) {
+    const html = fs.readFileSync(path.join(distDir, rel), 'utf8');
+    const firstImg = html.match(/<img\b[^>]*>/i)?.[0] ?? '';
+    assert.match(firstImg, /loading="eager"/, `${rel} first project cover must load eagerly`);
+    assert.match(firstImg, /fetchpriority="high"/, `${rel} first project cover must use fetchpriority="high"`);
+  }
+});
+
 test('sitemap excludes 404 and includes all public routes', () => {
   const indexXml = fs.readFileSync(path.join(distDir, 'sitemap-index.xml'), 'utf8');
   const chunkMatch = indexXml.match(/<loc>https:\/\/westendasig\.pages\.dev\/([^<]+)<\/loc>/);
