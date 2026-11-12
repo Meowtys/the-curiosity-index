@@ -3,6 +3,8 @@ import '../styles/global.css';
 import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import AmbientBackdrop from '../components/AmbientBackdrop.astro';
+import PixelCat from '../components/PixelCat.astro';
 
 export interface Props {
   title: string;
@@ -28,16 +30,20 @@ const { title, description, image, imageAlt, type = 'website', noindex = false }
       noindex={noindex}
     />
   </head>
-  <body class="flex min-h-dvh flex-col bg-surface text-ink">
+  <body class="relative flex min-h-dvh flex-col bg-surface text-ink">
+    <AmbientBackdrop />
+    <PixelCat />
     <a href="#main-content" class="skip-link">Skip to main content</a>
-    <Header />
-    <main
-      id="main-content"
-      tabindex="-1"
-      class="mx-auto w-full max-w-[46rem] flex-1 px-5 py-10 sm:px-8 sm:py-14 focus:outline-none"
-    >
-      <slot />
-    </main>
-    <Footer />
+    <div class="relative z-10 flex flex-1 flex-col">
+      <Header />
+      <main
+        id="main-content"
+        tabindex="-1"
+        class="mx-auto w-full max-w-[46rem] flex-1 px-5 py-10 sm:px-8 sm:py-14 focus:outline-none"
+      >
+        <slot />
+      </main>
+      <Footer />
+    </div>
   </body>
 </html>
