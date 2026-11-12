@@ -22,8 +22,8 @@
   width="32"
   height="32"
   aria-hidden="true"
-  class="pointer-events-none fixed z-40 hidden h-8 w-8 lg:block"
-  style="image-rendering: pixelated; left: 18px; top: 58px;"
+  class="pointer-events-none invisible fixed z-40 hidden h-8 w-8 lg:block"
+  style="image-rendering: pixelated;"
 ></canvas>
 
 <script>
@@ -36,6 +36,7 @@
     const desktopQuery = window.matchMedia('(min-width: 1024px)');
     const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
     const STORAGE_KEY = 'curiosity_cat_disabled';
+    const STATE_KEY = 'curiosity_cat_state';
     const MEOW_COOLDOWN_MS = 1400;
 
     let disabled = false;
@@ -44,6 +45,9 @@
     } catch {
       disabled = false;
     }
+
+    const clampX = (v: number) => Math.max(8, Math.min(window.innerWidth - 40, v));
+    const clampY = (v: number) => Math.max(8, Math.min(window.innerHeight - 40, v));
 
     let x = 18;
     let y = 58;
@@ -59,6 +63,42 @@
     let lastTick = 0;
     let rafId = 0;
     let audioCtx: AudioContext | null = null;
+
+    try {
+      const saved = window.sessionStorage.getItem(STATE_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved) as Partial<{
+          x: number;
+          y: number;
+          targetX: number;
+          targetY: number;
+          facing: number;
+          idleTicks: number;
+        }>;
+        if (typeof parsed.x === 'number' && typeof parsed.y === 'number') {
+          x = clampX(parsed.x);
+          y = clampY(parsed.y);
+          targetX = typeof parsed.targetX === 'number' ? clampX(parsed.targetX) : x;
+          targetY = typeof parsed.targetY === 'number' ? clampY(parsed.targetY) : y;
+          facing = parsed.facing === -1 ? -1 : 1;
+          idleTicks = typeof parsed.idleTicks === 'number' ? parsed.idleTicks : 0;
+          state = idleTicks > 28 ? 'sleep' : 'sit';
+        }
+      }
+    } catch {
+      // Ignore storage parsing or restriction errors.
+    }
+
+    function saveCatState() {
+      try {
+        window.sessionStorage.setItem(
+          STATE_KEY,
+          JSON.stringify({ x, y, targetX, targetY, facing, idleTicks }),
+        );
+      } catch {
+        // Ignore storage restrictions in private browsing.
+      }
+    }
 
     async function playMeowSound() {
       try {
@@ -247,13 +287,15 @@
             const move = Math.min(9, dist);
             const rawX = x + (dx / dist) * move;
             const rawY = y + (dy / dist) * move;
-            x = Math.max(8, Math.min(window.innerWidth - 40, rawX));
-            y = Math.max(8, Math.min(window.innerHeight - 40, rawY));
+            x = clampX(rawX);
+            y = clampY(rawY);
           }
         } else {
           idleTicks++;
           state = idleTicks > 28 ? 'sleep' : 'sit';
         }
+
+        if (frame % 5 === 0) saveCatState();
 
         catCanvas!.style.left = `${Math.round(x)}px`;
         catCanvas!.style.top = `${Math.round(y)}px`;
@@ -273,6 +315,9 @@
 
     function startLoop() {
       if (!rafId && isActive() && !document.hidden) {
+        catCanvas!.style.left = `${Math.round(x)}px`;
+        catCanvas!.style.top = `${Math.round(y)}px`;
+        catCanvas!.classList.remove('invisible');
         lastTick = performance.now();
         drawCat();
         rafId = requestAnimationFrame(step);
@@ -281,16 +326,22 @@
 
     window.addEventListener('pointermove', (e) => {
       if (!isActive()) return;
-      targetX = e.clientX - 16;
-      targetY = e.clientY - 16;
+      targetX = clampX(e.clientX - 16);
+      targetY = clampY(e.clientY - 16);
     }, { passive: true });
 
     window.addEventListener('pointerdown', (e) => {
       if (!isActive()) return;
+      const target = e.target as Element | null;
+      if (target?.closest('a')) {
+        targetX = clampX(e.clientX - 16);
+        targetY = clampY(e.clientY - 16);
+        saveCatState();
+        return;
+      }
+      if (target?.closest('button, input, select, textarea, summary, [role="switch"]')) return;
       const nowMs = performance.now();
       if (state === 'meow' || nowMs - lastMeowAt < MEOW_COOLDOWN_MS) return;
-      const target = e.target as Element | null;
-      if (target?.closest('a, button, input, select, textarea, summary, [role="switch"]')) return;
       if (Math.hypot(e.clientX - (x + 16), e.clientY - (y + 16)) <= 30) {
         lastMeowAt = nowMs;
         meowTicks = 14;
@@ -318,12 +369,15 @@
 
     document.addEventListener('visibilitychange', () => {
       if (document.hidden) {
+        saveCatState();
         cancelAnimationFrame(rafId);
         rafId = 0;
       } else {
         startLoop();
       }
     });
+
+    window.addEventListener('pagehide', saveCatState);
 
     desktopQuery.addEventListener('change', syncVisibility);
     motionQuery.addEventListener('change', syncVisibility);
