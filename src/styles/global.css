@@ -25,6 +25,12 @@
   --badge-dev-fg: #78350F;
   --badge-dev-border: #FCD34D;
 
+  --gh-0: #EAE5DC;
+  --gh-1: #F3D1BD;
+  --gh-2: #D99B78;
+  --gh-3: #BA643B;
+  --gh-4: #9A3412;
+
   --scrollbar-thumb: #78736A;
   --scrollbar-track: #F2EFE9;
 
@@ -61,6 +67,12 @@
     --badge-dev-fg: #FCD34D;
     --badge-dev-border: #92400E;
 
+    --gh-0: #1F1D1A;
+    --gh-1: #4A2B16;
+    --gh-2: #7C441E;
+    --gh-3: #BA652B;
+    --gh-4: #FB923C;
+
     --scrollbar-thumb: #78736A;
     --scrollbar-track: #1A1917;
   }
@@ -88,6 +100,12 @@
   --badge-dev-bg: #3B2106;
   --badge-dev-fg: #FCD34D;
   --badge-dev-border: #92400E;
+
+  --gh-0: #1F1D1A;
+  --gh-1: #4A2B16;
+  --gh-2: #7C441E;
+  --gh-3: #BA652B;
+  --gh-4: #FB923C;
 
   --scrollbar-thumb: #78736A;
   --scrollbar-track: #1A1917;
@@ -315,6 +333,37 @@ p, li, dd {
 
 details[open] .accordion-chevron {
   transform: rotate(180deg);
+}
+
+/* GitHub contribution heatmap cell levels */
+.gh-cell {
+  cursor: pointer;
+  transition: stroke 0.1s ease;
+}
+
+.gh-cell[data-level='0'] {
+  fill: var(--gh-0);
+}
+
+.gh-cell[data-level='1'] {
+  fill: var(--gh-1);
+}
+
+.gh-cell[data-level='2'] {
+  fill: var(--gh-2);
+}
+
+.gh-cell[data-level='3'] {
+  fill: var(--gh-3);
+}
+
+.gh-cell[data-level='4'] {
+  fill: var(--gh-4);
+}
+
+.gh-cell:hover {
+  stroke: var(--fg);
+  stroke-width: 1.25;
 }
 
 /* Editorial prose overrides for @tailwindcss/typography in both light & dark modes */
