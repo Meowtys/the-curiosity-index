@@ -77,4 +77,5 @@ npm run preview
 
 ## License
 
-ISC — See [package.json](./package.json).
+- **Code:** [MIT License](./LICENSE) — Components, layouts, CSS tokens, build config, and tests may be reused with attribution.
+- **Content & Assets:** **All Rights Reserved** — See [LICENSE-CONTENT](./LICENSE-CONTENT). Personal copy (`src/content/`, `src/data/`), screenshots (`src/assets/`), and brand graphics (`public/`) are excluded from the MIT license and may not be republished without permission.
