@@ -23,12 +23,23 @@ test('dist contains all expected static HTML pages and sitemap-index.xml', () =>
   assert.ok(fs.existsSync(path.join(distDir, 'sitemap-index.xml')), 'Missing sitemap-index.xml');
 });
 
-test('every built page has zero client JS, required SEO/OG tags, single h1, skip link, and valid internal links', () => {
+test('every built page ships only tiny self-hosted Astro module JS, required SEO/OG tags, single h1, skip link, and valid internal links', () => {
   const titles = new Set();
+  const seenScriptSrcs = new Set();
   for (const rel of expectedPages) {
     const html = fs.readFileSync(path.join(distDir, rel), 'utf8');
 
-    assert.doesNotMatch(html, /<script\b/i, `${rel} must ship zero client <script> tags`);
+    const scripts = [...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)];
+    for (const [, attrs, inlineBody] of scripts) {
+      assert.equal(inlineBody.trim(), '', `${rel} must not contain inline <script> bodies`);
+      assert.match(attrs, /type="module"/i, `${rel} scripts must be type="module"`);
+      const srcMatch = attrs.match(/src="(\/_astro\/[^"]+\.js)"/i);
+      assert.ok(srcMatch?.[1], `${rel} script must load only self-hosted /_astro/*.js modules, got: ${attrs}`);
+      seenScriptSrcs.add(srcMatch[1]);
+    }
+    assert.match(html, /id="ambient-ascii"/, `${rel} missing #ambient-ascii backdrop canvas`);
+    assert.match(html, /id="meowtys-cat"/, `${rel} missing #meowtys-cat companion canvas`);
+    assert.match(html, /id="cat-toggle"/, `${rel} missing #cat-toggle button`);
     assert.match(html, /<a[^>]+href="#main-content"/i, `${rel} missing skip link`);
     assert.match(html, /<main[^>]+id="main-content"/i, `${rel} missing #main-content`);
 
@@ -81,6 +92,15 @@ test('every built page has zero client JS, required SEO/OG tags, single h1, skip
     }
   }
   assert.equal(titles.size, expectedPages.length, 'Every page must have a unique <title>');
+
+  let totalJsBytes = 0;
+  for (const src of seenScriptSrcs) {
+    const jsPath = path.join(distDir, src.replace(/^\//, ''));
+    assert.ok(fs.existsSync(jsPath), `Missing bundled script in dist: ${src}`);
+    totalJsBytes += fs.statSync(jsPath).size;
+  }
+  assert.ok(seenScriptSrcs.size > 0, 'Expected at least one self-hosted /_astro/*.js bundle for Option 2 visuals');
+  assert.ok(totalJsBytes <= 12 * 1024, `Total client JS payload must stay lightweight (<=12 KB), got ${totalJsBytes} bytes`);
 });
 
 test('public pages ship short meta descriptions, social image alt text, and an eager first cover', () => {
