@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import TechBadge from '../components/TechBadge.astro';
 import { SITE, EXPERIENCE, EDUCATION, TOOLBOX } from '../data/site';
 ---
 
@@ -84,8 +85,8 @@ import { SITE, EXPERIENCE, EDUCATION, TOOLBOX } from '../data/site';
             <ul role="list" class="mt-3 flex flex-wrap gap-1.5">
               {
                 group.items.map((tool) => (
-                  <li class="rounded-xs border border-hairline bg-surface-elevated px-2.5 py-1 font-mono text-xs text-ink break-words">
-                    {tool}
+                  <li>
+                    <TechBadge name={tool} size="md" />
                   </li>
                 ))
               }

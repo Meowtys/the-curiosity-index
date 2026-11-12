@@ -30,6 +30,12 @@ export interface ToolboxGroup {
   items: string[];
 }
 
+export interface ExploringItem {
+  topic: string;
+  tag: string;
+  description: string;
+}
+
 export const SITE = {
   name: 'Westen Dasig',
   fullName: 'John Westen Rey Dasig',
@@ -161,5 +167,47 @@ export const TOOLBOX: readonly ToolboxGroup[] = [
       'PC & Mobile Hardware Diagnostics',
       'Custom PC Assembly',
     ],
+  },
+];
+
+export const CORE_STACK: readonly string[] = [
+  'Laravel 13',
+  'PHP 8.4',
+  'React 19',
+  'Inertia 3',
+  'Flutter',
+  'Dart',
+  'TypeScript',
+  'Python',
+  'Astro',
+  'Tailwind CSS v4',
+  'TensorFlow Lite',
+  'MariaDB / MySQL',
+];
+
+export const EXPLORING: readonly ExploringItem[] = [
+  {
+    topic: 'On-Device ML & Vision',
+    tag: 'Android · TFLite',
+    description:
+      'Running quantized MobileFaceNet embeddings and Google ML Kit pipelines directly on Android devices for zero-cost offline verification.',
+  },
+  {
+    topic: 'AI Agents & RAG Workflows',
+    tag: 'Python · LangGraph',
+    description:
+      'Building stateful multi-step agent graphs and retrieval-augmented generation pipelines in Python.',
+  },
+  {
+    topic: 'Full-Stack Web Systems',
+    tag: 'Laravel · React · Astro',
+    description:
+      'Designing type-safe monolithic applications with Laravel 13, Inertia.js v3, and React 19 alongside zero-JS static Astro frontends.',
+  },
+  {
+    topic: 'Custom PC Builds & Repair',
+    tag: 'WesTech · Tanjay City',
+    description:
+      'Selecting components, assembling custom desktop builds, and troubleshooting laptop, PC, and mobile hardware for local clients.',
   },
 ];

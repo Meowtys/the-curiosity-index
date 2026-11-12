@@ -1,0 +1,241 @@
+---
+export interface Props {
+  name: string;
+  size?: 'sm' | 'md';
+}
+
+const { name, size = 'md' } = Astro.props;
+const lower = name.toLowerCase();
+
+type IconKey =
+  | 'flutter'
+  | 'dart'
+  | 'mlkit'
+  | 'tflite'
+  | 'firebase'
+  | 'astro'
+  | 'laravel'
+  | 'php'
+  | 'inertia'
+  | 'react'
+  | 'typescript'
+  | 'javascript'
+  | 'tailwind'
+  | 'database'
+  | 'python'
+  | 'wcag'
+  | 'cloudflare'
+  | 'railway'
+  | 'vercel'
+  | 'hardware'
+  | 'code';
+
+function resolveIcon(label: string): IconKey {
+  if (label.includes('flutter')) return 'flutter';
+  if (label.includes('dart')) return 'dart';
+  if (label.includes('ml kit')) return 'mlkit';
+  if (label.includes('tensorflow') || label.includes('tflite')) return 'tflite';
+  if (label.includes('firebase')) return 'firebase';
+  if (label.includes('astro')) return 'astro';
+  if (label.includes('laravel')) return 'laravel';
+  if (label.includes('php') || label.includes('larastan')) return 'php';
+  if (label.includes('inertia')) return 'inertia';
+  if (label.includes('react')) return 'react';
+  if (label.includes('typescript')) return 'typescript';
+  if (label.includes('javascript') || label.includes('vanilla js')) return 'javascript';
+  if (label.includes('tailwind')) return 'tailwind';
+  if (label.includes('sqlite') || label.includes('mariadb') || label.includes('mysql')) return 'database';
+  if (label.includes('python')) return 'python';
+  if (label.includes('wcag') || label.includes('accessibility')) return 'wcag';
+  if (label.includes('cloudflare')) return 'cloudflare';
+  if (label.includes('railway')) return 'railway';
+  if (label.includes('vercel')) return 'vercel';
+  if (label.includes('hardware') || label.includes('pc ')) return 'hardware';
+  return 'code';
+}
+
+const icon = resolveIcon(lower);
+const pillClasses =
+  size === 'sm'
+    ? 'inline-flex items-center gap-1.5 rounded-xs border border-hairline bg-surface px-2 py-0.5 font-mono text-xs text-ink break-words'
+    : 'inline-flex items-center gap-1.5 rounded-xs border border-hairline bg-surface-elevated px-2.5 py-1 font-mono text-xs text-ink break-words';
+---
+
+<span class={pillClasses}>
+  {
+    icon === 'flutter' && (
+      <svg class="h-3.5 w-3.5 shrink-0 text-accent" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M14.314 0L2.3 12 6 15.7 21.684.013h-7.357zm.014 11.072L7.857 17.53l6.47 6.47H21.7l-6.46-6.468 6.46-6.46h-7.37z" />
+      </svg>
+    )
+  }
+  {
+    icon === 'dart' && (
+      <svg class="h-3.5 w-3.5 shrink-0 text-accent" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M4.105 4.105S9.158 1.58 11.684.316a3.079 3.079 0 0 1 1.481-.315c.766.047 1.677.788 1.677.788L24 9.948v9.789h-4.263V24H9.789l-9-9C.303 14.5 0 13.795 0 13.105c0-.319.18-.818.316-1.105l3.789-7.895zm.679 2.425v11.787c.002.543.021 1.024.498 1.508L10.204 23h8.533v-4.263L4.784 6.53zm12.755-.685c-.889-.896-1.809-1.78-2.74-2.643-.302-.267-.567-.468-1.07-.462-.37.014-.87.195-.87.195L6.341 5.905l10.498 10.499h4.898V11.6l-4.198-5.755z" />
+      </svg>
+    )
+  }
+  {
+    icon === 'mlkit' && (
+      <svg class="h-3.5 w-3.5 shrink-0 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M3 7V5a2 2 0 0 1 2-2h2" />
+        <path d="M17 3h2a2 2 0 0 1 2 2v2" />
+        <path d="M21 17v2a2 2 0 0 1-2 2h-2" />
+        <path d="M7 21H5a2 2 0 0 1-2-2v-2" />
+        <circle cx="9" cy="10" r="1" fill="currentColor" />
+        <circle cx="15" cy="10" r="1" fill="currentColor" />
+        <path d="M9.5 15a3.5 3.5 0 0 0 5 0" />
+      </svg>
+    )
+  }
+  {
+    icon === 'tflite' && (
+      <svg class="h-3.5 w-3.5 shrink-0 text-accent" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M1.292 5.856L11.54 0v24l-4.095-2.378V7.603l-6.168 3.564.015-5.31zm21.43 5.311l-.014-5.31L12.46 0v24l4.095-2.378V14.87l3.092 1.788-.018-4.618-3.074-1.756V7.603l6.168 3.564z" />
+      </svg>
+    )
+  }
+  {
+    icon === 'firebase' && (
+      <svg class="h-3.5 w-3.5 shrink-0 text-accent" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M3.89 15.672L6.255.461A.542.542 0 0 1 7.27.288l2.543 4.771zm16.794 3.692l-2.25-14a.54.54 0 0 0-.919-.295L3.316 19.365l7.856 4.427a1.621 1.621 0 0 0 1.588 0zM14.3 7.147l-1.82-3.482a.542.542 0 0 0-.96 0L3.53 17.984z" />
+      </svg>
+    )
+  }
+  {
+    icon === 'astro' && (
+      <svg class="h-3.5 w-3.5 shrink-0 text-accent" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M8.358 20.162c-1.186-1.07-1.532-3.316-1.038-4.944.856 1.026 2.043 1.352 3.272 1.535 1.897.283 3.76.177 5.522-.678.202-.098.388-.229.602-.36.166.473.219.95.159 1.437-.15 1.198-.738 2.132-1.688 2.849-.38.286-.782.545-1.175.814-1.205.826-1.536 1.797-1.079 3.19l.044.148a3.158 3.158 0 0 1-1.407-1.188 3.31 3.31 0 0 1-.544-1.815c-.004-.32-.004-.642-.047-.958-.106-.769-.462-1.113-1.132-1.133-.692-.02-1.267.411-1.425 1.09-.012.053-.028.104-.066.023zM4.09 15.059s2.625-1.273 5.254-1.273l1.983-6.122c.074-.296.29-.498.536-.498.247 0 .463.202.537.498l1.983 6.122c3.108 0 5.253 1.273 5.253 1.273L15.174 2.86c-.129-.359-.35-.59-.646-.59H9.2c-.296 0-.505.231-.646.59z" />
+      </svg>
+    )
+  }
+  {
+    icon === 'laravel' && (
+      <svg class="h-3.5 w-3.5 shrink-0 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M3 7l6-3.5L15 7v7l-6 3.5L3 14V7z" />
+        <path d="M15 10.5l6-3.5v7l-6 3.5" />
+        <path d="M9 17.5V21l6-3.5" />
+        <path d="M3 7l6 3.5L15 7" />
+        <path d="M9 10.5v7" />
+      </svg>
+    )
+  }
+  {
+    icon === 'php' && (
+      <svg class="h-3.5 w-3.5 shrink-0 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <ellipse cx="12" cy="12" rx="10" ry="6" />
+        <path d="M6.5 14.5l.8-5h2a1.3 1.3 0 0 1 0 2.6H7" />
+        <path d="M11 14.5l.8-5M11.4 12h2.2M14 9.5l-.8 5" />
+        <path d="M15.8 14.5l.8-5h1.8a1.3 1.3 0 0 1 0 2.6h-2.1" />
+      </svg>
+    )
+  }
+  {
+    icon === 'inertia' && (
+      <svg class="h-3.5 w-3.5 shrink-0 text-accent" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M6.901 5.331H0L6.669 12 0 18.669h6.901L13.571 12 6.9 5.331zm10.43 0H10.43L17.099 12l-6.67 6.669h6.902L24 12l-6.669-6.669z" />
+      </svg>
+    )
+  }
+  {
+    icon === 'react' && (
+      <svg class="h-3.5 w-3.5 shrink-0 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+        <circle cx="12" cy="12" r="2" fill="currentColor" />
+        <ellipse cx="12" cy="12" rx="10" ry="4.2" />
+        <ellipse cx="12" cy="12" rx="10" ry="4.2" transform="rotate(60 12 12)" />
+        <ellipse cx="12" cy="12" rx="10" ry="4.2" transform="rotate(120 12 12)" />
+      </svg>
+    )
+  }
+  {
+    icon === 'typescript' && (
+      <svg class="h-3.5 w-3.5 shrink-0 text-accent" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M3 3h18v18H3V3zm10.7 8.9h-2.4v7.2H9.5v-7.2H7.1V10.3h6.6v1.6zm6.5 5.2c0 1.3-1 2.1-2.6 2.1-1.1 0-2-.4-2.5-.9l.9-1.2c.4.4.9.6 1.6.6.6 0 1-.2 1-.6 0-.4-.3-.6-1.2-.9-1.3-.4-2.1-.9-2.1-2.1 0-1.2 1-2 2.4-2 1 0 1.8.3 2.3.8l-.8 1.2c-.4-.3-.9-.5-1.5-.5-.5 0-.8.2-.8.5 0 .4.3.5 1.2.8 1.3.4 2.1 1 2.1 2.2z" />
+      </svg>
+    )
+  }
+  {
+    icon === 'javascript' && (
+      <svg class="h-3.5 w-3.5 shrink-0 text-accent" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M3 3h18v18H3V3zm9.6 13.7c0 1.6-.9 2.4-2.4 2.4-.9 0-1.6-.4-2-.9l1-1.1c.2.3.5.5.9.5.5 0 .8-.2.8-.9v-5.4h1.7v5.4zm6.9.2c0 1.4-1.1 2.2-2.6 2.2-1.2 0-2-.5-2.5-1.1l1-1.1c.4.5.9.7 1.5.7.6 0 1-.3 1-.7 0-.4-.3-.6-1.2-1-1.2-.5-2-1-2-2.2 0-1.2.9-2.1 2.4-2.1 1 0 1.8.3 2.3 1l-1 1c-.3-.4-.8-.6-1.3-.6-.5 0-.8.3-.8.6 0 .4.3.6 1.2.9 1.2.5 2 1 2 2.4z" />
+      </svg>
+    )
+  }
+  {
+    icon === 'tailwind' && (
+      <svg class="h-3.5 w-3.5 shrink-0 text-accent" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M12.001 4.8c-3.2 0-5.2 1.6-6 4.8 1.2-1.6 2.6-2.2 4.2-1.8.913.228 1.565.89 2.288 1.624C13.666 10.618 15.027 12 18.001 12c3.2 0 5.2-1.6 6-4.8-1.2 1.6-2.6 2.2-4.2 1.8-.913-.228-1.565-.89-2.288-1.624C16.337 6.182 14.976 4.8 12.001 4.8zm-6 7.2c-3.2 0-5.2 1.6-6 4.8 1.2-1.6 2.6-2.2 4.2-1.8.913.228 1.565.89 2.288 1.624 1.177 1.194 2.538 2.576 5.512 2.576 3.2 0 5.2-1.6 6-4.8-1.2 1.6-2.6 2.2-4.2 1.8-.913-.228-1.565-.89-2.288-1.624C10.337 13.382 8.976 12 6.001 12z" />
+      </svg>
+    )
+  }
+  {
+    icon === 'database' && (
+      <svg class="h-3.5 w-3.5 shrink-0 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <ellipse cx="12" cy="5" rx="8" ry="3" />
+        <path d="M4 5v14c0 1.66 3.58 3 8 3s8-1.34 8-3V5" />
+        <path d="M4 12c0 1.66 3.58 3 8 3s8-1.34 8-3" />
+      </svg>
+    )
+  }
+  {
+    icon === 'python' && (
+      <svg class="h-3.5 w-3.5 shrink-0 text-accent" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M11.914 0C5.82 0 6.2 2.656 6.2 2.656l.007 2.752h5.814v.826H3.9S0 5.789 0 11.969c0 6.18 3.403 5.96 3.403 5.96h2.03v-2.867s-.109-3.402 3.35-3.402h5.766s3.24.052 3.24-3.131V3.202S18.28 0 11.914 0zM8.708 1.85c.578 0 1.046.47 1.046 1.048 0 .577-.468 1.046-1.046 1.046-.579 0-1.046-.469-1.046-1.046 0-.578.467-1.048 1.046-1.048zm3.378 22.15c6.094 0 5.714-2.656 5.714-2.656l-.007-2.752h-5.814v-.826h8.121S24 18.211 24 12.031c0-6.18-3.403-5.96-3.403-5.96h-2.03v2.867s.109 3.402-3.35 3.402H9.451s-3.24-.052-3.24 3.131v5.327S5.72 24 12.086 24zm3.206-1.85c-.578 0-1.046-.47-1.046-1.048 0-.577.468-1.046 1.046-1.046.579 0 1.046.469 1.046 1.046 0 .578-.467 1.048-1.046 1.048z" />
+      </svg>
+    )
+  }
+  {
+    icon === 'wcag' && (
+      <svg class="h-3.5 w-3.5 shrink-0 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="10" />
+        <circle cx="12" cy="7.5" r="1.2" fill="currentColor" />
+        <path d="M7.5 10.5L12 11.5l4.5-1" />
+        <path d="M12 11.5v3l-2 4M12 14.5l2 4" />
+      </svg>
+    )
+  }
+  {
+    icon === 'cloudflare' && (
+      <svg class="h-3.5 w-3.5 shrink-0 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M17.5 19H7a5 5 0 0 1-.5-9.97A6.5 6.5 0 0 1 19.3 11a4 4 0 0 1-1.8 8z" />
+      </svg>
+    )
+  }
+  {
+    icon === 'railway' && (
+      <svg class="h-3.5 w-3.5 shrink-0 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect x="5" y="3" width="14" height="14" rx="3" />
+        <path d="M5 11h14" />
+        <circle cx="8.5" cy="14" r="1" fill="currentColor" />
+        <circle cx="15.5" cy="14" r="1" fill="currentColor" />
+        <path d="M8 17l-2 4M16 17l2 4" />
+      </svg>
+    )
+  }
+  {
+    icon === 'vercel' && (
+      <svg class="h-3.5 w-3.5 shrink-0 text-accent" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M12 2L2 20h20L12 2z" />
+      </svg>
+    )
+  }
+  {
+    icon === 'hardware' && (
+      <svg class="h-3.5 w-3.5 shrink-0 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect x="6" y="6" width="12" height="12" rx="2" />
+        <rect x="9" y="9" width="6" height="6" rx="1" />
+        <path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4" />
+      </svg>
+    )
+  }
+  {
+    icon === 'code' && (
+      <svg class="h-3.5 w-3.5 shrink-0 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <polyline points="16 18 22 12 16 6" />
+        <polyline points="8 6 2 12 8 18" />
+      </svg>
+    )
+  }
+  <span>{name}</span>
+</span>

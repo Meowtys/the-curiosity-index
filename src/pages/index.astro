@@ -2,7 +2,8 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ProjectCard from '../components/ProjectCard.astro';
-import { SITE, EXPERIENCE, SOCIAL_LINKS } from '../data/site';
+import TechBadge from '../components/TechBadge.astro';
+import { SITE, EXPERIENCE, SOCIAL_LINKS, CORE_STACK, EXPLORING } from '../data/site';
 
 const allProjects = await getCollection('projects');
 const featuredProjects = allProjects
@@ -16,25 +17,50 @@ const featuredProjects = allProjects
       {SITE.name}
     </h1>
     <p class="mt-2 font-display text-lg italic text-ink-muted sm:text-xl">
-      {SITE.role}
+      {SITE.role} · {SITE.location}
     </p>
     <p class="mt-5 max-w-[62ch] text-base leading-relaxed text-ink sm:text-lg">
       {SITE.bio}
     </p>
 
-    <div class="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm">
-      <a
-        href="/projects/"
-        class="inline-flex min-h-8 items-center rounded-xs border border-hairline-strong bg-surface-elevated px-3.5 py-1.5 font-medium text-ink no-underline transition-colors hover:border-accent hover:text-accent"
-      >
-        Explore case studies <span aria-hidden="true" class="ml-1.5">→</span>
-      </a>
-      <a
-        href="/about/"
-        class="inline-flex min-h-8 items-center py-1 font-medium text-ink underline decoration-hairline-strong underline-offset-[0.25em] hover:text-accent hover:decoration-accent"
-      >
-        About me
-      </a>
+    <div class="mt-6 flex flex-wrap items-center justify-between gap-x-6 gap-y-3 text-sm">
+      <div class="flex flex-wrap items-center gap-x-5 gap-y-2.5">
+        <a
+          href="/projects/"
+          class="inline-flex min-h-8 items-center rounded-xs border border-hairline-strong bg-surface-elevated px-3.5 py-1.5 font-medium text-ink no-underline transition-colors hover:border-accent hover:text-accent"
+        >
+          Explore case studies <span aria-hidden="true" class="ml-1.5">→</span>
+        </a>
+        <a
+          href="/about/"
+          class="inline-flex min-h-8 items-center py-1 font-medium text-ink underline decoration-hairline-strong underline-offset-[0.25em] hover:text-accent hover:decoration-accent"
+        >
+          About me
+        </a>
+      </div>
+
+      <ul role="list" class="flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-xs" aria-label="Direct profiles">
+        {
+          SOCIAL_LINKS.map((item) => (
+            <li>
+              <a
+                href={item.href}
+                target={item.external ? '_blank' : undefined}
+                rel={item.external ? 'noopener noreferrer' : undefined}
+                class="inline-flex min-h-7 items-center text-ink-muted underline decoration-hairline-strong underline-offset-[0.25em] transition-colors hover:text-accent hover:decoration-accent"
+              >
+                {item.label}
+                {item.external && (
+                  <>
+                    <span class="visually-hidden"> (opens in a new tab)</span>
+                    <span aria-hidden="true" class="ml-0.5 text-xs">↗</span>
+                  </>
+                )}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
     </div>
   </section>
 
@@ -70,6 +96,59 @@ const featuredProjects = allProjects
         ))
       }
     </div>
+  </section>
+
+  <section class="mt-12 border-b border-hairline pb-10 sm:mt-14 sm:pb-12">
+    <div class="flex flex-wrap items-baseline justify-between gap-4">
+      <h2 class="font-display text-2xl font-bold text-ink sm:text-3xl">
+        Core Stack
+      </h2>
+      <a
+        href="/about/"
+        class="group inline-flex min-h-7 items-center text-sm font-medium text-accent no-underline"
+      >
+        <span class="underline decoration-accent/60 underline-offset-[0.25em] group-hover:decoration-accent">Full toolbox</span> <span aria-hidden="true" class="ml-1">→</span>
+      </a>
+    </div>
+    <p class="mt-2 max-w-[65ch] text-sm text-ink-muted">
+      Languages, frameworks, and tools I work with across web, mobile, and on-device ML projects.
+    </p>
+    <ul role="list" class="mt-4 flex flex-wrap gap-2" aria-label="Core technical stack">
+      {
+        CORE_STACK.map((tool) => (
+          <li>
+            <TechBadge name={tool} size="md" />
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="mt-12 border-b border-hairline pb-6 sm:mt-14 sm:pb-8">
+    <h2 class="font-display text-2xl font-bold text-ink sm:text-3xl">
+      Currently Exploring
+    </h2>
+    <p class="mt-2 max-w-[65ch] text-sm text-ink-muted">
+      Areas I'm actively building in, studying, and testing right now.
+    </p>
+
+    <ul role="list" class="mt-5 divide-y divide-hairline border-t border-hairline">
+      {
+        EXPLORING.map((item) => (
+          <li class="py-3.5 sm:py-4">
+            <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+              <h3 class="font-display text-lg font-bold text-ink">
+                {item.topic}
+              </h3>
+              <span class="font-mono text-xs text-ink-muted">{item.tag}</span>
+            </div>
+            <p class="mt-1 max-w-[65ch] text-sm leading-relaxed text-ink-muted">
+              {item.description}
+            </p>
+          </li>
+        ))
+      }
+    </ul>
   </section>
 
   <section class="mt-12 border-b border-hairline pb-6 sm:mt-14 sm:pb-8">
