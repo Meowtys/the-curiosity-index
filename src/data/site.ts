@@ -62,7 +62,7 @@ export const SITE = {
   email: 'westendasig2003@gmail.com',
   siteUrl: 'https://westendasig.pages.dev',
   description:
-    'Westen Dasig — The Curiosity Index. Computer science student at Foundation University Dumaguete and full-stack developer building web and mobile software, custom PCs, and handling computer and phone repairs.',
+    'Westen Dasig — CS student at Foundation University Dumaguete and full-stack developer building web and mobile apps, custom PCs, and device repairs.',
 } as const;
 
 export const NAV_LINKS: readonly NavLink[] = [

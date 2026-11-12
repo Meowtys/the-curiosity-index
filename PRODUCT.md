@@ -17,7 +17,7 @@ The personal portfolio and engineering index of **Westen Dasig** (*John Westen R
 - **Three MDX Project Case Studies** (all source repositories are private; no `repoUrl` links are rendered):
   1. **Here!** (`https://youre-here.vercel.app`) — Open Beta (`2023 · Rebuilt 2026`), Creator & Lead Developer. Face-first, offline-first Android attendance system (`Flutter`, `Google ML Kit`, `MobileFaceNet TFLite`, `Firebase Auth & Firestore`, `Astro` web portal).
   2. **JB2K Mods** (`https://jb2k.shop`) — Live (`2026 · Production`), Full-Stack Developer. Commission & order-tracking platform for custom NBA 2K player cyberfaces (`Laravel 13`, `PHP 8.4`, `Inertia 3`, `React 19`, `TypeScript`, `Tailwind CSS 4`, `SQLite`, `Resend`).
-  3. **SUSG Voting System** (in development, no public URL) — In Development (`2024 · Rebuilt 2026`), Project Lead & Maintainer. Online student government election & Comelec administration platform for Silliman University (`PHP 8.2`, `MariaDB`, `Tailwind CSS 4`, `Vanilla JS`).
+  3. **SUSG Voting System** (in development, no public URL) — In Development (`2024 · Rebuilt 2026`), Project Lead & Maintainer. Online student government election & Comelec administration platform for Silliman University (`PHP 8.4`, `MariaDB`, `Tailwind CSS 4`, `Vanilla JS`).
 - **Experience & Community:**
   - **eGetinnz** (`Jun 2026 – Aug 2026`, Remote): Software Quality Assurance Intern — exploratory QA testing across partner brand websites and web crawling/data extraction prototyping with Crawl4AI and Trafilatura.
   - **WesTech** (`2020 – Present`, Tanjay City, Philippines): Local computer and phone repair shop and custom PC building business.
