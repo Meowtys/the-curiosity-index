@@ -22,7 +22,10 @@ export interface ExperienceItem {
 export interface EducationItem {
   institution: string;
   degree: string;
+  period: string;
   location: string;
+  summary?: string;
+  activities?: string[];
 }
 
 export interface ToolboxGroup {
@@ -91,6 +94,19 @@ export const SOCIAL_LINKS: readonly SocialLink[] = [
 
 export const EXPERIENCE: readonly ExperienceItem[] = [
   {
+    title: 'Software Quality Assurance Intern',
+    organization: 'eGetinnz',
+    period: 'Jun 2026 – Aug 2026',
+    location: 'Remote',
+    summary:
+      'Conducted exploratory QA testing across partner brand websites and prototyped automated web crawling and merchant data extraction pipelines.',
+    highlights: [
+      'Conducted exploratory QA testing across multiple partner brand websites, covering UI/UX, navigation, usability, and functionality, and documented issues with recommendations for improvement.',
+      'Researched and evaluated web crawling and data extraction tools, including Crawl4AI and Trafilatura, and built a web crawler prototype to assess automating merchant discovery across websites with varying structures.',
+      'Performed structured data sourcing for a Southeast Asian (Myanmar) e-commerce business directory.',
+    ],
+  },
+  {
     title: 'Founder & Technician',
     organization: 'WesTech',
     period: '2020 – Present',
@@ -130,7 +146,26 @@ export const EDUCATION: readonly EducationItem[] = [
   {
     institution: 'Foundation University',
     degree: 'Bachelor of Science (BS) in Computer Science',
+    period: '2025 – 2027',
     location: 'Dumaguete City, Philippines',
+    activities: [
+      '4th Year Computer Science Representative, Executive Council of Student Leaders (2026–Present)',
+      'Multimedia Committee Member, Executive Council of Student Leaders (2025–2026)',
+    ],
+  },
+  {
+    institution: 'Silliman University',
+    degree: 'Bachelor of Science (BS) in Computer Science',
+    period: '2021 – 2025',
+    location: 'Dumaguete City, Philippines',
+    summary:
+      'Completed Computer Science coursework from 2021 to 2025 before transferring to Foundation University to finish my degree.',
+    activities: [
+      'Executive Chairperson, Research Committee, Silliman University Student Government (2023–2024)',
+      'Legislative Representative, Student Assembly, Silliman University Student Government (2022–2023)',
+      'Technical Head, Cheering Committee, Silliman University Student Government (2022–2023)',
+      'Press Relations Officer, Confederates Student Council, College of Computer Studies (2022–2023)',
+    ],
   },
 ];
 
