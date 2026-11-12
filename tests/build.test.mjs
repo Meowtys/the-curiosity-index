@@ -164,4 +164,9 @@ test('built home and case study pages include Currently Exploring, Core Stack, a
   assert.match(aboutHtml, /Silliman University/, 'about page must include Silliman University in Education');
   assert.match(aboutHtml, /eGetinnz/, 'about page must include eGetinnz internship in Experience');
   assert.match(aboutHtml, /Software Quality Assurance Intern/, 'about page must include Software Quality Assurance Intern role');
+
+  const detailsMatches = [...aboutHtml.matchAll(/<details\b([^>]*)>/gi)];
+  assert.equal(detailsMatches.length, 6, 'about page must render 6 collapsible details cards (4 Experience + 2 Education)');
+  const openCount = detailsMatches.filter(([, attrs]) => /\bopen\b/i.test(attrs)).length;
+  assert.equal(openCount, 2, 'about page must leave exactly 2 details cards open by default (first Experience + first Education)');
 });
