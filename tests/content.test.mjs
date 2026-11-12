@@ -49,4 +49,27 @@ test('ProjectCard uses compact horizontal row layout with a constrained side thu
   assert.match(card, /\bsm:flex-row\b/, 'ProjectCard must use sm:flex-row for compact horizontal rows');
   assert.match(card, /\bsm:w-48\b/, 'ProjectCard cover thumbnail must be constrained to sm:w-48');
   assert.doesNotMatch(card, /w-\[calc\(100%\+/, 'ProjectCard must not use full-bleed cover banners');
+  assert.match(card, /\bafter:inset-0\b/, 'ProjectCard title link must stretch across the card');
+  assert.match(card, /TechBadge/, 'ProjectCard must render TechBadge stack pills with logos');
+});
+
+test('BaseHead and global.css load Instrument Serif, Plus Jakarta Sans, and JetBrains Mono web fonts', () => {
+  const head = fs.readFileSync(path.join(root, 'src/components/BaseHead.astro'), 'utf8');
+  const css = fs.readFileSync(path.join(root, 'src/styles/global.css'), 'utf8');
+  assert.match(head, /fonts\.googleapis\.com/);
+  assert.match(head, /Instrument\+Serif/);
+  assert.match(head, /Plus\+Jakarta\+Sans/);
+  assert.match(head, /JetBrains\+Mono/);
+  assert.match(css, /'Instrument Serif'/);
+  assert.match(css, /'Plus Jakarta Sans'/);
+});
+
+test('site.ts exports EXPLORING and CORE_STACK and TechBadge component exists with SVG logos', () => {
+  const site = fs.readFileSync(path.join(root, 'src/data/site.ts'), 'utf8');
+  assert.match(site, /export const EXPLORING/);
+  assert.match(site, /export const CORE_STACK/);
+  const badgePath = path.join(root, 'src/components/TechBadge.astro');
+  assert.ok(fs.existsSync(badgePath), 'src/components/TechBadge.astro must exist');
+  const badge = fs.readFileSync(badgePath, 'utf8');
+  assert.match(badge, /<svg\b/, 'TechBadge must render inline SVG logos');
 });
