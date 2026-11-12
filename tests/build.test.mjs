@@ -29,10 +29,9 @@ test('every built page ships only tiny self-hosted Astro module JS, required SEO
     const html = fs.readFileSync(path.join(distDir, rel), 'utf8');
 
     const scripts = [...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)];
-    assert.ok(scripts.length > 0 && scripts.length <= 2, `${rel} expected 1-2 ambient/cat module scripts, got ${scripts.length}`);
+    assert.ok(scripts.length > 0 && scripts.length <= 4, `${rel} expected 1-4 lightweight scripts, got ${scripts.length}`);
     let pageJsBytes = 0;
     for (const [, attrs, inlineBody] of scripts) {
-      assert.match(attrs, /type="module"/i, `${rel} scripts must be type="module"`);
       const srcMatch = attrs.match(/src="([^"]+)"/i);
       if (srcMatch) {
         assert.match(srcMatch[1], /^\/_astro\/[^"]+\.js$/, `${rel} must not load third-party scripts: ${srcMatch[1]}`);
@@ -40,11 +39,17 @@ test('every built page ships only tiny self-hosted Astro module JS, required SEO
         assert.ok(fs.existsSync(jsPath), `Missing bundled script in dist: ${srcMatch[1]}`);
         pageJsBytes += fs.statSync(jsPath).size;
       } else {
-        assert.match(inlineBody, /ambient-ascii|meowtys-cat/, `${rel} inline module must only be ambient-ascii or meowtys-cat`);
+        assert.match(
+          inlineBody,
+          /ambient-ascii|meowtys-cat|theme-toggle|curiosity_theme/,
+          `${rel} inline script must only be ambient, cat, or theme controller`,
+        );
         pageJsBytes += Buffer.byteLength(inlineBody, 'utf8');
       }
     }
-    assert.ok(pageJsBytes <= 8 * 1024, `${rel} total client JS must stay <= 8 KB, got ${pageJsBytes} bytes`);
+    assert.ok(pageJsBytes <= 10 * 1024, `${rel} total client JS must stay <= 10 KB, got ${pageJsBytes} bytes`);
+    assert.match(html, /id="theme-toggle"/, `${rel} missing #theme-toggle switch`);
+    assert.match(html, /role="switch"/, `${rel} missing role="switch" on theme toggle`);
     assert.match(html, /id="ambient-ascii"/, `${rel} missing #ambient-ascii backdrop canvas`);
     assert.match(html, /id="meowtys-cat"/, `${rel} missing #meowtys-cat companion canvas`);
     assert.match(html, /id="cat-toggle"/, `${rel} missing #cat-toggle button`);
