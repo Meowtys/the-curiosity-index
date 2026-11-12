@@ -4,7 +4,7 @@ import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
-  site: 'https://the-curiosity-index.pages.dev',
+  site: 'https://westendasig.pages.dev',
   output: 'static',
   trailingSlash: 'always',
   integrations: [

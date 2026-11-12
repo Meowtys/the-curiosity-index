@@ -55,7 +55,7 @@ test('every built page has zero client JS, required SEO/OG tags, single h1, skip
     titles.add(titleMatch[1].trim());
 
     assert.match(html, /<meta\s+name="description"\s+content="[^"]+"/i, `${rel} missing meta description`);
-    assert.match(html, /<link\s+rel="canonical"\s+href="https:\/\/the-curiosity-index\.pages\.dev\//i, `${rel} missing canonical URL`);
+    assert.match(html, /<link\s+rel="canonical"\s+href="https:\/\/westendasig\.pages\.dev\//i, `${rel} missing canonical URL`);
     assert.match(html, /<meta\s+property="og:title"\s+content="[^"]+"/i, `${rel} missing og:title`);
     assert.match(html, /<meta\s+property="og:description"\s+content="[^"]+"/i, `${rel} missing og:description`);
     assert.doesNotMatch(html, /href="undefined"|src="undefined"/i, `${rel} contains undefined link/asset`);
@@ -77,7 +77,7 @@ test('every built page has zero client JS, required SEO/OG tags, single h1, skip
 
 test('sitemap excludes 404 and includes all public routes', () => {
   const indexXml = fs.readFileSync(path.join(distDir, 'sitemap-index.xml'), 'utf8');
-  const chunkMatch = indexXml.match(/<loc>https:\/\/the-curiosity-index\.pages\.dev\/([^<]+)<\/loc>/);
+  const chunkMatch = indexXml.match(/<loc>https:\/\/westendasig\.pages\.dev\/([^<]+)<\/loc>/);
   assert.ok(chunkMatch?.[1], 'sitemap-index.xml must reference a sitemap file');
   const sitemapXml = fs.readFileSync(path.join(distDir, chunkMatch[1]), 'utf8');
   assert.match(sitemapXml, /\/projects\/here\/?</);
