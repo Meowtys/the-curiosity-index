@@ -55,6 +55,7 @@ weeks.forEach((week, col) => {
 
   <div class="mt-5 rounded-sm border border-hairline bg-surface-elevated/45 p-4 sm:p-5">
     <div
+      id="gh-scroll-region"
       class="overflow-x-auto pb-1"
       tabindex="0"
       role="region"
@@ -121,7 +122,7 @@ weeks.forEach((week, col) => {
     </div>
 
     <div class="mt-3 flex flex-wrap items-center justify-between gap-3 font-mono text-xs text-ink-muted">
-      <span id="gh-hover-status" class="tabular-nums">Hover a day square to inspect count</span>
+      <span id="gh-hover-status" class="tabular-nums" aria-live="polite">Hover a day square to inspect count</span>
       <div class="flex items-center gap-1.5" aria-hidden="true">
         <span>Less</span>
         <svg width="62" height="10" viewBox="0 0 62 10" class="block">
@@ -138,15 +139,22 @@ weeks.forEach((week, col) => {
 </section>
 
 <script>
+  const region = document.getElementById('gh-scroll-region');
+  if (region && region.scrollWidth > region.clientWidth) {
+    region.scrollLeft = region.scrollWidth;
+  }
+
   const svg = document.getElementById('gh-calendar-svg');
   const status = document.getElementById('gh-hover-status');
   if (svg && status) {
     const defaultText = status.textContent || 'Hover a day square to inspect count';
-    svg.addEventListener('mouseover', (e) => {
-      const target = (e.target as Element | null)?.closest('.gh-cell');
-      const label = target?.getAttribute('data-label');
-      if (label) status.textContent = label;
-    });
+    function showCell(target: EventTarget | null) {
+      const cell = (target as Element | null)?.closest('.gh-cell');
+      const label = cell?.getAttribute('data-label');
+      if (label) status!.textContent = label;
+    }
+    svg.addEventListener('mouseover', (e) => showCell(e.target));
+    svg.addEventListener('click', (e) => showCell(e.target));
     svg.addEventListener('mouseleave', () => {
       status.textContent = defaultText;
     });
