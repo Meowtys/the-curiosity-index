@@ -5,14 +5,19 @@ export interface Props {
   title: string;
   description: string;
   image?: string;
+  imageAlt?: string;
   type?: 'website' | 'article';
   noindex?: boolean;
 }
+
+const DEFAULT_IMAGE = '/og-default.png';
+const DEFAULT_IMAGE_ALT = `${SITE.name} — ${SITE.subtitle}: ${SITE.role}.`;
 
 const {
   title,
   description,
   image,
+  imageAlt,
   type = 'website',
   noindex = false,
 } = Astro.props;
@@ -22,10 +27,11 @@ const fullTitle = title.includes(SITE.name)
   : `${title} · ${SITE.name} — ${SITE.subtitle}`;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? SITE.siteUrl);
-const resolvedImage = image ?? (noindex ? undefined : '/og-default.png');
+const resolvedImage = image ?? (noindex ? undefined : DEFAULT_IMAGE);
 const socialImageURL = resolvedImage
   ? new URL(resolvedImage, Astro.site ?? SITE.siteUrl).toString()
   : undefined;
+const socialImageAlt = image ? imageAlt : DEFAULT_IMAGE_ALT;
 ---
 
 <meta charset="utf-8" />
@@ -51,8 +57,10 @@ const socialImageURL = resolvedImage
 <meta property="og:description" content={description} />
 <meta property="og:site_name" content={`${SITE.name} — ${SITE.subtitle}`} />
 {socialImageURL && <meta property="og:image" content={socialImageURL} />}
+{socialImageURL && socialImageAlt && <meta property="og:image:alt" content={socialImageAlt} />}
 
 <meta name="twitter:card" content={socialImageURL ? 'summary_large_image' : 'summary'} />
 <meta name="twitter:title" content={fullTitle} />
 <meta name="twitter:description" content={description} />
 {socialImageURL && <meta name="twitter:image" content={socialImageURL} />}
+{socialImageURL && socialImageAlt && <meta name="twitter:image:alt" content={socialImageAlt} />}

@@ -8,11 +8,12 @@ export interface Props {
   title: string;
   description: string;
   image?: string;
+  imageAlt?: string;
   type?: 'website' | 'article';
   noindex?: boolean;
 }
 
-const { title, description, image, type = 'website', noindex = false } = Astro.props;
+const { title, description, image, imageAlt, type = 'website', noindex = false } = Astro.props;
 ---
 
 <!doctype html>
@@ -22,6 +23,7 @@ const { title, description, image, type = 'website', noindex = false } = Astro.p
       title={title}
       description={description}
       image={image}
+      imageAlt={imageAlt}
       type={type}
       noindex={noindex}
     />
