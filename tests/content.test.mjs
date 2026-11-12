@@ -154,6 +154,10 @@ test('AmbientBackdrop and PixelCat components exist and honor motion, desktop, a
   assert.doesNotMatch(cat, /steerAwayFromContent/, 'PixelCat must pass freely over page content without getting stuck');
   assert.match(cat, /'purr'/, 'PixelCat must support a purr state when clicked');
   assert.match(cat, /pointerdown/, 'PixelCat must listen for pointerdown clicks without blocking links');
+  assert.match(cat, /id="cat-purr-label"/, 'PixelCat must render floating purr text element');
+  assert.match(cat, />purr~</, 'PixelCat purr label must show purr~ text');
+  assert.match(cat, /await\s+audioCtx\.resume\(\)/, 'PixelCat must await audioCtx.resume() before scheduling nodes');
+  assert.match(cat, /bandpass/, 'PixelCat audio purr must shape audible noise/harmonics via bandpass filter');
 
   const layout = read('src/layouts/BaseLayout.astro');
   assert.match(layout, /AmbientBackdrop/, 'BaseLayout must include AmbientBackdrop');

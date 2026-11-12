@@ -11,6 +11,12 @@
   cat: on
 </button>
 
+<span
+  id="cat-purr-label"
+  aria-hidden="true"
+  class="pointer-events-none fixed z-40 hidden font-mono text-xs font-medium text-accent select-none"
+>purr~</span>
+
 <canvas
   id="meowtys-cat"
   width="32"
@@ -22,6 +28,7 @@
 
 <script>
   const catCanvas = document.getElementById('meowtys-cat') as HTMLCanvasElement | null;
+  const purrLabel = document.getElementById('cat-purr-label') as HTMLSpanElement | null;
   const toggleBtn = document.getElementById('cat-toggle') as HTMLButtonElement | null;
 
   if (catCanvas && toggleBtn) {
@@ -51,7 +58,7 @@
     let rafId = 0;
     let audioCtx: AudioContext | null = null;
 
-    function playPurrSound() {
+    async function playPurrSound() {
       try {
         const AudioCtor =
           window.AudioContext ||
@@ -59,48 +66,75 @@
         if (!AudioCtor) return;
         audioCtx ??= new AudioCtor();
         if (audioCtx.state === 'suspended') {
-          void audioCtx.resume();
+          await audioCtx.resume();
         }
 
         const now = audioCtx.currentTime;
-        const rumble = audioCtx.createOscillator();
-        const overtone = audioCtx.createOscillator();
-        const lfo = audioCtx.createOscillator();
-        const lfoGain = audioCtx.createGain();
+        const duration = 1.15;
+
+        // Filtered throat-noise bed + audible low-mid harmonics modulated at 26Hz so small speakers reproduce the purr trill clearly.
+        const bufferSize = Math.floor(audioCtx.sampleRate * duration);
+        const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+        const data = noiseBuffer.getChannelData(0);
+        let smooth = 0;
+        for (let i = 0; i < bufferSize; i++) {
+          smooth = smooth * 0.85 + (Math.random() * 2 - 1) * 0.15;
+          data[i] = smooth * 2.4;
+        }
+
+        const noise = audioCtx.createBufferSource();
+        noise.buffer = noiseBuffer;
+
+        const bodyOsc = audioCtx.createOscillator();
+        bodyOsc.type = 'sawtooth';
+        bodyOsc.frequency.setValueAtTime(118, now);
+
+        const subOsc = audioCtx.createOscillator();
+        subOsc.type = 'triangle';
+        subOsc.frequency.setValueAtTime(78, now);
+
         const filter = audioCtx.createBiquadFilter();
-        const master = audioCtx.createGain();
+        filter.type = 'bandpass';
+        filter.frequency.setValueAtTime(220, now);
+        filter.Q.setValueAtTime(1.15, now);
 
-        // Warm 27Hz + 54Hz purr fundamentals pulsed gently around ~4.5Hz breathing rhythm.
-        rumble.type = 'triangle';
-        rumble.frequency.setValueAtTime(27, now);
-        overtone.type = 'sine';
-        overtone.frequency.setValueAtTime(54, now);
+        const trillLfo = audioCtx.createOscillator();
+        trillLfo.type = 'sine';
+        trillLfo.frequency.setValueAtTime(26, now);
+        const trillDepth = audioCtx.createGain();
+        trillDepth.gain.setValueAtTime(0.14, now);
 
-        lfo.type = 'sine';
-        lfo.frequency.setValueAtTime(4.5, now);
-        lfoGain.gain.setValueAtTime(0.025, now);
+        const amp = audioCtx.createGain();
+        amp.gain.setValueAtTime(0.001, now);
+        amp.gain.linearRampToValueAtTime(0.24, now + 0.08);
+        amp.gain.setValueAtTime(0.2, now + 0.48);
+        amp.gain.linearRampToValueAtTime(0.24, now + 0.65);
+        amp.gain.exponentialRampToValueAtTime(0.0001, now + duration);
 
-        filter.type = 'lowpass';
-        filter.frequency.setValueAtTime(185, now);
+        const bodyGain = audioCtx.createGain();
+        bodyGain.gain.setValueAtTime(0.28, now);
+        const subGain = audioCtx.createGain();
+        subGain.gain.setValueAtTime(0.32, now);
 
-        master.gain.setValueAtTime(0.001, now);
-        master.gain.exponentialRampToValueAtTime(0.045, now + 0.08);
-        master.gain.setValueAtTime(0.045, now + 0.55);
-        master.gain.exponentialRampToValueAtTime(0.0001, now + 0.92);
+        trillLfo.connect(trillDepth);
+        trillDepth.connect(amp.gain);
+        noise.connect(filter);
+        bodyOsc.connect(bodyGain);
+        bodyGain.connect(filter);
+        subOsc.connect(subGain);
+        subGain.connect(filter);
+        filter.connect(amp);
+        amp.connect(audioCtx.destination);
 
-        lfo.connect(lfoGain);
-        lfoGain.connect(master.gain);
-        rumble.connect(filter);
-        overtone.connect(filter);
-        filter.connect(master);
-        master.connect(audioCtx.destination);
+        noise.start(now);
+        bodyOsc.start(now);
+        subOsc.start(now);
+        trillLfo.start(now);
 
-        rumble.start(now);
-        overtone.start(now);
-        lfo.start(now);
-        rumble.stop(now + 0.95);
-        overtone.stop(now + 0.95);
-        lfo.stop(now + 0.95);
+        noise.stop(now + duration);
+        bodyOsc.stop(now + duration);
+        subOsc.stop(now + duration);
+        trillLfo.stop(now + duration);
       } catch {
         // Visual purr still runs even if Web Audio is unavailable.
       }
@@ -114,6 +148,7 @@
       const active = isActive();
       catCanvas!.classList.toggle('lg:block', active);
       catCanvas!.classList.toggle('hidden', !active);
+      if (!active) purrLabel?.classList.add('hidden');
       toggleBtn!.setAttribute('aria-pressed', String(!disabled));
       toggleBtn!.textContent = disabled || motionQuery.matches ? 'cat: off' : 'cat: on';
 
@@ -244,6 +279,14 @@
 
         catCanvas!.style.left = `${Math.round(x)}px`;
         catCanvas!.style.top = `${Math.round(y)}px`;
+        if (purrLabel) {
+          const showPurr = state === 'purr' && isActive();
+          purrLabel.classList.toggle('hidden', !showPurr);
+          if (showPurr) {
+            purrLabel.style.left = `${Math.round(Math.max(8, Math.min(window.innerWidth - 52, x - 4)))}px`;
+            purrLabel.style.top = `${Math.round(Math.max(8, y - 16 - (frame % 2)))}px`;
+          }
+        }
         drawCat();
       }
 
@@ -268,12 +311,17 @@
       if (!isActive()) return;
       const target = e.target as Element | null;
       if (target?.closest('a, button, input, select, textarea, summary, [role="switch"]')) return;
-      if (Math.hypot(e.clientX - (x + 16), e.clientY - (y + 16)) <= 24) {
+      if (Math.hypot(e.clientX - (x + 16), e.clientY - (y + 16)) <= 30) {
         purrTicks = 18;
         idleTicks = 0;
         state = 'purr';
+        if (purrLabel) {
+          purrLabel.classList.remove('hidden');
+          purrLabel.style.left = `${Math.round(Math.max(8, Math.min(window.innerWidth - 52, x - 4)))}px`;
+          purrLabel.style.top = `${Math.round(Math.max(8, y - 16))}px`;
+        }
         drawCat();
-        playPurrSound();
+        void playPurrSound();
       }
     }, { passive: true });
 
