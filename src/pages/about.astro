@@ -64,9 +64,27 @@ import { SITE, EXPERIENCE, EDUCATION, TOOLBOX } from '../data/site';
       {
         EDUCATION.map((edu) => (
           <li class="rounded-sm border border-hairline bg-surface-elevated/40 p-5">
-            <h3 class="font-display text-lg font-bold text-ink">{edu.institution}</h3>
+            <div class="flex flex-wrap items-baseline justify-between gap-2">
+              <h3 class="font-display text-lg font-bold text-ink">{edu.institution}</h3>
+              <span class="font-mono text-xs tabular-nums text-ink-muted">{edu.period}</span>
+            </div>
             <p class="mt-1 text-sm font-medium text-ink">{edu.degree}</p>
             <p class="mt-0.5 font-mono text-xs text-ink-muted">{edu.location}</p>
+            {edu.summary && (
+              <p class="mt-3 max-w-[65ch] text-sm leading-relaxed text-ink">
+                {edu.summary}
+              </p>
+            )}
+            {edu.activities && edu.activities.length > 0 && (
+              <div class="mt-3">
+                <p class="font-mono text-xs text-ink-muted">Activities & societies</p>
+                <ul class="mt-1.5 max-w-[65ch] list-disc space-y-1 pl-5 text-sm text-ink-muted">
+                  {edu.activities.map((activity) => (
+                    <li>{activity}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </li>
         ))
       }

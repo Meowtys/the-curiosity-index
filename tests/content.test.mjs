@@ -15,11 +15,18 @@ test('content.config.ts and site.ts exist with required exports', () => {
   assert.match(site, /westendasig2003@gmail\.com/);
   assert.match(site, /https:\/\/www\.linkedin\.com\/in\/westen-dasig\//);
   assert.match(site, /https:\/\/github\.com\/Meowtys/);
+  assert.match(site, /eGetinnz/);
+  assert.match(site, /Software Quality Assurance Intern/);
+  assert.match(site, /Crawl4AI/);
+  assert.match(site, /Trafilatura/);
   assert.match(site, /WesTech/);
   assert.match(site, /Tanjay City, Philippines/);
   assert.match(site, /2020/);
   assert.match(site, /SugarPy/);
   assert.match(site, /Foundation University/);
+  assert.match(site, /Silliman University/);
+  assert.match(site, /2021 – 2025/);
+  assert.match(site, /2025 – 2027/);
   assert.match(site, /Bachelor of Science \(BS\) in Computer Science/);
 });
 
@@ -95,4 +102,13 @@ test('site.ts exports EXPLORING, CORE_STACK, and getStatusBadgeClass, and TechBa
   assert.ok(fs.existsSync(badgePath), 'src/components/TechBadge.astro must exist');
   const badge = fs.readFileSync(badgePath, 'utf8');
   assert.match(badge, /<svg\b/, 'TechBadge must render inline SVG logos');
+  const evenOddMatches = badge.match(/fill-rule="evenodd"/g) ?? [];
+  assert.ok(
+    evenOddMatches.length >= 2,
+    'TechBadge TypeScript and JavaScript icons must use fill-rule="evenodd" so inner TS/JS letters cut out instead of rendering as a solid square',
+  );
+
+  const indexPage = fs.readFileSync(path.join(root, 'src/pages/index.astro'), 'utf8');
+  assert.match(indexPage, /Experience & Community/, 'Home page must title the experience section Experience & Community');
+  assert.doesNotMatch(indexPage, /Hardware & Community/, 'Home page must not title the experience section Hardware & Community');
 });
