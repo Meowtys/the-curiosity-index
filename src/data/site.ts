@@ -38,7 +38,7 @@ export const SITE = {
   location: 'Dumaguete City, Philippines',
   bio: "I'm Westen, a computer science student interested in exploring different areas of technology. I spend my time building software, working with hardware, and learning about things that catch my curiosity.",
   email: 'westendasig2003@gmail.com',
-  siteUrl: 'https://the-curiosity-index.pages.dev',
+  siteUrl: 'https://westendasig.pages.dev',
   description:
     'Westen Dasig — The Curiosity Index. Computer science student at Foundation University Dumaguete, full-stack builder, and hardware technician exploring software systems, on-device ML, and physical hardware.',
 } as const;
