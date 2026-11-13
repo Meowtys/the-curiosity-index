@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
+import { pathToFileURL } from 'node:url';
 
 const root = process.cwd();
 
@@ -275,23 +276,84 @@ test('UI audit hardening: mobile GitHub heatmap defaults to recent months, suppo
   assert.match(product, /\/notes/, 'PRODUCT.md Future Roadmap must note Field Notes / Micro-Blog');
 });
 
-test('sync-github-activity script and GitHub Actions workflows exist and validate', () => {
+test('sync-github-activity script and GitHub Actions workflows exist and validate', async () => {
   const scriptPath = path.join(root, 'scripts/sync-github-activity.mjs');
   const workflowPath = path.join(root, '.github/workflows/sync-github-activity.yml');
+  const deployPath = path.join(root, '.github/workflows/deploy.yml');
   const ciPath = path.join(root, '.github/workflows/ci.yml');
   const pkgPath = path.join(root, 'package.json');
 
   assert.ok(fs.existsSync(scriptPath), 'scripts/sync-github-activity.mjs must exist');
   assert.ok(fs.existsSync(workflowPath), '.github/workflows/sync-github-activity.yml must exist');
+  assert.ok(fs.existsSync(deployPath), '.github/workflows/deploy.yml must exist');
   assert.ok(fs.existsSync(ciPath), '.github/workflows/ci.yml must exist');
 
   const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
   assert.equal(pkg.scripts?.['sync:github'], 'node scripts/sync-github-activity.mjs', 'package.json must declare sync:github script');
 
+  const syncScript = fs.readFileSync(scriptPath, 'utf8');
+  assert.doesNotMatch(
+    syncScript,
+    /process\.env\.GITHUB_TOKEN/,
+    'sync-github-activity.mjs must not use repo-scoped GITHUB_TOKEN for GraphQL because it omits private repo contributions',
+  );
+  assert.match(syncScript, /users\/\$\{USERNAME\}\/contributions/, 'sync-github-activity.mjs must fetch full profile contributions fragment');
+  assert.match(syncScript, /GH_CONTRIB_TOKEN/, 'sync-github-activity.mjs may accept optional GH_CONTRIB_TOKEN override');
+
   const workflow = fs.readFileSync(workflowPath, 'utf8');
   assert.match(workflow, /cron:\s*['"]0 0 \* \* 0['"]/, 'sync-github-activity.yml must run weekly on cron');
   assert.match(workflow, /workflow_dispatch/, 'sync-github-activity.yml must support manual trigger');
   assert.match(workflow, /npm run sync:github/, 'sync-github-activity.yml must invoke npm run sync:github');
+  assert.doesNotMatch(workflow, /GITHUB_TOKEN:\s*\$\{\{\s*secrets\.GITHUB_TOKEN\s*\}\}/, 'sync-github-activity.yml must not pass repo GITHUB_TOKEN to sync:github');
+  assert.match(workflow, /uses:\s*\.\/\.github\/workflows\/deploy\.yml/, 'sync-github-activity.yml must deploy synced updates via reusable deploy.yml');
+  assert.match(workflow, /needs\.sync\.outputs\.changed == 'true'/, 'sync-github-activity.yml deploy job must gate on changed output');
+  assert.match(workflow, /ref:\s*\$\{\{\s*needs\.sync\.outputs\.sha\s*\}\}/, 'sync-github-activity.yml deploy job must deploy the newly pushed commit SHA');
+
+  const deploy = fs.readFileSync(deployPath, 'utf8');
+  assert.match(deploy, /workflow_call:/, 'deploy.yml must expose workflow_call');
+  assert.match(deploy, /workflow_dispatch:/, 'deploy.yml must support manual workflow_dispatch');
+  assert.match(deploy, /group:\s*deploy-pages/, 'deploy.yml must serialize deploys via concurrency group');
+  assert.match(deploy, /CLOUDFLARE_API_TOKEN/, 'deploy.yml must check CLOUDFLARE_API_TOKEN secret');
+  assert.match(deploy, /CLOUDFLARE_ACCOUNT_ID/, 'deploy.yml must check CLOUDFLARE_ACCOUNT_ID secret');
+  assert.match(deploy, /pages deploy dist --project-name=westendasig --branch=main/, 'deploy.yml must deploy dist/ to westendasig Cloudflare Pages production branch');
+
+  const ci = fs.readFileSync(ciPath, 'utf8');
+  assert.match(ci, /uses:\s*\.\/\.github\/workflows\/deploy\.yml/, 'ci.yml must invoke deploy.yml after verify passes on main');
+  assert.match(ci, /github\.event_name == 'push' && github\.ref == 'refs\/heads\/main'/, 'ci.yml deploy job must run only on pushes to main');
+
+  const mod = await import(pathToFileURL(scriptPath).href);
+  assert.equal(typeof mod.parseContributionsHtml, 'function', 'sync-github-activity.mjs must export parseContributionsHtml');
+  assert.equal(typeof mod.validateCalendar, 'function', 'sync-github-activity.mjs must export validateCalendar');
+
+  const sampleWeeks = Array.from({ length: 53 }, (_, ix) => {
+    const dayCount = ix === 52 ? 5 : 7;
+    return Array.from({ length: dayCount }, (__, d) => {
+      const id = `contribution-day-component-${d}-${ix}`;
+      const dateNum = new Date(Date.UTC(2025, 10, 9 + ix * 7 + d)).toISOString().slice(0, 10);
+      const count = ix === 0 && d === 0 ? 1 : ix === 52 && d === 4 ? 1005 : 0;
+      const lvl = count === 0 ? 0 : count === 1 ? 1 : 4;
+      const label =
+        count === 0
+          ? `No contributions on ${dateNum}.`
+          : count === 1
+            ? `1 contribution on ${dateNum}.`
+            : `1,005 contributions on ${dateNum}.`;
+      return {
+        td: `<td data-date="${dateNum}" id="${id}" data-ix="${ix}" data-level="${lvl}" class="ContributionCalendar-day"></td>`,
+        tip: `<tool-tip for="${id}">${label}</tool-tip>`,
+      };
+    });
+  }).flat();
+
+  const sampleHtml = `<h2>1,006 contributions in the last year</h2><table>${sampleWeeks.map((x) => x.td).join('')}</table>${sampleWeeks.map((x) => x.tip).join('')}`;
+  const parsed = mod.parseContributionsHtml(sampleHtml);
+  assert.equal(parsed.total, 1006);
+  assert.equal(parsed.weeks.length, 53);
+  assert.deepEqual(parsed.weeks[0][0], ['2025-11-09', 1, 1]);
+  assert.deepEqual(parsed.weeks[0][1], ['2025-11-10', 0, 0]);
+  assert.deepEqual(parsed.weeks[52][4], ['2026-11-12', 1005, 4]);
+  assert.doesNotThrow(() => mod.validateCalendar(parsed));
+  assert.throws(() => mod.validateCalendar({ total: 0, weeks: [] }));
 });
 
 test('BaseHead and global.css load clean sans-serif (Geist) and JetBrains Mono web fonts without Instrument Serif', () => {

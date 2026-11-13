@@ -29,7 +29,7 @@ The personal portfolio and engineering index of **Westen Dasig** (*John Westen R
 - **Direct Contact Channels:**
   - Email: `mailto:westendasig2003@gmail.com` (with 1-click clipboard copy button on `/contact/`)
   - LinkedIn: `https://www.linkedin.com/in/westen-dasig/`
-  - GitHub: `https://github.com/Meowtys` (53-week SVG contribution heatmap on the homepage, automatically refreshed weekly via GitHub Actions and `npm run sync:github`)
+  - GitHub: `https://github.com/Meowtys` (53-week SVG contribution heatmap on the homepage, automatically refreshed weekly via `.github/workflows/sync-github-activity.yml` + `npm run sync:github` and deployed via reusable `.github/workflows/deploy.yml`)
 - **Interactive Lightbox:**
   - Native `<dialog>` modal for high-resolution case study screenshots and covers with zero client library bloat.
 

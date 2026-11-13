@@ -29,15 +29,21 @@ Live site: **[westendasig.pages.dev](https://westendasig.pages.dev)**
 ## Project Structure
 
 ```text
+├── .github/workflows/
+│   ├── ci.yml                    # Typecheck, build, test, and trigger deploy on main
+│   ├── deploy.yml                # Reusable Cloudflare Pages deploy workflow
+│   └── sync-github-activity.yml  # Weekly GitHub calendar sync + auto-deploy
 ├── public/
 │   ├── favicon.svg
 │   ├── og-default.png
 │   └── robots.txt
+├── scripts/
+│   └── sync-github-activity.mjs  # Refreshes src/data/github.json from GitHub activity
 ├── src/
 │   ├── assets/projects/          # 1472x920 covers + WebP case study screenshots
-│   ├── components/               # AmbientBackdrop, BaseHead, Header, Footer, PixelCat, ProjectCard, TechBadge
+│   ├── components/               # AmbientBackdrop, BaseHead, GitHubActivity, Header, Footer, PixelCat, ProjectCard, TechBadge
 │   ├── content/projects/         # MDX case studies (here, jb2k-mods, susg-voting-system)
-│   ├── data/site.ts              # Profile copy, nav, experience, education, stack, badge helpers
+│   ├── data/                     # site.ts + cached github.json heatmap data
 │   ├── layouts/BaseLayout.astro
 │   ├── pages/                    # /, /projects/, /projects/[slug]/, /about/, /contact/, /404
 │   └── styles/global.css         # Theme tokens, badge styles, .tap-target, typography overrides
@@ -60,6 +66,9 @@ npm install
 # Start local dev server
 npm run dev
 
+# Refresh GitHub contribution heatmap JSON
+npm run sync:github
+
 # Run Astro & TypeScript diagnostics
 npm run check
 
@@ -72,6 +81,13 @@ npm test
 # Preview the built site locally
 npm run preview
 ```
+
+---
+
+## Automation & Deployment
+
+- **CI & Production Deploy (`.github/workflows/ci.yml` + `deploy.yml`):** Every pull request and push to `main` runs `astro check`, `astro build`, and `node --test`. Pushes to `main` automatically invoke the reusable `deploy.yml` workflow (`cloudflare/wrangler-action@v3`) once `CLOUDFLARE_API_TOKEN` (Pages Edit scope) and `CLOUDFLARE_ACCOUNT_ID` are set in GitHub Repository Secrets.
+- **Weekly Activity Sync (`.github/workflows/sync-github-activity.yml`):** Runs Sundays at `00:00 UTC` (or manually via `workflow_dispatch`), refreshes `src/data/github.json` from GitHub's profile activity calendar (preserving private contribution counts without repo-scoped token truncation), re-runs full verification, commits changes to `main`, and chains directly into `deploy.yml`.
 
 ---
 
