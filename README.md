@@ -86,7 +86,7 @@ npm run preview
 
 ## Automation & Deployment
 
-- **CI & Production Deploy (`.github/workflows/ci.yml` + `deploy.yml`):** Every pull request and push to `main` runs `astro check`, `astro build`, and `node --test`. Pushes to `main` automatically invoke the reusable `deploy.yml` workflow (`cloudflare/wrangler-action@v3`) once `CLOUDFLARE_API_TOKEN` (Pages Edit scope) and `CLOUDFLARE_ACCOUNT_ID` are set in GitHub Repository Secrets.
+- **CI & Production Deploy (`.github/workflows/ci.yml` + `deploy.yml`):** Every pull request and push to `main` runs `astro check`, `astro build`, and `node --test`. Pushes to `main` automatically invoke the reusable `deploy.yml` workflow (`cloudflare/wrangler-action@v4`) once `CLOUDFLARE_API_TOKEN` (Pages Edit scope) and `CLOUDFLARE_ACCOUNT_ID` are set in GitHub Repository Secrets.
 - **Weekly Activity Sync (`.github/workflows/sync-github-activity.yml`):** Runs Sundays at `00:00 UTC` (or manually via `workflow_dispatch`), refreshes `src/data/github.json` from GitHub's profile activity calendar (preserving private contribution counts without repo-scoped token truncation), re-runs full verification, commits changes to `main`, and chains directly into `deploy.yml`.
 
 ---

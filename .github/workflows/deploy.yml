@@ -35,15 +35,15 @@ jobs:
 
       - name: Check out repository
         if: steps.cf.outputs.configured == 'true'
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           ref: ${{ inputs.ref || github.sha }}
 
       - name: Set up Node.js
         if: steps.cf.outputs.configured == 'true'
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
-          node-version: 22
+          node-version: 24
           cache: npm
 
       - name: Install dependencies
@@ -56,7 +56,7 @@ jobs:
 
       - name: Deploy dist/ to Cloudflare Pages
         if: steps.cf.outputs.configured == 'true'
-        uses: cloudflare/wrangler-action@v3
+        uses: cloudflare/wrangler-action@v4
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
