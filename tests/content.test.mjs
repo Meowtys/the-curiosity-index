@@ -321,6 +321,19 @@ test('sync-github-activity script and GitHub Actions workflows exist and validat
   assert.match(ci, /uses:\s*\.\/\.github\/workflows\/deploy\.yml/, 'ci.yml must invoke deploy.yml after verify passes on main');
   assert.match(ci, /github\.event_name == 'push' && github\.ref == 'refs\/heads\/main'/, 'ci.yml deploy job must run only on pushes to main');
 
+  for (const [name, content] of [
+    ['ci.yml', ci],
+    ['deploy.yml', deploy],
+    ['sync-github-activity.yml', workflow],
+  ]) {
+    assert.match(content, /uses:\s*actions\/checkout@v7/, `${name} must use Node 24 actions/checkout@v7`);
+    assert.match(content, /uses:\s*actions\/setup-node@v7/, `${name} must use Node 24 actions/setup-node@v7`);
+    assert.match(content, /node-version:\s*24/, `${name} must use Node 24 LTS`);
+    assert.doesNotMatch(content, /uses:\s*actions\/(?:checkout|setup-node)@v4/, `${name} must not use deprecated Node 20 action v4`);
+  }
+  assert.match(deploy, /uses:\s*cloudflare\/wrangler-action@v4/, 'deploy.yml must use Node 24 cloudflare/wrangler-action@v4');
+  assert.doesNotMatch(deploy, /cloudflare\/wrangler-action@v3/, 'deploy.yml must not use deprecated Node 20 wrangler-action@v3');
+
   const mod = await import(pathToFileURL(scriptPath).href);
   assert.equal(typeof mod.parseContributionsHtml, 'function', 'sync-github-activity.mjs must export parseContributionsHtml');
   assert.equal(typeof mod.validateCalendar, 'function', 'sync-github-activity.mjs must export validateCalendar');
