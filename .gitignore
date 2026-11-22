@@ -15,5 +15,6 @@ npm-debug.log*
 .DS_Store
 Thumbs.db
 
-# superpowers working ledger
+# superpowers working ledger & local plans/specs
 .superpowers/
+docs/superpowers/
