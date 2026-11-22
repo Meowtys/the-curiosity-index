@@ -1,6 +1,6 @@
 # Westen Dasig — The Curiosity Index
 
-Personal portfolio and engineering index of **Westen Dasig** (*John Westen Rey Dasig*), Computer Science student at Foundation University Dumaguete and Full-Stack Builder based in Tanjay City, Philippines.
+My personal portfolio and engineering index — I'm **Westen Dasig**, a Computer Science student at Foundation University Dumaguete and full-stack builder based in Tanjay City, Philippines.
 
 Live site: **[westendasig.pages.dev](https://westendasig.pages.dev)**
 

@@ -1,7 +1,7 @@
 # Product Context — The Curiosity Index (Westen Dasig)
 
 ## What It Is
-The personal portfolio and engineering index of **Westen Dasig** (*John Westen Rey Dasig*), a Computer Science student at Foundation University Dumaguete and Full-Stack Builder based in Tanjay City, Philippines.
+My personal portfolio and engineering index (**Westen Dasig** / *John Westen Rey Dasig*) — I'm a Computer Science student at Foundation University Dumaguete and full-stack builder based in Tanjay City, Philippines.
 
 ## Brand Identity & Pairing
 - **Primary Identity:** Westen Dasig
@@ -10,7 +10,7 @@ The personal portfolio and engineering index of **Westen Dasig** (*John Westen R
 - **Core Bio:** *"I'm a computer science student interested in exploring different areas of technology. I spend my time building software, working with hardware, and learning about things that catch my curiosity."*
 
 ## Audience & Purpose
-1. **Primary (Curiosity-driven builder showcase / digital index):** Fellow builders, engineers, and collaborators exploring what Westen builds across software, on-device ML, full-stack web platforms, and computer/mobile hardware repair.
+1. **Primary (Curiosity-driven builder showcase / digital index):** Fellow builders, engineers, and collaborators exploring what I build across software, on-device ML, full-stack web platforms, and computer/mobile hardware repair.
 2. **Secondary (Recruiters, hiring managers, and clients):** Reviewers evaluating real shipped systems, architectural rebuild decisions, testing discipline, and direct contact paths.
 
 ## Confirmed Launch Content
