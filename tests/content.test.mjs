@@ -380,9 +380,9 @@ test('BaseHead and global.css load clean sans-serif (Geist) and JetBrains Mono w
   assert.doesNotMatch(css, /Instrument Serif/);
 });
 
-test('site.ts exports EXPLORING, CORE_STACK, and getStatusBadgeClass, and TechBadge component exists with SVG logos', () => {
+test('site.ts exports CORE_STACK and getStatusBadgeClass, and TechBadge component exists with SVG logos', () => {
   const site = fs.readFileSync(path.join(root, 'src/data/site.ts'), 'utf8');
-  assert.match(site, /export const EXPLORING/);
+  assert.doesNotMatch(site, /export const EXPLORING/);
   assert.match(site, /export const CORE_STACK/);
   assert.match(site, /export function getStatusBadgeClass/);
   assert.doesNotMatch(site, /I'm Westen,/, 'SITE.bio should not repeat name right below hero h1');

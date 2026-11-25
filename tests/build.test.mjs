@@ -142,9 +142,9 @@ test('sitemap excludes 404 and includes all public routes', () => {
   assert.doesNotMatch(sitemapXml, /\/404/);
 });
 
-test('built home and case study pages include Currently Exploring, Core Stack, and SVG tech stack logos', () => {
+test('built home and case study pages include Core Stack and SVG tech stack logos without redundant Currently Exploring', () => {
   const homeHtml = fs.readFileSync(path.join(distDir, 'index.html'), 'utf8');
-  assert.match(homeHtml, /Currently Exploring/i, 'index.html must include Currently Exploring section');
+  assert.doesNotMatch(homeHtml, /Currently Exploring/i, 'index.html must not include redundant Currently Exploring section');
   assert.match(homeHtml, /Core Stack/i, 'index.html must include Core Stack section');
   assert.match(homeHtml, /<svg\b/i, 'index.html must include inline SVG stack logos');
 

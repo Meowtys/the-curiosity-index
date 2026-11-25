@@ -4,7 +4,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import GitHubActivity from '../components/GitHubActivity.astro';
 import TechBadge from '../components/TechBadge.astro';
-import { SITE, EXPERIENCE, SOCIAL_LINKS, CORE_STACK, EXPLORING } from '../data/site';
+import { SITE, EXPERIENCE, SOCIAL_LINKS, CORE_STACK } from '../data/site';
 
 const allProjects = await getCollection('projects');
 const featuredProjects = allProjects
@@ -122,33 +122,6 @@ const featuredProjects = allProjects
         CORE_STACK.map((tool) => (
           <li>
             <TechBadge name={tool} size="md" />
-          </li>
-        ))
-      }
-    </ul>
-  </section>
-
-  <section class="mt-12 border-b border-hairline pb-6 sm:mt-14 sm:pb-8">
-    <h2 class="font-display text-2xl font-bold text-ink sm:text-3xl">
-      Currently Exploring
-    </h2>
-    <p class="mt-2 max-w-[65ch] text-sm text-ink-muted">
-      Areas I'm actively building in, studying, and testing right now.
-    </p>
-
-    <ul role="list" class="mt-5 divide-y divide-hairline border-t border-hairline">
-      {
-        EXPLORING.map((item) => (
-          <li class="py-3.5 sm:py-4">
-            <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-              <h3 class="font-display text-lg font-bold text-ink">
-                {item.topic}
-              </h3>
-              <span class="font-mono text-xs text-ink-muted">{item.tag}</span>
-            </div>
-            <p class="mt-1 max-w-[65ch] text-sm leading-relaxed text-ink-muted">
-              {item.description}
-            </p>
           </li>
         ))
       }
